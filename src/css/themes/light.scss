@@ -1,0 +1,28 @@
+$light: (
+  bg:(
+    tabs: #F2F2F2,
+    active-bg: rgb(255, 227, 150),
+    jesus: rgb(98, 0, 0),
+    separator: rgb(175, 175, 175),
+    background: #ffffff,
+    secondary-bg: #F2F2F2,
+  ),
+  text: (
+    text: #000000,
+    active-text: rgb(0, 71, 196),
+  ),
+  secondary: (
+    S: #9e9e9e,
+    i: #5d5d5d,
+    n: #6f6f6f,
+    info: #b8b8b8,
+    not-found: #555,
+    warning: #f2c037,
+    mark: #2c2cff,
+    primary: #1976d2,
+    secondary: #26a69a,
+    accent: #9c27b0,
+    positive: #21ba45,
+    negative: #c10015,
+  ),
+)

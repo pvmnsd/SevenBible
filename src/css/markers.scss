@@ -1,0 +1,154 @@
+S, f {
+  display: none;
+}
+
+m {
+  display: none;
+}
+
+n {
+  color: var(--n);
+}
+
+h, .h {
+  display: none;
+}
+.commentary{
+  display: none;
+}
+
+.commentary{
+  cursor: pointer;
+  color: green;
+  &:hover{
+    text-decoration: underline;
+  }
+}
+
+.bible-text {
+  w {
+    cursor: pointer;
+    transition: 0.2s ease;
+    border-radius: 1px;
+
+    &:hover {
+      background: var(--active-bg);
+    }
+  }
+
+
+  f {
+    cursor: pointer;
+    color: blue;
+    font-size: 0.9em;
+    vertical-align: super;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  j {
+    color: var(--jesus)
+  }
+
+  pb {
+    display: block;
+  }
+
+  e {
+    font-weight: 600;
+  }
+
+  //вставка
+  i {
+    color: var(--i);
+  }
+
+  pb {
+    display: inherit;
+  }
+}
+
+.bible-text[showbookname="false"] .book-name {
+  display: none;
+}
+
+.bible-text[showsubheadings="true"] {
+  h, .h {
+    font-size: 1.1em;
+    color: #860000;
+    font-weight: bold;
+    margin: 4px 0;
+    display: block;
+  }
+}
+
+.bible-text[showchapternumber="false"] .chapter-number {
+  display: none;
+}
+
+.bible-text[showversenumber="false"] .number {
+  display: none;
+}
+
+.bible-text[showjesuswords="false"] j {
+  color: inherit;
+}
+
+.bible-text[showstrongnumbers="true"] {
+  S {
+    display: inherit;
+    vertical-align: super;
+    font-size: 0.9em;
+    padding: 0 5px;
+    text-decoration: none;
+    color: var(--S);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--active-text);
+    }
+
+    & + S::before {
+      content: '| ';
+      padding-right: 5px;
+    }
+  }
+}
+
+.bible-text[showdreamy="true"] {
+  f {
+    display: inherit;
+  }
+}
+
+.bible-text[showcontinuoustext="true"] {
+  & .verse {
+    display: inline;
+  }
+}
+
+.bible-text[showparagraphs="true"] {
+  .verse {
+    display: inline;
+  }
+
+  .aaa::before {
+    content: '';
+    display: block;
+    padding-bottom: 20px;
+  }
+
+  & t {
+    margin: 0 20px;
+    display: block;
+    padding-bottom: 20px;
+  }
+}
+.bible-text[showcommentaries]{
+  .commentary {
+    display: inline;
+  }
+}
