@@ -25,3 +25,7 @@ export const openNewWindow = state => {
 export const closeWindow = (state, id) => {
   state.windows[id].active = false
 }
+
+export const toggleModuleState = (state, {id, key, name}) => {
+  state.windows[id][key][name] = !state.windows[id][key][name]
+}

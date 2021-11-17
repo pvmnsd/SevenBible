@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme, dialog } from 'electron'
+import { app, BrowserWindow, nativeTheme } from 'electron'
 import { initialize, enable } from '@electron/remote/main'
 import path from 'path'
 import fs from 'fs'
@@ -28,8 +28,10 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'),
-    width: 500,
-    height: 600,
+    width: 1920 / 2,
+    height: 1080,
+    x: 1920 / 2,
+    y: 0,
     useContentSize: true,
     frame: false,
     webPreferences: {
@@ -38,9 +40,6 @@ function createWindow () {
       preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD)
     }
   })
-  // dialog.showMessageBox(mainWindow,{
-  //   message: app.getPath('userData')
-  // })
 
   enable(mainWindow.webContents)
 

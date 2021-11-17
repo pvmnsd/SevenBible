@@ -22,26 +22,22 @@
       icon="close"
       unelevated
       stretch
-      @click="closeCommentariesWindow"
+      @click="toggleModuleState('commentaries', 'show')"
     />
   </div>
   <q-separator color='separator'/>
 </template>
 <script>
-import closeModule from "src/hooks/closeModule"
-import ModuleSelector from "components/bible/ModuleSelector";
-import {useStore} from "vuex";
+import ModuleSelector from "components/bible/ModuleSelector"
+import {useStore} from "vuex"
 import { inject } from 'vue'
 export default {
   setup(){
     const id = inject('id')
     const store = useStore()
-    const changeModuleState = settings => store.commit('settings/changeModuleState', settings)
+    const toggleModuleState = (key, name) => store.commit('settings/toggleModuleState', {id, key, name})
 
-    const closeCommentariesWindow = () => {
-      closeModule(changeModuleState, id, 'commentaries')
-    }
-    return {closeCommentariesWindow}
+    return {toggleModuleState}
   },
   props: {
     commentariesFileName: String,

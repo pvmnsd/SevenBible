@@ -5,10 +5,10 @@
     icon='more_vert'
     stretch
     unelevated
-    :menu-offset="[1, 1]"
+    :menu-offset="[0, 1]"
   >
-    <q-tab-panels :model-value="panel" >
-      <q-tab-panel name="show">
+    <div>
+      <div  v-if="panel === 'show'">
         <div class="q-py-sm q-px-md no-selectable column">
           <div class="row content-between no-wrap q-gutter-x-sm">
             <q-btn
@@ -16,7 +16,7 @@
               round
               unelevated
             />
-            <span class="text-center text-h6">Показывать</span>
+            <span class="text-center text-h6 col">Показывать</span>
             <q-btn
               icon="arrow_right"
               round
@@ -40,8 +40,8 @@
               :model-value="bibleView.showSubheadings"
               label="подзаголовки"
             />
+            <q-space/>
             <q-btn
-              class="q-ml-md"
               round
               flat
               size="xs"
@@ -57,7 +57,6 @@
             />
             <q-space/>
             <q-btn
-              class="q-ml-md"
               round
               flat
               size="xs"
@@ -113,37 +112,59 @@
             </div>
           </div>
         </div>
-      </q-tab-panel>
-      <q-tab-panel name="open">
-        <div class="row content-between q-gutter-x-sm no-wrap">
-          <q-btn
-            icon="arrow_left"
-            round
-            unelevated
-          />
-          <span class="text-center text-h6">Открыть</span>
-          <q-btn
-            icon="arrow_right"
-            round
-            unelevated
-            @click="showNextPanel('open')"
-          />
+      </div>
+      <div  v-if="panel === 'open'">
+        <div class="q-py-sm q-px-md q-gutter-y-sm no-selectable column">
+          <div class="row content-between">
+            <q-btn
+              icon="arrow_left"
+              round
+              unelevated
+            />
+            <span class="text-center text-h6 col">Открыть</span>
+            <q-btn
+              icon="arrow_right"
+              round
+              unelevated
+              @click="showNextPanel('open')"
+            />
+          </div>
+
+            <q-btn
+              label="Словарь стронга"
+              icon-right="toys"
+              align="between"
+              @click="toggleModuleState('strong', 'show')"
+            />
+            <q-btn
+              label="Словарь"
+              icon-right="sports_baseball"
+              align="between"
+              @click="toggleModuleState('dictionary', 'show')"
+            />
+            <q-btn
+              label="Комментарии"
+              icon-right="downhill_skiing"
+              align="between"
+              @click="toggleModuleState('commentaries', 'show')"
+            />
         </div>
-      </q-tab-panel>
-    </q-tab-panels>
+      </div>
+    </div>
   </q-btn-dropdown>
 </template>
 
 <script>
 import {useStore} from 'vuex'
 import {defineComponent, onMounted, onBeforeUnmount, inject, ref} from "vue"
+import {toggleModuleState} from "src/store/settings/mutations";
 
 export default defineComponent({
   setup(props) {
     const id = inject('id')
 
     const panels = ['show', 'open']
-    const panel = ref('show')
+    const panel = ref('open')
 
     const showNextPanel = current => {
       const index = panels.indexOf(current)
@@ -152,6 +173,8 @@ export default defineComponent({
 
     const store = useStore()
     const changeModuleStateView = settings => store.commit('settings/changeModuleStateView', settings)
+    const toggleModuleState = (key, name) => store.commit('settings/toggleModuleState', {id, key, name})
+
     const changeViewState = (name, value) => {
       if (name === 'showParagraphs') {
         if (props.bibleView.showContinuousText) {
@@ -184,6 +207,7 @@ export default defineComponent({
       changeViewState,
       changeFontSize,
       showNextPanel,
+      toggleModuleState,
       panel
     }
   },

@@ -1,5 +1,5 @@
 import {contextBridge, ipcRenderer} from 'electron'
-import {BrowserWindow} from '@electron/remote'
+import {BrowserWindow, app} from '@electron/remote'
 import path from 'path'
 import fs from 'fs'
 

@@ -15,8 +15,9 @@
       <q-separator vertical color='separator'/>
       <div class='bible-search col-auto'>
         <q-btn
-            @click="$parent.$parent.$parent.$emit('toggleWindow', 'strongSearcher', true)"
-            flat
+            @click="$parent.$parent.$parent.$parent.$parent.$emit('toggleWindow', 'strongSearcher', true)"
+            stretch
+            unelevated
             size='13px'
             icon='manage_search'
             class='full-width full-height'
@@ -24,14 +25,22 @@
       </div>
       <q-separator vertical color='separator'/>
       <div class='bible-ref col-auto'>
-        <q-btn icon='more_vert' flat size='13px' class='fit'></q-btn>
+        <q-btn
+          icon='more_vert'
+          stretch
+          unelevated
+          size='13px'
+          class='fit'
+        />
       </div>
 
       <q-separator vertical color='separator'/>
       <div class='bible-ref col-auto'>
         <q-btn
             icon='close'
-            flat size='13px'
+            stretch
+            unelevated
+            size='13px'
             class='fit'
             @click="changeModuleState({ id, key: 'strong', settings: {show: false}})">
         </q-btn>

@@ -210,13 +210,14 @@ module.exports = configure(function (ctx) {
         appId: 'seven-bible',
         asar: true,
         productName: 'SevenBible',
+        npmRebuild: false,
         //extraResources: ["./modules/**"],
         win: {
-          target: 'nsis'
+          target: ['nsis', 'portable']
         },
         linux: {
           category: 'Education',
-          target: ['AppImage']
+          target: ['AppImage', 'snap']
         }
       },
 

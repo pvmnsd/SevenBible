@@ -1,7 +1,6 @@
 <template>
   <q-btn-dropdown
     :label='fileName'
-    flat
     class='without-icon'
     stretch
     unelevated

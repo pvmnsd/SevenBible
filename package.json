@@ -4,18 +4,19 @@
   "description": "Best desktop app to study Bible",
   "productName": "Seven Bible",
   "author": "KurchenkoDarij <thefinalwarningg@gmail.com>",
-  "private": true,
+  "private": false,
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
     "build-linux": "quasar build -m electron -T linux",
     "build-windows": "quasar build -m electron -T win",
     "dev": "quasar dev -m electron",
-    "rebuild": "electron-rebuild -f -w better-sqlite3"
+    "rebuild": "electron-rebuild -f -w better-sqlite3",
+    "*postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "@electron/remote": "^2.0.1",
     "@quasar/extras": "^1.12.0",
-    "better-sqlite3": "^7.4.0",
+    "better-sqlite3": "7.4.0",
     "core-js": "^3.6.5",
     "quasar": "^2.3.2",
     "splitpanes": "^3.0.6",
@@ -27,6 +28,7 @@
     "@quasar/app": "^3.2.2",
     "electron": "^15.3.1",
     "electron-builder": "^22.13.1",
+    "electron-rebuild": "^3.2.5",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^7.0.0",
