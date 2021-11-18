@@ -2,6 +2,7 @@
   <q-layout
     view="hHh Lpr ffr"
     :theme="programSettings.theme"
+    :style="font"
   >
     <Header @toggleDrawer="toggleDrawer"/>
 
@@ -34,9 +35,12 @@ export default defineComponent({
     const drawer = ref(false)
     const toggleDrawer = () => drawer.value = !drawer.value
     const programSettings = computed(() => useStore().getters["settings/programSettings"])
-    onMounted(() => document.body.setAttribute('theme', programSettings.value.theme))
+    const font = computed(() => ({fontFamily: `${programSettings.value.font}, sans-serif`}))
+    onMounted(() => {
+      document.body.setAttribute('theme', programSettings.value.theme)
+    })
 
-    return {drawer, toggleDrawer, programSettings}
+    return {drawer, toggleDrawer, programSettings, font}
   }
 })
 </script>

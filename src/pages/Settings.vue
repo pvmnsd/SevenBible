@@ -5,28 +5,28 @@
       inline-label
       class='bg-secondary-bg tabs'
     >
-      <q-tab name='appearance' icon='brush' label='Внешний вид'/>
-      <q-tab name='modules' icon='library_books' label='Модули'/>
-      <q-tab name='languages' icon='language' label='Язык'/>
-      <q-tab name='mouse' icon='mouse' label='Взаимодействие'/>
+      <q-tab
+        v-for="tab in tabs"
+        :key="tab.name"
+        :name='tab.name'
+        :icon='tab.icon'
+        :label='tab.label'
+      />
+
     </q-tabs>
     <q-separator color='separator'/>
 
     <q-tab-panels v-model='tab'>
 
-      <q-tab-panel name='appearance' class='bg-background'>
-        <div class='text-h4 q-mb-md'>Внешний вид</div>
-
-        <div class="q-pa-lg">
-          <q-option-group
-            @update:model-value="updateTheme"
-            :model-value='programSettings.theme'
-            :options="themes"
-            color="info"
-          />
-        </div>
-        <q-separator color='separator'/>
-
+      <q-tab-panel
+        v-for="tab in [tabs[0]]"
+        :key="tab.name"
+        :name='tab.name'
+      >
+        <component
+          :is="`${tab.name}Tab`"
+          :active-tab-label="activeTabLabel"
+        />
       </q-tab-panel>
 
     </q-tab-panels>
@@ -36,42 +36,45 @@
 
 <script>
 
-import { useStore } from 'vuex'
-import {computed, inject, ref} from 'vue'
-import { useQuasar } from 'quasar'
+import {computed, ref} from 'vue'
+import AppearanceTab from "components/Settings/appearanceTab"
 
 export default {
-
   setup() {
-    const id = inject('id')
 
-    const tab = ref('appearance')
-    const themes = [
+    const tabs = [
       {
-        label: 'Светлая',
-        value: 'light'
+        name: 'appearance',
+        label: 'Внешний вид',
+        icon: 'brush'
       },
       {
-        label: 'Темная',
-        value: 'dark'
-      }
+        name: 'modules',
+        label: 'Модули',
+        icon: 'library_books'
+      },
+      {
+        name: 'mouse',
+        label: 'Взаимодействие',
+        icon: 'mouse'
+      },
+      {
+        name: 'language',
+        label: 'Язык',
+        icon: 'language'
+      },
     ]
-    const $q = useQuasar()
-    const store = useStore()
-    const programSettings = computed(() => store.getters['settings/programSettings'])
-    const changeProgramSettings = (settings) => store.commit('settings/changeProgramSettings', settings)
+    const tab = ref('appearance')
 
-    const updateTheme = value => {
-      changeProgramSettings({ id,  key: 'theme', value })
-      $q.dark.set(value === 'dark')
-      document.body.setAttribute('theme', value)
-    }
+    const activeTabLabel = computed(() => tabs.find(currTab => currTab.name = tab.value).label)
+
+
     return {
-      updateTheme,
-      themes,
       tab,
-      programSettings
+      tabs,
+      activeTabLabel,
     }
-  }
+  },
+  components: {AppearanceTab},
 }
 </script>
