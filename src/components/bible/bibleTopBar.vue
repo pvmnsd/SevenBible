@@ -1,7 +1,7 @@
 <template>
-  <div class="col-auto">
+  <div>
 
-    <div class='row no-wrap bg-secondary-bg'>
+    <div class="row no-wrap bg-secondary-bg">
       <ModuleSelector
         :file-name="bookFileName"
         :path="['modules', 'books']"
@@ -24,6 +24,7 @@
         class='col'
         :label='`${bookShortName ?? "..."} ${chapterNumber}`'
         no-caps
+        no-wrap
         stretch
         unelevated
         @click.stop="$emit('toggleWindow','bookSelector',true)"
@@ -65,8 +66,8 @@
       <q-separator vertical color='separator'/>
 
       <quick-settings :bible-view="bibleView"/>
-
     </div>
+
     <q-separator color='separator'/>
   </div>
 </template>

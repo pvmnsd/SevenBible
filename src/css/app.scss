@@ -5,27 +5,10 @@
 @import "notifications";
 @import "markers";
 //@import "fonts/Noto_Sans";
-//@import "fonts/Roboto";
+@import "fonts/Roboto";
 
 body {
   color: var(--text);
-}
-
-img {
-  pointer-events: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-
-.drag {
-  -webkit-app-region: drag;
-}
-
-.no-drag {
-  -webkit-app-region: no-drag;
 }
 
 .without-icon .q-btn-dropdown__arrow {
@@ -48,26 +31,13 @@ img {
   background-color: rgba(255, 255, 0, 0.315);
 }
 
-/* полоса прокрутки (скроллбар) */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #b3b3b39b;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #9e9e9e9b;
-}
-
-::-webkit-scrollbar-button {
-  display: none;
-}
-
-.q-page ::-webkit-scrollbar {
-  display: none;
-}
+//::-webkit-scrollbar-button {
+//  display: none;
+//}
+//
+//.q-page ::-webkit-scrollbar {
+//  display: none;
+//}
 
 .no-selectable {
   -moz-user-select: none;

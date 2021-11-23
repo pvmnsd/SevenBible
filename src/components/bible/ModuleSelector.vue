@@ -5,6 +5,7 @@
     stretch
     unelevated
     no-caps
+    no-wrap
     @before-show="loadStrongModules"
   >
     <q-list>
