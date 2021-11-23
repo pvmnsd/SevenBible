@@ -5,7 +5,7 @@
         class="q-electron-drag"
       >
         <q-icon name="book"/>
-        <div class="">Bible App</div>
+        <div class="">Seven Bible</div>
         <q-space/>
         <div class="q-gutter-x-sm">
           <q-btn dense flat icon="menu" @click="$emit('toggleDrawer')"/>

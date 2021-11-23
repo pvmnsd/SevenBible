@@ -21,6 +21,10 @@ export const openNewWindow = state => {
   const notActiveWindow = state.windows.find(window => !window.active)
   if (notActiveWindow)
     notActiveWindow.active = true
+  else {
+    const lastWindowIndex = state.windows.length - 1
+    state.windows.push(JSON.parse(JSON.stringify(state.windows[lastWindowIndex])))
+  }
 }
 export const closeWindow = (state, id) => {
   state.windows[id].active = false
