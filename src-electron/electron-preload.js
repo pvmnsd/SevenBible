@@ -1,19 +1,19 @@
 import {contextBridge, ipcRenderer} from 'electron'
-import {BrowserWindow, /*app*/} from '@electron/remote'
+import {BrowserWindow, app} from '@electron/remote'
 import path from 'path'
 import fs from 'fs'
-import fontList from 'font-list'
+import {getFonts} from 'font-list'
+
+const dir = process.env.DEBUGGING ? '' : path.join(app.getAppPath(), '..')
 
 contextBridge.exposeInMainWorld('electron', {
   invoke: (apiKey, settings) => ipcRenderer.invoke(apiKey, settings),
   send: (apiKey, settings) => ipcRenderer.send(apiKey, settings)
 })
 contextBridge.exposeInMainWorld('system', {
-  fsReaddirSync: (_path) => fs.readdirSync(_path),
-  pathResolve: (_path) => path.resolve(..._path),
-  pathJoin: (_path) => path.join(..._path),
-  fsExistsSync: (_path) => fs.existsSync(_path),
-  getAllFonts: () => fontList.getFonts()
+  fsReaddirSync: (_path) => fs.readdirSync(path.join(dir, ..._path)),
+  fsExistsSync: (_path) => fs.existsSync(path.join(dir, ..._path)),
+  getAllFonts: () => getFonts()
 })
 
 contextBridge.exposeInMainWorld('myWindowAPI', {

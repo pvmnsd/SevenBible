@@ -207,17 +207,17 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'seven-bible',
+        appId: 'sevenbible',
         asar: true,
         productName: 'SevenBible',
-        npmRebuild: false,
-        //extraResources: ["./modules/**"],
+        npmRebuild: true,
+        extraResources: ["./modules/**"],
         win: {
           target: ['nsis', 'portable']
         },
         linux: {
           category: 'Education',
-          target: ['AppImage', 'snap']
+          target: ['deb']
         }
       },
 

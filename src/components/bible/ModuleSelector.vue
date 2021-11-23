@@ -37,8 +37,7 @@ export default defineComponent({
     const changeModuleState = settings => store.commit('settings/changeModuleState', settings)
 
     const loadStrongModules = () => {
-      const ph = window.system.pathResolve(props.path)
-      if (ph.length) { modules.value = window.system.fsReaddirSync(ph).map(module => module.split('.')[0]) } else console.log('Отсутствуют модули ... ')
+      if (props.path.length) { modules.value = window.system.fsReaddirSync(props.path).map(module => module.split('.')[0]) } else console.log('Отсутствуют модули ... ')
     }
     const onModuleClick = fileName => changeModuleState({ id, key: props.module, settings: { fileName: fileName } })
 

@@ -49,8 +49,7 @@ export default defineComponent({
 
     const commentariesModules = ref([])
     onMounted(() => {
-      const ph = window.system.pathResolve(['modules', 'commentaries'])
-      commentariesModules.value = window.system.fsReaddirSync(ph).map(moduleName => moduleName.match(/.+?(?=\.)/g)[0])
+      commentariesModules.value = window.system.fsReaddirSync(['modules', 'commentaries']).map(moduleName => moduleName.match(/.+?(?=\.)/g)[0])
     })
 
     return{ commentariesModules, addNewActiveCommentaryModule }

@@ -56,8 +56,7 @@ export default defineComponent({
 
     const subheadingsModules = ref([])
     onMounted(() => {
-      const ph = window.system.pathResolve(['modules', 'subheadings'])
-      subheadingsModules.value = window.system.fsReaddirSync(ph).map(moduleName => moduleName.match(/.+?(?=\.)/g)[0])
+      subheadingsModules.value = window.system.fsReaddirSync(['modules', 'subheadings']).map(moduleName => moduleName.match(/.+?(?=\.)/g)[0])
     })
 
     const changeSubheadingsSetting = (name1, value) => changeModuleStateView({ id, key: 'bible', name: 'subheadings', name1, value })

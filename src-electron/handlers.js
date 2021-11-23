@@ -1,9 +1,9 @@
 import {ipcMain, app} from 'electron'
 import fs from 'fs'
 import path from 'path'
-import Database from 'better-sqlite3'
+import Database from 'better-sqlite3-with-prebuilds'
 
-// const userDataPath = app.getPath('userData')
+const dir = process.env.DEBUGGING ? '' : path.join(app.getAppPath(), '..')
 
 function getDirection(info) {
   return info.right_to_left === 'true' ? {
@@ -31,7 +31,7 @@ function useHandlers() {
 
   const openDbConnectionIfNotExists = bookFileName => {
     if (!databases[bookFileName]) {
-      databases[bookFileName] = new Database(`modules/books/${bookFileName}.SQLite3`, {readonly: true})
+      databases[bookFileName] = new Database(path.join(dir, 'modules', 'books', bookFileName+'.SQLite3'), {readonly: true})
     }
   }
   const closeDbConnection = (bookFileName, activeBibleModules) => {
@@ -71,7 +71,7 @@ function useHandlers() {
         res.subheadings = []
         args.activeModulesSubheadings.forEach(moduleName => {
           try {
-            const ph = path.resolve('modules', 'subheadings', `${moduleName}.subheadings.SQLite3`)
+            const ph = path.join(dir, 'modules', 'subheadings', `${moduleName}.subheadings.SQLite3`)
             const subheadingDb = new Database(ph, {readonly: true})
 
             let sql = 'SELECT * FROM info'
@@ -96,7 +96,7 @@ function useHandlers() {
       res.commentaries = {}
       args.activeModulesCommentaries.forEach(moduleName => {
         try {
-          const ph = path.resolve('modules', 'commentaries', `${moduleName}.commentaries.SQLite3`)
+          const ph = path.join(dir, 'modules', 'commentaries', `${moduleName}.commentaries.SQLite3`)
           const commentariesDb = new Database(ph, {readonly: true})
           const sql = 'SELECT text, verse_number_from, verse_number_to from commentaries WHERE book_number = ? AND chapter_number_from = ?'
           const commentaries = commentariesDb.prepare(sql).all(args.bookNumber, args.chapterNumber)
@@ -216,7 +216,7 @@ function useHandlers() {
 
   ipcMain.handle('find-texts-in-bible', (event, args) => {
     const fundedTexts = []
-    const dbSearch = new Database(`modules/search/${args.bookFileName}.SQLite3.search`, {readonly: true})
+    const dbSearch = new Database(path.join(dir, 'modules', 'search', `${args.bookFileName}.SQLite3.search`), {readonly: true})
 
     let sql = `SELECT book_number, chapter, verse FROM texts WHERE bare_lowercase_words like('%${args.searchString}%')`
     const fundedRefs = dbSearch.prepare(sql).all()
@@ -230,7 +230,7 @@ function useHandlers() {
   })
 
   ipcMain.handle('get-strong-numbers-info', (event, args) => {
-    const strongDb = new Database(`modules/dictionaries/strong/${args.strongFileName}.dictionary.SQLite3`, {readonly: true})
+    const strongDb = new Database(path.join(dir, 'modules', 'dictionaries', 'strong', `${args.strongFileName}.dictionary.SQLite3`), {readonly: true})
     const res = {}
     args.strongNumbers.forEach(number => {
       let sql = 'SELECT strong_number FROM cognate_strong_numbers WHERE group_id in(SELECT group_id FROM cognate_strong_numbers WHERE strong_number = ?)'
@@ -285,12 +285,12 @@ function useHandlers() {
   })
 
   ipcMain.handle('get-crossreferences', (event, args) => {
-    const dir = fs.readdirSync(path.resolve('modules/crossreferences'))
+    const crossreferencesDir = fs.readdirSync(path.join(dir, 'modules', 'crossreferences'))
     const sql = 'SELECT book_to, chapter_to, verse_to_start, verse_to_end, votes FROM cross_references WHERE book = ? AND chapter = ? AND verse = ?'
     const result = []
     const i = 0
-    dir.forEach(fileName => {
-      const crf = new Database(`modules/crossreferences/${fileName}`, {readonly: true})
+    crossreferencesDir.forEach(fileName => {
+      const crf = new Database(path.join(dir, 'modules', 'crossreferences', fileName), {readonly: true})
       const foundedRefs = crf.prepare(sql).all(args.bookNumber, args.chapterNumber, args.verse)
 
       const sql1 = 'SELECT verse, text from verses WHERE book_number = ? AND chapter = ? AND verse BETWEEN ? AND ?'
@@ -327,15 +327,15 @@ function useHandlers() {
   })
 
   ipcMain.handle('get-compared-translations', (event, args) => {
-    let ph = path.resolve('modules', 'books')
-    const dir = fs.readdirSync(ph).map(moduleName => (/[^.]+?(?=\.)/.exec(moduleName))[0])
+    let ph = path.join(dir, 'modules', 'books')
+    const booksDir = fs.readdirSync(ph).map(moduleName => (/[^.]+?(?=\.)/.exec(moduleName))[0])
 
     const res = []
     let sql
-    dir.forEach(moduleName => {
+    booksDir.forEach(moduleName => {
       try {
         sql = 'SELECT text, verse FROM verses WHERE book_number = ?  AND chapter = ? AND verse = ?'
-        ph = path.resolve('modules', 'books', moduleName + '.SQLite3')
+        ph = path.join(dir, 'modules', 'books', moduleName + '.SQLite3')
         const bibleDb = new Database(ph, {readonly: true})
         const data = bibleDb.prepare(sql).get(args.bookNumber, args.chapterNumber, args.verseNumber)
 
@@ -346,6 +346,7 @@ function useHandlers() {
           data.moduleName = moduleName
           data.direction = getDirection(info)
           res.push(data)
+          bibleDb.close()
         }
       } catch {
       }
@@ -355,7 +356,7 @@ function useHandlers() {
   })
 
   ipcMain.handle('get-footnotes', (event, args) => {
-    const ph = path.resolve('modules', 'commentaries', args.moduleName + '.commentaries.SQLite3')
+    const ph = path.join(dir, 'modules', 'commentaries', args.moduleName + '.commentaries.SQLite3')
     let commentaryDb, res
     try {
       commentaryDb = new Database(ph, {readonly: true})
@@ -368,7 +369,7 @@ function useHandlers() {
   })
 
   ipcMain.handle('get-commentaries', (event, args) => {
-    const commentariesDb = new Database('modules/commentaries/' + args.commentaryFileName + '.commentaries.SQLite3', {readonly: true})
+    const commentariesDb = new Database(path.join(dir, 'modules', 'commentaries',args.commentaryFileName + '.commentaries.SQLite3'), {readonly: true})
     let res = null
     try {
       const sql = `SELECT verse_number_from as verseNumber, text FROM commentaries WHERE book_number = ? AND chapter_number_from = ?`

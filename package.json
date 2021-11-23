@@ -10,13 +10,13 @@
     "build-linux": "quasar build -m electron -T linux",
     "build-windows": "quasar build -m electron -T win",
     "dev": "quasar dev -m electron",
-    "rebuild": "electron-rebuild -f -w better-sqlite3",
-    "ppostinstall": "electron-builder install-app-deps"
+    "rebuild": "electron-rebuild",
+    "postinstalll": "electron-builder install-app-deps"
   },
   "dependencies": {
     "@electron/remote": "^2.0.1",
     "@quasar/extras": "^1.12.0",
-    "better-sqlite3": "7.4.0",
+    "better-sqlite3-with-prebuilds": "^7.4.3",
     "core-js": "^3.6.5",
     "font-list": "^1.4.2",
     "quasar": "^2.3.2",

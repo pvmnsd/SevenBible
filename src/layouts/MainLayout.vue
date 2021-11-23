@@ -39,6 +39,9 @@ export default defineComponent({
     onMounted(() => {
       document.body.setAttribute('theme', programSettings.value.theme)
     })
+    // setTimeout(() => {
+    //   return import('src/css/fonts/Roboto.scss')
+    // }, 5000)
 
     return {drawer, toggleDrawer, programSettings, font}
   }

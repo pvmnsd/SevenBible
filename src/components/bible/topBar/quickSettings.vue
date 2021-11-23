@@ -132,19 +132,19 @@
 
             <q-btn
               label="Словарь стронга"
-              icon-right="toys"
+              icon-right="menu_book"
               align="between"
               @click="toggleModuleState('strong', 'show')"
             />
             <q-btn
               label="Словарь"
-              icon-right="sports_baseball"
+              icon-right="auto_stories"
               align="between"
               @click="toggleModuleState('dictionary', 'show')"
             />
             <q-btn
               label="Комментарии"
-              icon-right="downhill_skiing"
+              icon-right="forum"
               align="between"
               @click="toggleModuleState('commentaries', 'show')"
             />

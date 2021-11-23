@@ -23,9 +23,6 @@ useHandlers()
 let mainWindow
 
 function createWindow () {
-  /**
-   * Initial window options
-   */
   mainWindow = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'),
     width: 1920 / 2,
