@@ -7,7 +7,7 @@
           <pane
             v-for="(id, i) in activeBibleModulesIndexes"
             :key="id"
-            min-size=""
+            min-size="10"
             :class="i === 1 ? 'col' : 'col-auto'"
             class="relative-position column"
           >
