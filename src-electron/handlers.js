@@ -378,6 +378,11 @@ function useHandlers() {
     commentariesDb.close()
     return res
   })
+
+  ipcMain.handle('save-program-settings', (_, state) => {
+    fs.writeFileSync(path.join(dir, 'user', 'settings', 'settings.json'), state)
+    return
+  })
 }
 
 export default useHandlers

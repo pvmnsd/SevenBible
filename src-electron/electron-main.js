@@ -1,9 +1,12 @@
-import { app, BrowserWindow, nativeTheme } from 'electron'
-import { initialize, enable } from '@electron/remote/main'
+import {app, BrowserWindow, nativeTheme, dialog, ipcMain} from 'electron'
+import {initialize, enable} from '@electron/remote/main'
 import path from 'path'
 import fs from 'fs'
 import os from 'os'
 import useHandlers from './handlers'
+import settings from '/user/settings/settings.json'
+import {colors} from "quasar";
+const {programSettings: {win}} = settings
 
 initialize()
 
@@ -14,26 +17,23 @@ try {
   if (platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
     fs.unlinkSync(path.join(app.getPath('userData'), 'DevTools Extensions'))
   }
+} catch (_) {
 }
-catch (_) { }
 
 useHandlers()
 
 
 let mainWindow
 
-function createWindow () {
+function createWindow() {
   mainWindow = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'),
-    width: 1920 / 2,
-    height: 1080,
-    x: 1920 / 2,
-    y: 0,
+    center: true,
     useContentSize: true,
     frame: false,
+    ...win,
     webPreferences: {
       contextIsolation: true,
-      // More info: /quasar-cli/developing-electron-apps/electron-preload-script
       preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD)
     }
   })
@@ -45,14 +45,18 @@ function createWindow () {
   if (process.env.DEBUGGING) {
     // if on DEV or Production with debug enabled
     mainWindow.webContents.openDevTools()
-  }
-  else {
+  } else {
     // we're on production; no access to devtools pls
     mainWindow.webContents.on('devtools-opened', () => {
       mainWindow.webContents.closeDevTools()
     })
   }
 
+  mainWindow.on('close', (e) => {
+    e.preventDefault()
+    ipcMain.once('close-app', () => app.exit())
+    mainWindow.webContents.send('close-app')
+  })
   mainWindow.on('closed', () => {
     mainWindow = null
   })
@@ -60,11 +64,12 @@ function createWindow () {
 
 app.whenReady().then(createWindow)
 
-app.on('window-all-closed', () => {
-  if (platform !== 'darwin') {
-    app.quit()
-  }
-})
+// app.on('window-all-closed', () => {
+//   if (platform !== 'darwin') {
+//     app.quit()
+//   }
+// })
+
 
 app.on('activate', () => {
   if (mainWindow === null) {

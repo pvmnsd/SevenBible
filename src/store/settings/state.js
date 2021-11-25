@@ -1,4 +1,4 @@
-import settings from '/modules/user/settings/settings.json'
+import settings from '/user/settings/settings.json'
 
 export default function () {
   return {

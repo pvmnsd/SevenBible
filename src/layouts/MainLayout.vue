@@ -11,7 +11,7 @@
     />
 
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
   </q-layout>
 </template>
@@ -34,14 +34,26 @@ export default defineComponent({
   setup() {
     const drawer = ref(false)
     const toggleDrawer = () => drawer.value = !drawer.value
-    const programSettings = computed(() => useStore().getters["settings/programSettings"])
+    const store = useStore()
+    const programSettings = computed(() => store.getters["settings/programSettings"])
     const font = computed(() => ({fontFamily: `${programSettings.value.font}, sans-serif`}))
     onMounted(() => {
       document.body.setAttribute('theme', programSettings.value.theme)
     })
-    // setTimeout(() => {
-    //   return import('src/css/fonts/Roboto.scss')
-    // }, 5000)
+
+
+    const stringify = state => JSON.stringify(state, null, 2)
+    const saveProgramSettings = (state) => window.electron.saveProgramSettings(stringify(state))
+
+    setInterval(() => {
+      console.log('saved')
+      saveProgramSettings(store.state.settings)
+    }, 60000 * 5)
+
+    window.electron.onCloseApp(async () => {
+      await saveProgramSettings(store.state.settings)
+      window.electron.closeApp()
+    })
 
     return {drawer, toggleDrawer, programSettings, font}
   }

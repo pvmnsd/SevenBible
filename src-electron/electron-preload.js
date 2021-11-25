@@ -8,7 +8,10 @@ const dir = process.env.DEBUGGING ? '' : path.join(app.getAppPath(), '..')
 
 contextBridge.exposeInMainWorld('electron', {
   invoke: (apiKey, settings) => ipcRenderer.invoke(apiKey, settings),
-  send: (apiKey, settings) => ipcRenderer.send(apiKey, settings)
+  send: (apiKey, settings) => ipcRenderer.send(apiKey, settings),
+  closeApp: () => ipcRenderer.send('close-app'),
+  onCloseApp: callback => ipcRenderer.once('close-app', callback),
+  saveProgramSettings: state => ipcRenderer.invoke('save-program-settings', state),
 })
 contextBridge.exposeInMainWorld('system', {
   fsReaddirSync: (_path) => fs.readdirSync(path.join(dir, ..._path)),
