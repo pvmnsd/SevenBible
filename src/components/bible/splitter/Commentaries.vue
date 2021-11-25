@@ -1,5 +1,4 @@
 <template>
-  <div class='column col'>
     <CommentariesTopBar
       :commentaries-file-name="commentariesFileName"
       :book-short-name="bookShortName"
@@ -40,9 +39,6 @@
         <q-spinner-gears size="50px" color="primary"/>
       </q-inner-loading>
     </div>
-
-
-  </div>
 
 </template>
 

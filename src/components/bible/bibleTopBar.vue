@@ -1,7 +1,9 @@
 <template>
-  <div>
-
-    <div class="row no-wrap bg-secondary-bg">
+    <div
+      @wheel.prevent="horizontalScrollOnWheel($event, $refs.topBar)"
+      ref="topBar"
+      class="row no-wrap bg-secondary-bg col-auto scroll-x"
+    >
       <ModuleSelector
         :file-name="bookFileName"
         :path="['modules', 'books']"
@@ -21,7 +23,7 @@
       <q-separator vertical color='separator'/>
 
       <q-btn
-        class='col'
+        class='col overflow-hidden'
         :label='`${bookShortName ?? "..."} ${chapterNumber}`'
         no-caps
         no-wrap
@@ -69,7 +71,6 @@
     </div>
 
     <q-separator color='separator'/>
-  </div>
 </template>
 
 <script>
@@ -77,6 +78,7 @@ import QuickSettings from 'components/bible/topBar/quickSettings.vue'
 import ModuleSelector from 'components/bible/ModuleSelector.vue'
 import {useStore} from 'vuex'
 import {inject, onMounted, ref, watch} from "vue";
+import {horizontalScrollOnWheel} from "src/hooks/HorizontalScrollOnWheel";
 
 export default {
   setup(props) {
@@ -121,6 +123,7 @@ export default {
     const activeBibleModulesIndexes = inject('activeBibleModulesIndexes')
 
     return {
+      horizontalScrollOnWheel,
       arrows,
       onNavigateClick,
       closeWindow,

@@ -31,13 +31,13 @@ body {
   background-color: rgba(255, 255, 0, 0.315);
 }
 
-//::-webkit-scrollbar-button {
-//  display: none;
-//}
-//
-//.q-page ::-webkit-scrollbar {
-//  display: none;
-//}
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+.q-page ::-webkit-scrollbar {
+  display: none;
+}
 
 .no-selectable {
   -moz-user-select: none;
@@ -84,12 +84,12 @@ body {
 }
 
 .splitpanes--vertical > .splitpanes__splitter {
-  min-width: 6px !important;
+  min-width: 2px !important;
   background: var(--separator);
 }
 
 .splitpanes--horizontal > .splitpanes__splitter {
-  min-height: 6px !important;
+  min-height: 2px !important;
   background: var(--separator);
 }
 

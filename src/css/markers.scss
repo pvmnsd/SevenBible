@@ -78,7 +78,7 @@ h, .h {
 .bible-text[showsubheadings="true"] {
   h, .h {
     font-size: 1.1em;
-    color: #860000;
+    color: var(--heading);
     font-weight: bold;
     margin: 4px 0;
     display: block;
@@ -151,4 +151,11 @@ h, .h {
   .commentary {
     display: inline;
   }
+}
+
+font{
+  color: var(--text);
+}
+a{
+  white-space: nowrap;
 }

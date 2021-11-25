@@ -5,21 +5,21 @@
     />
 
     <q-scroll-area class='col'>
-        <div class='q-px-xl q-py-sm q-gutter-sm'>
+      <div class='q-px-xl q-py-sm q-gutter-sm'>
 
-          <div v-for='(number, key, id) in strongNumbersInfo' :key='id'>
-            <div class='text-bold text-green' v-show='strongNumbers.length > 1'>{{ key }}</div>
-            <div v-html='number.definition'></div>
-            <q-separator class='q-my-xs' color='separator'/>
-            <div v-if="number.cognate.length" class='cognate row'>
-              Однокоренные:
-              <div style='margin: 0 2px' v-for='(cognate, i) in number.cognate' :key='i'>
-                <a :href="'S:' + cognate">{{ cognate }}</a>
-              </div>
+        <div v-for='(number, key, id) in strongNumbersInfo' :key='id'>
+          <div class='text-bold text-green' v-show='strongNumbers.length > 1'>{{ key }}</div>
+          <div v-html='number.definition'></div>
+          <q-separator class='q-my-xs' color='separator'/>
+          <div v-if="number.cognate.length" class='cognate row'>
+            Однокоренные:
+            <div style='margin: 0 2px' v-for='(cognate, i) in number.cognate' :key='i'>
+              <a :href="'S:' + cognate">{{ cognate }}</a>
             </div>
           </div>
-
         </div>
+
+      </div>
     </q-scroll-area>
 </template>
 <script>

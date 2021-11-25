@@ -9,7 +9,7 @@
             :key="id"
             min-size="10"
             :class="i === 1 ? 'col' : 'col-auto'"
-            class="relative-position column"
+            class="relative-position column row"
           >
             <Bible :id="id"/>
           </pane>

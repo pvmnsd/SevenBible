@@ -19,7 +19,7 @@
     </div>
 
     <q-scroll-area class="col">
-      <q-list separator bordered>
+      <q-list separator>
         <q-item
           clickable
           v-ripple

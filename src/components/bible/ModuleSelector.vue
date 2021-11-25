@@ -1,7 +1,7 @@
 <template>
   <q-btn-dropdown
     :label='fileName'
-    class='without-icon'
+    class='without-icon col-auto'
     stretch
     unelevated
     no-caps

@@ -3,7 +3,10 @@
     class="column col"
     horizontal
   >
-    <Pane class="column col">
+    <Pane
+      class="column col"
+      min-size="10"
+    >
       <bible-text
         :ref-string="refString"
         :chapter-number="bible.chapterNumber"
@@ -18,10 +21,18 @@
         :key="bibleTextKey"
       />
     </Pane>
-    <Pane v-if="!allModulesClosed" class="column col-auto">
+    <Pane
+      v-if="!allModulesClosed"
+      class="column col-auto"
+      min-size="10"
+    >
       <Splitpanes class="column col">
 
-        <Pane v-if="commentaries.show" class="column col-auto">
+        <Pane
+          v-if="commentaries.show"
+          class="column row col-auto"
+          min-size="10"
+        >
           <Commentaries
             :book-file-name="bible.fileName"
             :chapter-number="bible.chapterNumber"
@@ -30,7 +41,11 @@
             :book-short-name="bookNames.bookShortName"
           />
         </Pane>
-        <Pane v-if='strong.show' class="column col">
+        <Pane
+          v-if='strong.show'
+          class="column row col"
+          min-size="10"
+        >
           <Strong
             :strong-file-name="strong.fileName"
             :strong-numbers="strong.strongNumbers"

@@ -1,5 +1,9 @@
 <template>
-  <div class='row no-wrap bg-secondary-bg'>
+  <div
+    @wheel.prevent="horizontalScrollOnWheel($event, $refs.topBar)"
+    ref="topBar"
+    class='row no-wrap col-auto bg-secondary-bg scroll-x'
+  >
 
     <ModuleSelector
       module="commentaries"
@@ -9,10 +13,11 @@
     <q-separator vertical color="separator"/>
 
     <q-btn
-      class="col"
+      class="col overflow-hidden"
       :label="bookShortName + ' ' + chapterNumber"
       no-caps
       unelevated
+      no-wrap
       stretch
     />
     <q-separator vertical color="separator"/>
@@ -31,13 +36,15 @@
 import ModuleSelector from "components/bible/ModuleSelector"
 import {useStore} from "vuex"
 import { inject } from 'vue'
+import {horizontalScrollOnWheel} from "src/hooks/HorizontalScrollOnWheel";
+
 export default {
   setup(){
     const id = inject('id')
     const store = useStore()
     const toggleModuleState = (key, name) => store.commit('settings/toggleModuleState', {id, key, name})
 
-    return {toggleModuleState}
+    return {toggleModuleState, horizontalScrollOnWheel}
   },
   props: {
     commentariesFileName: String,
