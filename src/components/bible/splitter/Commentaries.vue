@@ -1,44 +1,44 @@
 <template>
-    <CommentariesTopBar
-      :commentaries-file-name="commentariesFileName"
-      :book-short-name="bookShortName"
-      :chapter-number="chapterNumber"
-    />
-    <div class="relative-position column col">
-      <q-scroll-area
-        class="col"
-        id="scroll-target"
+  <CommentariesTopBar
+    :commentaries-file-name="commentariesFileName"
+    :book-short-name="bookShortName"
+    :chapter-number="chapterNumber"
+  />
+  <div class="relative-position column col">
+    <q-scroll-area
+      class="col"
+      id="scroll-target"
+    >
+      <div
+        class="q-px-xl q-py-sm text-center"
+        v-if="!commentaries.length && !showLoader"
+        v-text='`В модуле "${commentariesFileName}" не найдено комментариев на выбраную главу.`'
+      />
+      <q-virtual-scroll
+        v-else
+        scroll-target="#scroll-target > .scroll"
+        :items="commentaries"
+        virtual-scroll-slice-size="1"
+        virtual-scroll-slice-ratio-before="0.3"
+        class="q-px-xl q-py-sm q-gutter-sm"
       >
-        <div
-          class="q-px-xl q-py-sm text-center"
-          v-if="!commentaries.length && !showLoader"
-          v-text='`В модуле "${commentariesFileName}" не найдено комментариев на выбраную главу.`'
-        />
-        <q-virtual-scroll
-          v-else
-          scroll-target="#scroll-target > .scroll"
-          :items="commentaries"
-          virtual-scroll-slice-size="1"
-          virtual-scroll-slice-ratio-before="0.3"
-          class="q-px-xl q-py-sm q-gutter-sm"
-        >
-          <template v-slot="{ item }">
-            <div>
-              <a
-                class="text-weight-bold"
-                v-text="bookShortName + ' ' + chapterNumber + ':' + item.verseNumber"
-              />
-            </div>
-            <span v-html="item.text"/>
-          </template>
-        </q-virtual-scroll>
+        <template v-slot="{ item }">
+          <div>
+            <a
+              class="text-weight-bold"
+              v-text="bookShortName + ' ' + chapterNumber + ':' + item.verseNumber"
+            />
+          </div>
+          <span v-html="item.text"/>
+        </template>
+      </q-virtual-scroll>
 
-      </q-scroll-area>
+    </q-scroll-area>
 
-      <q-inner-loading :showing="showLoader">
-        <q-spinner-gears size="50px" color="primary"/>
-      </q-inner-loading>
-    </div>
+    <q-inner-loading :showing="showLoader">
+      <q-spinner-gears size="50px" color="primary"/>
+    </q-inner-loading>
+  </div>
 
 </template>
 
@@ -51,19 +51,28 @@ export default {
     const commentaries = ref([])
     const showLoader = ref(false)
 
-    const getCommentaries = async () => {
+    let watcherValue
+
+    const getCommentaries = (currVal) => {
       showLoader.value = true
       commentaries.value = []
-      const settings = {
-        chapterNumber: props.chapterNumber,
-        bookNumber: props.bookNumber,
-        commentaryFileName: props.commentariesFileName
-      }
-      commentaries.value = await window.electron.invoke('get-commentaries', settings)
-      showLoader.value = false
+      setTimeout(async () => {
+        const settings = {
+          chapterNumber: props.chapterNumber,
+          bookNumber: props.bookNumber,
+          commentaryFileName: props.commentariesFileName
+        }
+        let commentariesData
+        if (watcherValue === currVal)
+          commentariesData = await window.electron.invoke('get-commentaries', settings)
+        if (watcherValue === currVal)
+          commentaries.value = commentariesData
+        showLoader.value = false
+      }, 700)
     }
-    watch([() => props.chapterNumber, () => props.bookNumber, () => props.commentariesFileName], (chapterNumber) => {
-      getCommentaries()
+    watch([() => props.chapterNumber, () => props.bookNumber, () => props.commentariesFileName], (newVal) => {
+      watcherValue = newVal
+      getCommentaries(newVal)
     })
     onMounted(() => getCommentaries())
 
