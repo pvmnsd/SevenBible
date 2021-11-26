@@ -10,7 +10,6 @@
 // const ESLintPlugin = require('eslint-webpack-plugin')
 const WatchIgnorePlugin = require('webpack').WatchIgnorePlugin
 const {configure} = require('quasar/wrappers')
-const path = require("path")
 
 module.exports = configure(function (ctx) {
   return {
@@ -210,7 +209,7 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'sevenbible',
+        appId: 'seven-bible',
         asar: true,
         productName: 'SevenBible',
         npmRebuild: true,

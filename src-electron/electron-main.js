@@ -1,12 +1,13 @@
-import {app, BrowserWindow, nativeTheme, dialog, ipcMain} from 'electron'
+import {app, BrowserWindow, nativeTheme, ipcMain} from 'electron'
 import {initialize, enable} from '@electron/remote/main'
 import path from 'path'
 import fs from 'fs'
 import os from 'os'
 import useHandlers from './handlers'
-import settings from '/user/settings/settings.json'
-import {colors} from "quasar";
-const {programSettings: {win}} = settings
+
+const dir = process.env.DEBUGGING ? '' : path.join(app.getAppPath(), '..')
+
+const {programSettings: {win}} = JSON.parse(fs.readFileSync(path.join(dir,'user','settings', 'settings.json'), {encoding: "utf8"}))
 
 initialize()
 

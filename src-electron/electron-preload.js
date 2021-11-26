@@ -15,6 +15,7 @@ contextBridge.exposeInMainWorld('electron', {
 })
 contextBridge.exposeInMainWorld('system', {
   fsReaddirSync: (_path) => fs.readdirSync(path.join(dir, ..._path)),
+  fsReadFileSync: (_path) => fs.readFileSync(path.join(dir, ..._path), {encoding: "utf8"}),
   fsExistsSync: (_path) => fs.existsSync(path.join(dir, ..._path)),
   getAllFonts: () => getFonts()
 })
