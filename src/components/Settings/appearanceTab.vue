@@ -52,16 +52,16 @@ export default {
     const $q = useQuasar()
     const store = useStore()
     const programSettings = computed(() => store.getters['settings/programSettings'])
-    const changeProgramSettings = (settings) => store.commit('settings/changeProgramSettings', settings)
+    const changeProgramSettingsPointly = (settings) => store.commit('settings/changeProgramSettingsPointly', settings)
 
     const updateTheme = value => {
-      changeProgramSettings({ id,  key: 'theme', value })
+      changeProgramSettingsPointly({ id,  key: 'theme', value })
       $q.dark.set(value === 'dark')
       document.body.setAttribute('theme', value)
     }
 
     const setNewFont = fontName => {
-      store.commit('settings/changeProgramSettings', {key: 'font', value: fontName})
+      store.commit('settings/changeProgramSettingsPointly', {key: 'font', value: fontName})
     }
 
     const fonts = ref([])

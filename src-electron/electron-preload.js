@@ -31,6 +31,6 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
       win.maximize()
     }
   },
-  close: () => BrowserWindow.getFocusedWindow().close()
+  close: () => BrowserWindow.getFocusedWindow().close(),
+  getWindowBounds: () => BrowserWindow.fromId(1).getBounds()
 })
-

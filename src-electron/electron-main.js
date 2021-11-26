@@ -32,6 +32,8 @@ function createWindow() {
     center: true,
     useContentSize: true,
     frame: false,
+    minHeight: 600,
+    minWidth: 700,
     ...win,
     webPreferences: {
       contextIsolation: true,
@@ -71,7 +73,6 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
 
 app.on('activate', () => {
   if (mainWindow === null) {

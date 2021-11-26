@@ -24,7 +24,6 @@ function getDirection(info) {
         }
 }
 
-
 const databases = {}
 
 function useHandlers() {

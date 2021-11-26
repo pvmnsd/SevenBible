@@ -45,13 +45,20 @@ export default defineComponent({
     const stringify = state => JSON.stringify(state, null, 2)
     const saveProgramSettings = (state) => window.electron.saveProgramSettings(stringify(state))
 
-    setInterval(() => {
-      console.log('saved')
+    const changeProgramSettings = settings => store.commit('settings/changeProgramSettings', settings)
+
+    const saveProgramState = () => {
+      changeProgramSettings({win: window.myWindowAPI.getWindowBounds()})
       saveProgramSettings(store.state.settings)
+    }
+
+    setInterval(() => {
+      saveProgramState()
+      console.log('saved')
     }, 60000 * 5)
 
     window.electron.onCloseApp(async () => {
-      await saveProgramSettings(store.state.settings)
+      await saveProgramState()
       window.electron.closeApp()
     })
 

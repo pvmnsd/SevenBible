@@ -1,5 +1,10 @@
-export function changeProgramSettings(state, {key, value}) {
+import {programSettings} from "src/store/settings/getters";
+
+export function changeProgramSettingsPointly(state, {key, value}) {
   state.programSettings[key] = value
+}
+export const changeProgramSettings = (state, settings) => {
+  state.programSettings = {...state.programSettings, ...settings}
 }
 
 export const changeModuleState = (state, {id, key, settings}) => {
