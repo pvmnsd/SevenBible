@@ -55,9 +55,10 @@ function createWindow() {
 
   mainWindow.on('close', (e) => {
     e.preventDefault()
-    ipcMain.once('close-app', () => app.exit())
+    ipcMain.once('close-app', () => mainWindow.destroy())
     mainWindow.webContents.send('close-app')
   })
+
   mainWindow.on('closed', () => {
     mainWindow = null
   })
@@ -65,11 +66,11 @@ function createWindow() {
 
 app.whenReady().then(createWindow)
 
-// app.on('window-all-closed', () => {
-//   if (platform !== 'darwin') {
-//     app.quit()
-//   }
-// })
+app.on('window-all-closed', () => {
+  if (platform !== 'darwin') {
+    app.quit()
+  }
+})
 
 
 app.on('activate', () => {
