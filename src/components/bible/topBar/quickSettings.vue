@@ -201,7 +201,9 @@ export default defineComponent({
       }
     }
 
-    onMounted(() => window.addEventListener('keyup', keyListener))
+    onMounted(() => {
+      window.addEventListener('keyup', keyListener)
+    })
     onBeforeUnmount(() => window.removeEventListener('keyup', keyListener))
     return {
       changeViewState,

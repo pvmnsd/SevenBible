@@ -117,7 +117,9 @@ export default {
       arrows.value = data.arrows
     }
 
-    onMounted(() => getState())
+    onMounted(() => {
+      getState()
+    })
     watch(() => props.refString, () => getState())
 
     const activeBibleModulesIndexes = inject('activeBibleModulesIndexes')

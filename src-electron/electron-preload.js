@@ -17,7 +17,8 @@ contextBridge.exposeInMainWorld('system', {
   fsReaddirSync: (_path) => fs.readdirSync(path.join(dir, ..._path)),
   fsExistsSync: (_path) => fs.existsSync(path.join(dir, ..._path)),
   getAllFonts: () => getFonts(),
-  getSettings: () => fs.readFileSync(path.join(dir, 'user', 'settings', 'settings.json'), {encoding: 'utf8'})
+  getSettings: () => fs.readFileSync(path.join(dir, 'user', 'settings', 'settings.json'), {encoding: 'utf8'}),
+  getFirstExistsModuleName: (_path) => fs.readdirSync(path.join(dir, ..._path))[0].split('.')[0]
 })
 
 contextBridge.exposeInMainWorld('myWindowAPI', {

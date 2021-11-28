@@ -115,11 +115,17 @@ export default defineComponent({
     const commentaries = computed(() => store.getters['settings/commentaries'](id))
     const bookFileName = computed(() => bible.value.fileName)
 
+    const changeModuleStatePointly = (moduleName, key, value) => store.commit('settings/changeModuleStatePointly',{id, moduleName, key, value})
+    if (!bookFileName.value || !bookFileName.value.length){
+      const fileName = window.system.getFirstExistsModuleName(['modules', 'books'])
+      changeModuleStatePointly('bible', 'fileName', fileName)
+    }
+
     let booksList = ref([])
     let info = ref({})
 
     const fetchInfoAndBooksList = async () => {
-      const data = await useBookList(bible.value.fileName)
+      const data = await useBookList(bookFileName.value)
       booksList.value = data.booksList
       info.value = data.info
     }
