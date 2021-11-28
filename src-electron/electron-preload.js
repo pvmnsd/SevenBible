@@ -4,7 +4,7 @@ import path from 'path'
 import fs from 'fs'
 import {getFonts} from 'font-list'
 
-const dir = process.env.DEBUGGING ? '' : path.join(app.getAppPath(), '..')
+const dir = process.env.DEBUGGING ? '' : path.join(app.getPath('userData'), '..')
 
 contextBridge.exposeInMainWorld('electron', {
   invoke: (apiKey, settings) => ipcRenderer.invoke(apiKey, settings),
@@ -15,9 +15,9 @@ contextBridge.exposeInMainWorld('electron', {
 })
 contextBridge.exposeInMainWorld('system', {
   fsReaddirSync: (_path) => fs.readdirSync(path.join(dir, ..._path)),
-  fsReadFileSync: (_path) => fs.readFileSync(path.join(dir, ..._path), {encoding: "utf8"}),
   fsExistsSync: (_path) => fs.existsSync(path.join(dir, ..._path)),
-  getAllFonts: () => getFonts()
+  getAllFonts: () => getFonts(),
+  getSettings: () => fs.readFileSync(path.join(dir, 'user', 'settings', 'settings.json'), {encoding: 'utf8'})
 })
 
 contextBridge.exposeInMainWorld('myWindowAPI', {

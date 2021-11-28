@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import Database from 'better-sqlite3-with-prebuilds'
 
-const dir = process.env.DEBUGGING ? '' : path.join(app.getAppPath(), '..')
+const dir = process.env.DEBUGGING ? '' : path.join(app.getPath('userData'), '..')
 
 function getDirection(info) {
   return info.right_to_left === 'true' ? {
@@ -30,7 +30,7 @@ function useHandlers() {
 
   const openDbConnectionIfNotExists = bookFileName => {
     if (!databases[bookFileName]) {
-      databases[bookFileName] = new Database(path.join(dir, 'modules', 'books', bookFileName+'.SQLite3'), {readonly: true})
+      databases[bookFileName] = new Database(path.join(dir, 'modules', 'books', bookFileName + '.SQLite3'), {readonly: true})
     }
   }
   const closeDbConnection = (bookFileName, activeBibleModules) => {
@@ -368,12 +368,13 @@ function useHandlers() {
   })
 
   ipcMain.handle('get-commentaries', (event, args) => {
-    const commentariesDb = new Database(path.join(dir, 'modules', 'commentaries',args.commentaryFileName + '.commentaries.SQLite3'), {readonly: true})
+    const commentariesDb = new Database(path.join(dir, 'modules', 'commentaries', args.commentaryFileName + '.commentaries.SQLite3'), {readonly: true})
     let res = null
     try {
       const sql = `SELECT verse_number_from as verseNumber, text FROM commentaries WHERE book_number = ? AND chapter_number_from = ?`
       res = commentariesDb.prepare(sql).all(args.bookNumber, args.chapterNumber)
-    }catch{}
+    } catch {
+    }
     commentariesDb.close()
     return res
   })

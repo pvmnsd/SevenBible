@@ -5,6 +5,9 @@
       "src/*": [
         "src/*"
       ],
+      "src-e/*": [
+        "src-electron/*"
+      ],
       "app/*": [
         "*"
       ],

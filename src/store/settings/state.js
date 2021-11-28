@@ -1,4 +1,4 @@
-const settings = JSON.parse(window.system.fsReadFileSync(['user', 'settings', 'settings.json']))
+const settings = JSON.parse(window.system.getSettings())
 
 export default function () {
   return {

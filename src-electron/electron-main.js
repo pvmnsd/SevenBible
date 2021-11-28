@@ -4,10 +4,11 @@ import path from 'path'
 import fs from 'fs'
 import os from 'os'
 import useHandlers from './handlers'
+import {getSettings} from "./hooks/getSettings"
 
-const dir = process.env.DEBUGGING ? '' : path.join(app.getAppPath(), '..')
+global.dir = process.env.DEBUGGING ? '' : path.resolve(app.getPath('userData'), '..')
 
-const {programSettings: {win}} = JSON.parse(fs.readFileSync(path.join(dir,'user','settings', 'settings.json'), {encoding: "utf8"}))
+const {programSettings: {win}} = getSettings()
 
 initialize()
 

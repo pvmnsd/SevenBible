@@ -10,6 +10,7 @@
 // const ESLintPlugin = require('eslint-webpack-plugin')
 const WatchIgnorePlugin = require('webpack').WatchIgnorePlugin
 const {configure} = require('quasar/wrappers')
+const path = require('path')
 
 module.exports = configure(function (ctx) {
   return {
@@ -73,6 +74,11 @@ module.exports = configure(function (ctx) {
         cfg.plugins.push(
           new WatchIgnorePlugin({paths: [/user/, /modules/, /node_modules/, /dist/]})
         )
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias,
+          "srce": path.resolve(__dirname,'./src-electron/')
+        }
+
       }
     },
 
@@ -191,7 +197,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
     electron: {
-      bundler: 'builder', // 'packager' or 'builder'
+      bundler: 'packager', // 'packager' or 'builder'
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
@@ -215,11 +221,11 @@ module.exports = configure(function (ctx) {
         npmRebuild: true,
         extraResources: ["./modules/**", "./user/**"],
         win: {
-          target: ['nsis', 'portable']
+          target: ['portable']
         },
         linux: {
           category: 'Education',
-          target: ['deb']
+          target: ['AppImage']
         }
       },
 
@@ -233,11 +239,19 @@ module.exports = configure(function (ctx) {
         cfg.plugins.push(
           new WatchIgnorePlugin({paths: [/user/, /modules/, /node_modules/, /dist/]})
         )
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias,
+          "src-e": path.resolve(__dirname,'./src-electron/')
+        }
       },
       extendWebpackPreload(cfg) {
         cfg.plugins.push(
           new WatchIgnorePlugin({paths: [/user/, /modules/, /node_modules/, /dist/]})
         )
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias,
+          "src-e": path.resolve(__dirname,'./src-electron/')
+        }
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
