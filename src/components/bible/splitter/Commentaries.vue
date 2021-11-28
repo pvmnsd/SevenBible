@@ -44,10 +44,18 @@
 
 <script>
 import CommentariesTopBar from "components/bible/splitter/commentaries/commentariesTopBar"
-import {onMounted, ref, watch, nextTick} from "vue"
+import {onMounted, ref, watch, inject} from "vue"
+import {useStore} from "vuex";
 
 export default {
   setup(props) {
+    const id = inject('id')
+    const store = useStore()
+    const changeModuleStatePointly = (moduleName, key, value) =>  store.commit('settings/changeModuleStatePointly',{id, moduleName, key, value})
+
+    if (!props.commentariesFileName || !props.commentariesFileName.length)
+      changeModuleStatePointly('commentaries', 'fileName', window.system.getFirstExistsModuleName(['modules', 'commentaries']))
+
     const commentaries = ref([])
     const showLoader = ref(false)
 
