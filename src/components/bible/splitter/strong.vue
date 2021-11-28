@@ -24,7 +24,8 @@
 </template>
 <script>
 import StrongTopBar from './strong/strongTopBar.vue'
-import {ref, defineComponent, computed, onMounted, watch} from "vue"
+import {ref, defineComponent, computed, onMounted, watch, inject} from "vue"
+import {useStore} from "vuex";
 
 export default defineComponent({
   props: {
@@ -36,6 +37,13 @@ export default defineComponent({
   },
   components: { StrongTopBar },
   setup(props){
+    const id = inject('id')
+    const store = useStore()
+    const changeModuleStatePointly = (moduleName, key, value) =>  store.commit('settings/changeModuleStatePointly',{id, moduleName, key, value})
+
+    if (!props.strongFileName || !props.strongFileName.length)
+      changeModuleStatePointly('strong', 'fileName', window.system.getFirstExistsModuleName(['modules', 'dictionaries', 'strong']))
+
     const strongNumbersInfo = ref({})
     const searchInfo = async () => {
       const settings = {
