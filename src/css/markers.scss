@@ -1,5 +1,6 @@
 S, f {
   display: none;
+  @extend .no-selectable
 }
 
 m {

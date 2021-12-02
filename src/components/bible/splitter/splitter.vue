@@ -12,6 +12,7 @@
         :chapter-number="bible.chapterNumber"
         :book-number="bible.bookNumber"
         :book-full-name="bookNames.bookFullName"
+        :book-short-name="bookNames.bookShortName"
         :info="info"
         :view="bible.view"
         :book-file-name="bible.fileName"

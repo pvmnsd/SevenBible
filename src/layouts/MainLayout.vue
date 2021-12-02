@@ -30,12 +30,13 @@ export default defineComponent({
     Drawer
   },
   emits: ['toggleDrawer'],
-
   setup() {
     const drawer = ref(false)
     const toggleDrawer = () => drawer.value = !drawer.value
+
     const store = useStore()
     const programSettings = computed(() => store.getters["settings/programSettings"])
+
     const font = computed(() => ({fontFamily: `${programSettings.value.font}, sans-serif`}))
     onMounted(() => {
       document.body.setAttribute('theme', programSettings.value.theme)

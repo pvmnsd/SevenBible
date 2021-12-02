@@ -9,3 +9,4 @@ export const bibleActiveModules = state => state.windows.reduce((sum, curr, id) 
     bookFileName: curr.bible.fileName
   }] : sum
 }, [])
+export const copySettings = state => state.programSettings.copy

@@ -33,8 +33,14 @@
 
       <div
         class='verses'
-        @click.stop="onVersesBlockEvent"
+        ref="verses"
+        @click.stop="onVersesBlockClick"
+        @copy="copyText"
       >
+        <ContextMenu
+          :verses="$refs.verses"
+          :book-short-name="bookShortName"
+        />
         <q-popup-proxy
           ref="popupProxy"
           no-parent-event
@@ -42,7 +48,11 @@
         >
           <div class="q-pa-md" v-html="popupProxyText"/>
         </q-popup-proxy>
-        <div class='verse' v-for='(verse, i) in chapterText' :key='i' :class="'v' + (i+1).toString()">
+        <div
+          v-for='(verse, i) in chapterText'
+          :key='i'
+          class='verse'
+        >
 
           <span
             v-if="verse.story"
@@ -100,6 +110,7 @@ import {useQuasar} from "quasar"
 import getChapter from 'src/hooks/getChapter'
 import getFootnotes from 'src/hooks/getFootnotes'
 import {strongSearch, getCommentByFootnote} from 'src/hooks/wordEvents'
+import ContextMenu from "components/bible/splitter/bibleText/ContextMenu";
 
 export default defineComponent({
   setup(props){
@@ -129,7 +140,7 @@ export default defineComponent({
     const popupProxyTarget = ref(undefined)
     const popupProxyText = ref('')
     const popupProxy = ref(null)
-    const onVersesBlockEvent = ({target: element}) => {
+    const onVersesBlockClick = ({target: element}) => {
       if (element.tagName === "S")
         changeModuleState({
           key: "strong", settings: {
@@ -146,6 +157,12 @@ export default defineComponent({
         getCommentByFootnote(element, popupProxyTarget, popupProxyText, popupProxy, footnotes)
     }
 
+    const copyText = async () => {
+      let text = await navigator.clipboard.readText()
+      text = text.replace(/\n/g, ' ')
+      navigator.clipboard.writeText(text)
+    }
+
     return {
       textScrollArea,
       chapterText,
@@ -153,16 +170,18 @@ export default defineComponent({
       popupProxyTarget,
       isStrong,
       popupProxy,
-      onVersesBlockEvent,
+      onVersesBlockClick,
+      copyText,
       isError,
       errorMessage
     }
   },
-  components: { Headings, VerseNumber },
+  components: {ContextMenu, Headings, VerseNumber },
   props: {
     view: Object,
     info: Object,
     bookFullName: String,
+    bookShortName: String,
     refString: String,
     bookNumber: Number,
     chapterNumber: Number,
