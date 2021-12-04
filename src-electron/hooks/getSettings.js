@@ -1,14 +1,13 @@
-import {writeFileSync, readFileSync} from 'fs'
+import fs from 'fs-extra'
 import {join} from 'path'
 import {settingsScheme} from "src-e/objects/settingsScheme"
 
 export const getSettings = () => {
   try {
-    const settings = readFileSync(join(global.dir, 'user', 'settings', 'settings.json'), {encoding: "utf8"})
+    const settings = fs.readFileSync(join(global.dir, 'user', 'settings', 'settings.json'), {encoding: "utf8"})
     return JSON.parse(settings)
   } catch (e) {
-    const settingsStr = JSON.stringify(settingsScheme, null, 2)
-    writeFileSync(join(dir, 'user', 'settings', 'settings.json'), settingsStr)
+    fs.outputJson(join(global.dir, 'user', 'settings', 'settings.json'), settingsScheme)
     return settingsScheme
   }
 }

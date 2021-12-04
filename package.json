@@ -19,6 +19,7 @@
     "better-sqlite3": "^7.4.5",
     "core-js": "^3.6.5",
     "font-list": "^1.4.2",
+    "fs-extra": "^10.0.0",
     "quasar": "^2.3.2",
     "splitpanes": "^3.0.6",
     "vue-i18n": "^9.0.0",
