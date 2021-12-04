@@ -4,7 +4,7 @@ import path from 'path'
 import fs from 'fs'
 import {getFonts} from 'font-list'
 
-const dir = process.env.DEBUGGING ? '' : path.join(app.getPath('userData'), '..')
+const dir = process.env.DEBUGGING ? '' : path.join(app.getPath('userData'))
 
 contextBridge.exposeInMainWorld('electron', {
   invoke: (apiKey, settings) => ipcRenderer.invoke(apiKey, settings),

@@ -1,9 +1,9 @@
 import {ipcMain, app} from 'electron'
 import fs from 'fs'
 import path from 'path'
-import Database from 'better-sqlite3-with-prebuilds'
+import Database from 'better-sqlite3'
 
-const dir = process.env.DEBUGGING ? '' : path.join(app.getPath('userData'), '..')
+const dir = process.env.DEBUGGING ? '' : path.join(app.getPath('userData'))
 
 function getDirection(info) {
   return info.right_to_left === 'true' ? {

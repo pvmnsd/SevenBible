@@ -6,7 +6,7 @@ import os from 'os'
 import useHandlers from './handlers'
 import {getSettings} from "./hooks/getSettings"
 
-global.dir = process.env.DEBUGGING ? '' : path.resolve(app.getPath('userData'), '..')
+global.dir = process.env.DEBUGGING ? '' : path.resolve(app.getPath('userData'))
 
 const {programSettings: {win}} = getSettings()
 

@@ -197,7 +197,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
     electron: {
-      bundler: 'packager', // 'packager' or 'builder'
+      bundler: 'builder', // 'packager' or 'builder'
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
@@ -215,13 +215,14 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'com.${name}',
+        appId: 'seven-bible',
         asar: true,
-        productName: 'SevenBible',
-        npmRebuild: true,
-        extraResources: ["./modules/**", "./user/**"],
+        productName: 'Seven Bible',
+        // npmRebuild: false,
+        // npmSkipBuildFromSource: true,
+        // extraResources: ["./modules/**", "./user/**"],
         win: {
-          target: ['portable']
+          target: ['nsis', 'portable']
         },
         linux: {
           category: 'Education',
