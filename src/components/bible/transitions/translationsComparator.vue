@@ -15,7 +15,6 @@
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
 
-    <div class="overlay">
       <q-list separator>
         <q-item
           clickable
@@ -40,7 +39,6 @@
           </q-item-section>
         </q-item>
       </q-list>
-    </div>
 
   </UIModalWindow>
 </template>

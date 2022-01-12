@@ -64,29 +64,37 @@
 
 
     </UIModalWindowSettings>
-
-    <div class="overlay">
-      <template
-        v-for="(item, i) in foundedTexts"
-        :key='i'
-      >
-        <q-separator/>
-        <q-item
-          clickable
-          class='q-px-md'
-          @click='goToText(item.book_number,item.chapter)'
+    <DynamicScroller
+      :items="foundedTexts"
+      :min-item-size="54"
+      class="overlay"
+      keyField="rowid"
+    >
+      <template v-slot="{ item, index, active }">
+        <DynamicScrollerItem
+          :item="item"
+          :active="active"
+          buffer="20"
+          :data-index="index"
         >
-          <q-item-section>
-            <q-item-label caption
-            >{{ item.bookFullName }}
-              {{ item.chapter }}:{{ item.verse }}
-            </q-item-label
-            >
-            <q-item-label v-html='item.text'></q-item-label>
-          </q-item-section>
-        </q-item>
+          <q-separator/>
+          <q-item
+            clickable
+            class='q-px-md'
+            @click='goToText(item.book_number,item.chapter)'
+          >
+            <q-item-section>
+              <q-item-label caption
+              >{{ item.bookShortName }}
+                {{ item.chapter }}:{{ item.verse }}
+              </q-item-label
+              >
+              <q-item-label v-html='item.text'></q-item-label>
+            </q-item-section>
+          </q-item>
+        </DynamicScrollerItem>
       </template>
-    </div>
+    </DynamicScroller>
 
   </UIModalWindow>
 </template>
@@ -165,10 +173,12 @@ export default defineComponent({
         fixedStrongNumbersPrefix: props.strongNumbersPrefix,
         bookFileName: bookFileName
       }
+
       const normalizedNumbers = strongNumbers.value.map(curr => curr.substring(1))
       const strongNumbersRegexString = normalizedNumbers.join('|')
       const data = await window.electron.invoke('find-verse-by-strong', settings)
 
+      console.log(data)
       const regex = new RegExp(`<S>(${strongNumbersRegexString})</S>`, 'gi')
       data.forEach(current => {
         current.text = current.text.replace(regex, `<mark>${current.strongNumbersPrefix}$1</mark>`)
@@ -203,7 +213,7 @@ export default defineComponent({
       foundedTexts
     }
   },
-  props:{
+  props: {
     strongNumbersPrefix: String
   }
 })

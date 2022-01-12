@@ -4,7 +4,7 @@
     :transitions="transitions"
     :book-full-name="bookFullName"
     :book-short-name="bookShortName"
-    :strong-numbers-prefix="strongNumbersPrefix"
+    :strong-numbers-prefix="bibleModuleInfo.strong_numbers_prefix"
   />
   <Splitpanes
     horizontal

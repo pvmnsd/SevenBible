@@ -16,79 +16,91 @@
       <q-btn flat round icon='more_vert'/>
     </UIModalWindowHeader>
 
-    <div class='overlay'>
-      <q-list separator bordered>
-        <q-item
-          clickable
-          v-ripple
-          v-for='(ref, idx) in crossreferences'
-          :key='idx'
-          @click="goToText(ref.book_to, ref.chapter_to)"
-          :dir="ref.book_to >= 470 ? textDirections.nt : textDirections.ot"
+    <DynamicScroller
+      :items="crossreferences"
+      :min-item-size="54"
+      class="overlay"
+      keyField="rowid"
+    >
+      <template v-slot="{ item, index, active }">
+        <DynamicScrollerItem
+          :item="item"
+          :active="active"
+          buffer="20"
+          :data-index="index"
         >
-          <q-item-section>
+          <q-item
+            clickable
+            v-ripple
+            @click="goToText(item.book_to, item.chapter_to)"
+            :dir="item.book_to >= 470 ? textDirections.nt : textDirections.ot"
+          >
+            <q-item-section>
 
-            <q-item-label lines="1" class="q-gutter-x-md q-pb-sm">
-              <bdo class="text-weight-light">{{ ref.module_name }}</bdo>
-              <span>{{ `${ref.bookShortName} ${ref.chapter_to}:${ref.verse_to_start}${ref.verse_to_end === 0 ? '' : '-' + ref.verse_to_end}` }}</span>
-            </q-item-label>
+              <q-item-label lines="1" class="q-gutter-x-md q-pb-sm">
+                <bdo class="text-weight-light">{{ item.module_name }}</bdo>
+                <span>{{
+                    `${item.bookShortName} ${item.chapter_to}:${item.verse_to_start}${item.verse_to_end === 0 ? '' : '-' + item.verse_to_end}`
+                  }}</span>
+              </q-item-label>
 
-            <q-item-label>
-              <div class="q-gutter-x-sm">
+              <q-item-label>
+                <div class="q-gutter-x-sm">
                 <span
-                  v-if="ref.expanded"
+                  v-if="item.expanded"
                   class="text-subtitle2 text-body2"
                 >
-                  {{ ref.texts[0].verse }}
+                  {{ item.texts[0].verse }}
                 </span>
 
-                <span v-html="{...ref.texts[0]}.text"></span>
-              </div>
-              <div
-                id="el"
-                style="transition: all .25s;max-height: 0;overflow: hidden;"
-              >
+                  <span v-html="{...item.texts[0]}.text"></span>
+                </div>
                 <div
-                  v-for="(item, i) in ref.texts.slice(1)"
-                  :key="i"
-                  class="q-gutter-x-sm"
+                  id="el"
+                  style="transition: all .25s;max-height: 0;overflow: hidden;"
                 >
+                  <div
+                    v-for="(firstVerse, i) in item.texts.slice(1)"
+                    :key="i"
+                    class="q-gutter-x-sm"
+                  >
 
                 <span class="text-subtitle2 text-body2">
-                  {{ item.verse }}
+                  {{ firstVerse.verse }}
                 </span>
 
-                  <span v-html="item.text"></span>
+                    <span v-html="firstVerse.text"></span>
 
+                  </div>
                 </div>
-              </div>
-              <q-btn
-                v-if="ref.texts.length > 1"
-                flat
-                class="full-width q-mt-sm"
-                @click.stop="openPanel($event, ref.expanded, ref)"
-              >
-                <!--                <transition name="fade">-->
-                <q-icon
-                  v-if="ref.expanded"
-                  key="less"
-                  class="absolute-center"
-                  name="expand_less"/>
-                <q-icon
-                  v-else
-                  key="more"
-                  class="absolute-center"
-                  name="expand_more"/>
-                <!--                </transition>-->
+                <q-btn
+                  v-if="item.texts.length > 1"
+                  flat
+                  class="full-width q-mt-sm"
+                  @click.stop="openPanel($event, item.expanded, item)"
+                >
+                  <!--                <transition name="fade">-->
+                  <q-icon
+                    v-if="item.expanded"
+                    key="less"
+                    class="absolute-center"
+                    name="expand_less"/>
+                  <q-icon
+                    v-else
+                    key="more"
+                    class="absolute-center"
+                    name="expand_more"/>
+                  <!--                </transition>-->
 
-              </q-btn>
-            </q-item-label>
+                </q-btn>
+              </q-item-label>
 
-          </q-item-section>
+            </q-item-section>
 
-        </q-item>
-      </q-list>
-    </div>
+          </q-item>
+        </DynamicScrollerItem>
+      </template>
+    </DynamicScroller>
 
   </UIModalWindow>
 </template>

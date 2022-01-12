@@ -255,6 +255,7 @@ function useHandlers() {
   })
 
   ipcMain.handle('find-verse-by-strong', (event, args) => {
+    const bookShortNameSelector = `(SELECT short_name FROM books WHERE book_number = @bookNumber)`
     const parsedNumbers = args.strongNumbers.map(current => {
       const strongNumbersPrefix = current[0].toUpperCase()
       return {
@@ -269,14 +270,15 @@ function useHandlers() {
     })
     let res = []
     if (args.separator === 'AND') {
-      let sql = `SELECT * from verses WHERE book_number ${parsedNumbers[0].testament} `
-      parsedNumbers.forEach(item => sql += `AND text like '%<S>${item.number}</S>%' `)
+      let sql = `SELECT v.*, v.rowid b.short_name as bookShortName FROM verses v, books b WHERE v.book_number ${parsedNumbers[0].testament} AND v.book_number = b.book_number `
+      parsedNumbers.forEach(item => sql += `AND v.text like '%<S>${item.number}</S>%' `)
       res = databases[args.bookFileName].prepare(sql).all()
       res.forEach(item => item.strongNumbersPrefix = parsedNumbers[0].testament === '<=460' ? 'H' : 'G')
-    } else if (args.separator === 'OR') {
+    }
+    else if (args.separator === 'OR') {
       const texts = {}
       parsedNumbers.forEach(parsedNumber => {
-        const sql = `SELECT * from verses WHERE book_number ${parsedNumber.testament} AND text like '%<S>${parsedNumber.number}</S>%'`
+        const sql = `SELECT v.*, v.rowid, b.short_name as bookShortName FROM verses v, books b WHERE v.book_number ${parsedNumber.testament} AND v.book_number = b.book_number AND v.text like '%<S>${parsedNumber.number}</S>%'`
         const findedTexts = databases[args.bookFileName].prepare(sql).all()
         findedTexts.forEach(item => {
           const prop = item.book_number + '-' + item.chapter + '-' + item.verse
@@ -296,7 +298,6 @@ function useHandlers() {
     const crossreferencesDir = fs.readdirSync(path.join(dir, 'modules', 'crossreferences'))
     const sql = 'SELECT book_to, chapter_to, verse_to_start, verse_to_end, votes, rowid FROM cross_references WHERE book = ? AND chapter = ? AND verse = ?'
     const result = []
-    const i = 0
     crossreferencesDir.forEach(fileName => {
       const crf = new Database(path.join(dir, 'modules', 'crossreferences', fileName), {readonly: true})
       const foundedRefs = crf.prepare(sql).all(args.bookNumber, args.chapterNumber, args.verse)
