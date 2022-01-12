@@ -1,66 +1,56 @@
 <template>
-  <div
-    @wheel.prevent="horizontalScrollOnWheel($event, $refs.topBar)"
-    ref="topBar"
-    class='row no-wrap bg-secondary-bg col-auto scroll-x'
-  >
-
+  <UIButtonset>
     <ModuleSelector
       :file-name="strongFileName"
       module="strong"
       :path="['modules', 'dictionaries', 'strong']"
     />
-    <q-separator vertical color='separator'/>
+    <q-separator vertical/>
 
     <q-btn
       :label='strongNumbersToString'
       stretch
       unelevated
       no-wrap
-      size='13px'
-      class='col overflow-hidden'
+      class="grow-1"
     />
-    <q-separator vertical color='separator'/>
+    <q-separator vertical/>
 
     <q-btn
-      @click="$parent.$parent.$parent.$parent.$parent.$emit('toggleWindow', 'strongSearcher', true)"
+      @click="transitions.strongSearcher = true"
       stretch
       unelevated
-      size='13px'
       icon='manage_search'
-      class='col-auto'
     />
-    <q-separator vertical color='separator'/>
+    <q-separator vertical/>
 
     <q-btn
       icon='more_vert'
       stretch
       unelevated
-      size='13px'
-      class='col-auto'
     />
-    <q-separator vertical color='separator'/>
+    <q-separator vertical/>
 
     <q-btn
       icon='close'
       stretch
       unelevated
-      size='13px'
-      class='col-auto'
       @click="changeModuleState({ id, key: 'strong', settings: {show: false}})"
     />
+  </UIButtonset>
 
-  </div>
-  <q-separator color='separator'/>
+  <q-separator/>
 </template>
 <script>
 import ModuleSelector from 'components/bible/ModuleSelector.vue'
 import {computed, defineComponent, inject, ref} from 'vue'
 import {useStore} from 'vuex'
 import {horizontalScrollOnWheel} from "src/hooks/HorizontalScrollOnWheel"
+import UIButtonset from "components/UI/UIButtonset";
+import useSevenBible from "src/hooks/useSevenBible";
 
 export default defineComponent({
-  components: {ModuleSelector},
+  components: {UIButtonset, ModuleSelector},
   props: {
     strongNumbers: Array,
     strongFileName: {
@@ -71,8 +61,9 @@ export default defineComponent({
   setup(props) {
     const id = inject('id')
     const store = useStore()
-
+    const {transitions} = useSevenBible()
     return {
+      transitions,
       horizontalScrollOnWheel: horizontalScrollOnWheel,
       id,
       changeModuleState: (settings) => store.commit('settings/changeModuleState', settings),

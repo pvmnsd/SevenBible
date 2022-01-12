@@ -24,8 +24,10 @@ module.exports = configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-      // 'i18n',
-      'stringPrototype'
+      'directives',
+      'i18n',
+      'prototype',
+      'globalComponents'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -70,16 +72,6 @@ module.exports = configure(function (ctx) {
 
       // https://quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      extendWebpack(cfg) {
-        cfg.plugins.push(
-          new WatchIgnorePlugin({paths: [/user/, /modules/, /node_modules/, /dist/]})
-        )
-        cfg.resolve.alias = {
-          ...cfg.resolve.alias,
-          "srce": path.resolve(__dirname,'./src-electron/')
-        }
-
-      }
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer

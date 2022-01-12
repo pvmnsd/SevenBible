@@ -1,138 +1,99 @@
 <template>
-    <div
-      @wheel.prevent="horizontalScrollOnWheel($event, $refs.topBar)"
-      ref="topBar"
-      class="row no-wrap bg-secondary-bg col-auto scroll-x"
-    >
-      <ModuleSelector
-        :file-name="bookFileName"
-        :path="['modules', 'books']"
-        module="bible"
-      />
-      <template v-if="activeBibleModulesIndexes.length > 1">
-        <q-separator vertical color='separator'/>
-        <q-btn
-          class='col-auto'
-          icon="close"
-          stretch
-          unelevated
-          @click.stop="closeWindow"
-        />
-      </template>
+  <UIButtonset>
+    <ModuleSelector
+      :file-name="bookFileName"
+      :path="['modules', 'books']"
+      module="bible"
+    />
 
-      <q-separator vertical color='separator'/>
+    <q-separator vertical/>
 
+    <q-btn
+      class='grow-1'
+      :label='`${bookShortName ?? "..."} ${chapterNumber}`'
+      no-caps
+      no-wrap
+      stretch
+      unelevated
+      @click.stop="openWindow('bookSelector')"
+    />
+
+    <q-separator vertical/>
+
+    <q-btn
+      stretch
+      unelevated
+      icon='search'
+      @click="openWindow('bookSearcher')"
+    />
+
+    <q-separator vertical/>
+
+    <q-btn
+      no-caps
+      icon='navigate_before'
+      :disable='arrows.before.disabled'
+      stretch
+      unelevated
+      @click='onNavigateClick("before")'
+    />
+
+    <q-separator vertical/>
+
+    <q-btn
+      no-caps
+      icon='navigate_next'
+      :disable='arrows.next.disabled'
+      stretch
+      unelevated
+      @click='onNavigateClick("next")'
+    />
+    <q-separator vertical/>
+
+    <quick-settings :bible-view="bibleView"/>
+
+    <template v-if="activeWorkPlacesCount > 1">
+      <q-separator vertical/>
       <q-btn
-        class='col overflow-hidden'
-        :label='`${bookShortName ?? "..."} ${chapterNumber}`'
-        no-caps
-        no-wrap
+        icon="close"
         stretch
         unelevated
-        @click.stop="$emit('toggleWindow','bookSelector',true)"
+        @click.stop="closeWindow"
       />
+    </template>
 
-      <q-separator vertical color='separator'/>
-
-      <q-btn
-        class='col-auto'
-        stretch
-        unelevated
-        icon='search'
-        @click="$emit('toggleWindow','bookSearcher', true)"
-      />
-
-      <q-separator vertical color='separator'/>
-
-      <q-btn
-        class='col-auto'
-        no-caps
-        icon='navigate_before'
-        :disable='arrows.before.disabled'
-        stretch
-        unelevated
-        @click='onNavigateClick("before")'
-      />
-
-      <q-separator vertical color='separator'/>
-
-      <q-btn
-        class='col-auto'
-        no-caps
-        icon='navigate_next'
-        :disable='arrows.next.disabled'
-        stretch
-        unelevated
-        @click='onNavigateClick("next")'
-      />
-      <q-separator vertical color='separator'/>
-
-      <quick-settings :bible-view="bibleView"/>
-    </div>
-
-    <q-separator color='separator'/>
+  </UIButtonset>
+  <q-separator/>
 </template>
+
 
 <script>
 import QuickSettings from 'components/bible/topBar/quickSettings.vue'
 import ModuleSelector from 'components/bible/ModuleSelector.vue'
-import {useStore} from 'vuex'
-import {inject, onMounted, ref, watch} from "vue";
 import {horizontalScrollOnWheel} from "src/hooks/HorizontalScrollOnWheel";
+import UIButtonset from "components/UI/UIButtonset";
+import useBibleTopBar from "src/hooks/useBibleTopBar";
 
 export default {
   setup(props) {
-    const id = inject('id')
-
-    const arrows = ref({
-      next: {ref: null, disabled: true},
-      before: {ref: null, disabled: true}
-    })
-
-    const store = useStore()
-    const changeModuleState = settings => store.commit('settings/changeModuleState', settings)
-    const closeWindow = () => {
-      store.commit('settings/closeWindow', id)
-      const settings = {
-        bookFileName: props.bookFileName,
-        activeBibleModules: store.getters["settings/bibleActiveModules"].map(e => e.bookFileName)
-      }
-      window.electron.invoke('close-db-connection', settings)
-    }
-
-    const onNavigateClick = btn => {
-      changeModuleState({
-        id,
-        key: 'bible',
-        settings: arrows.value[btn].ref
-      })
-    }
-    const getState = async () => {
-      const settings = {
-        bookNumber: props.bookNumber,
-        chapterNumber: props.chapterNumber,
-        bookFileName: props.bookFileName
-      }
-      const data = await window.electron.invoke('get-top-bar-state', settings)
-      arrows.value = data.arrows
-    }
-
-    onMounted(() => {
-      getState()
-    })
-    watch(() => props.refString, () => getState())
-
-    const activeBibleModulesIndexes = inject('activeBibleModulesIndexes')
-
-    return {
-      horizontalScrollOnWheel,
+    const {
       arrows,
       onNavigateClick,
       closeWindow,
-      activeBibleModulesIndexes
+      openWindow,
+      activeWorkPlacesCount
+    } = useBibleTopBar(props)
+
+    return {
+      arrows,
+      horizontalScrollOnWheel,
+      onNavigateClick,
+      closeWindow,
+      openWindow,
+      activeWorkPlacesCount
     }
   },
-  components: {QuickSettings, ModuleSelector},
+  components: {UIButtonset, QuickSettings, ModuleSelector},
   props: {
     bibleView: Object,
     refString: String,

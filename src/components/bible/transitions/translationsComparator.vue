@@ -1,24 +1,21 @@
 <template>
-  <div class='fit absolute transition bg-background column'>
-    <div>
-      <div class='row q-pa-md'>
-        <q-btn
-          flat
-          round
-          icon='arrow_back'
-          @click="$emit('toggleWindow', 'translationsComparator', false)"
-        />
-        <div class='flex direction-center items-center text-bold q-px-xs'>
-          {{ bookShortName }} {{ chapterNumber }}:{{ verseNumber }} в разных местах
-        </div>
-        <q-space/>
-        <q-btn flat round icon='payments'/>
-        <q-btn flat round icon='more_vert'/>
-      </div>
-      <q-separator color='blue' style='height: 2px'/>
-    </div>
+  <UIModalWindow>
 
-    <q-scroll-area class="col">
+    <UIModalWindowHeader>
+      <q-btn
+        flat
+        round
+        icon='arrow_back'
+        @click="close"
+      />
+      <div class='flex direction-center items-center text-bold q-px-xs'>
+        {{ bookShortName }} {{ chapterNumber }}:{{ chosenVerse }} в разных местах
+      </div>
+      <q-space/>
+      <q-btn disable flat round icon='more_vert'/>
+    </UIModalWindowHeader>
+
+    <div class="overlay">
       <q-list separator>
         <q-item
           clickable
@@ -43,47 +40,56 @@
           </q-item-section>
         </q-item>
       </q-list>
-    </q-scroll-area>
+    </div>
 
-  </div>
+  </UIModalWindow>
 </template>
 
 <script>
-import {mapMutations, useStore} from 'vuex'
-import {ref, computed, onMounted, inject} from "vue";
+import useStore from "src/hooks/useStore";
+import {ref, computed, onMounted} from "vue";
+import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
+import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
+import useSevenBible from "src/hooks/useSevenBible";
 
 export default {
-  setup(props, {emit}) {
-    const id = inject('id')
-
+  components: {UIModalWindowHeader, UIModalWindow},
+  setup(props) {
+    const {id, chosenVerse, transitions} = useSevenBible()
+    const store = useStore()
+    const {chapterNumber, bookNumber} = store.native.state.settings.workPlace[id].bible
     const testament = computed(() => props.bookNumber >= 470 ? 'nt' : 'ot')
 
-    const store = useStore()
-    const changeModuleState = settings => store.commit('settings/changeModuleState', settings)
+    const close = () => transitions.translationsComparator = false
 
     const goToModule = moduleName => {
-      changeModuleState({id, key: 'bible', settings: {fileName: moduleName}})
-      emit('toggleWindow', 'translationsComparator', false)
+      store.state.set(`workPlace.${id}.bible.fileName`, moduleName)
+      close()
     }
 
     const translationsTexts = ref([])
     const getComparedTranslations = async () => {
       const settings = {
-        bookNumber: props.bookNumber,
-        chapterNumber: props.chapterNumber,
-        verseNumber: props.verseNumber
+        bookNumber: bookNumber,
+        chapterNumber: chapterNumber,
+        verseNumber: chosenVerse.value
       }
       translationsTexts.value = await window.electron.invoke('get-compared-translations', settings)
     }
     onMounted(() => getComparedTranslations())
 
-    return {testament, goToModule, translationsTexts}
+    return {
+      testament,
+      translationsTexts,
+      chosenVerse,
+      chapterNumber,
+      bookNumber,
+      goToModule,
+      close
+    }
   },
   props: {
-    bookShortName: String,
-    bookNumber: Number,
-    chapterNumber: Number,
-    verseNumber: Number
+    bookShortName: String
   }
 }
 </script>

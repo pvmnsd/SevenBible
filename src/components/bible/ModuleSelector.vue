@@ -1,7 +1,7 @@
 <template>
   <q-btn-dropdown
     :label='fileName'
-    class='without-icon col-auto'
+    class='without-icon'
     stretch
     unelevated
     no-caps
@@ -15,7 +15,7 @@
             <q-item-label>{{ fileName }}</q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-icon name='book' color='gray'/>
+            <q-icon name='book'/>
           </q-item-section>
         </q-item>
 
@@ -27,20 +27,23 @@
 
 <script>
 
-import {defineComponent, inject, ref} from "vue"
-import { useStore } from "vuex"
+import {defineComponent, ref} from "vue"
+import useStore from "src/hooks/useStore";
+import useSevenBible from "src/hooks/useSevenBible";
 
 export default defineComponent({
-  setup(props){
-    const id = inject('id')
+  setup(props) {
+    const {id} = useSevenBible()
     const modules = ref([])
     const store = useStore()
-    const changeModuleState = settings => store.commit('settings/changeModuleState', settings)
 
     const loadStrongModules = () => {
-      if (props.path.length) { modules.value = window.system.fsReaddirSync(props.path).map(module => module.split('.')[0]) } else console.log('Отсутствуют модули ... ')
+      if (props.path.length) {
+        modules.value = window.system.fsReaddirSync(props.path)
+          .map(module => module.split('.')[0])
+      } else console.log('Отсутствуют модули ... ')
     }
-    const onModuleClick = fileName => changeModuleState({ id, key: props.module, settings: { fileName: fileName } })
+    const onModuleClick = fileName => store.state.set(`workPlace.${id}.${props.module}.fileName`, fileName)
 
     return {onModuleClick, loadStrongModules, modules}
   },

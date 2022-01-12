@@ -1,7 +1,8 @@
-import {ipcMain, app} from 'electron'
-import fs from 'fs'
+import {ipcMain, app, BrowserWindow} from 'electron'
+import fs from 'fs-extra'
 import path from 'path'
 import Database from 'better-sqlite3'
+import {getFonts} from 'font-list'
 
 const dir = process.env.DEBUGGING ? '' : path.join(app.getPath('userData'))
 
@@ -53,8 +54,10 @@ function useHandlers() {
     openDbConnectionIfNotExists(args.bookFileName)
     const res = {}
     try {
-      const sql = 'SELECT text FROM verses WHERE book_number = ? AND chapter = ?'
+      let sql = 'SELECT text FROM verses WHERE book_number = ? AND chapter = ?'
       res.texts = databases[args.bookFileName].prepare(sql).all(args.bookNumber, args.chapterNumber)
+      sql = "SELECT long_name as bookFullName, short_name as bookShortName from books WHERE book_number = ?"
+      res.bookNames = databases[args.bookFileName].prepare(sql).get(args.bookNumber)
     } catch {
     }
 
@@ -213,8 +216,10 @@ function useHandlers() {
     return databases[args.bookFileName].prepare(sql).pluck().all(args.bookNumber)[0]
   })
 
+
   ipcMain.handle('find-texts-in-bible', (event, args) => {
     const fundedTexts = []
+
     const dbSearch = new Database(path.join(dir, 'modules', 'search', `${args.bookFileName}.SQLite3.search`), {readonly: true})
 
     let sql = `SELECT book_number, chapter, verse FROM texts WHERE bare_lowercase_words like('%${args.searchString}%')`
@@ -222,8 +227,12 @@ function useHandlers() {
     dbSearch.close()
 
     fundedRefs.forEach(ref => {
-      sql = 'SELECT * FROM verses WHERE book_number = ? AND chapter = ? AND verse = ?'
-      fundedTexts.push(databases[args.bookFileName].prepare(sql).get(ref.book_number, ref.chapter, ref.verse))
+      sql = 'SELECT *, (SELECT long_name FROM books WHERE book_number = @bookNumber) as long_name, rowid FROM verses WHERE book_number = @bookNumber AND chapter = @chapterNumber AND verse = @verseNumber'
+      fundedTexts.push(databases[args.bookFileName].prepare(sql).get({
+        bookNumber: ref.book_number,
+        verseNumber: ref.verse,
+        chapterNumber: ref.chapter
+      }))
     })
     return fundedTexts
   })
@@ -285,14 +294,15 @@ function useHandlers() {
 
   ipcMain.handle('get-crossreferences', (event, args) => {
     const crossreferencesDir = fs.readdirSync(path.join(dir, 'modules', 'crossreferences'))
-    const sql = 'SELECT book_to, chapter_to, verse_to_start, verse_to_end, votes FROM cross_references WHERE book = ? AND chapter = ? AND verse = ?'
+    const sql = 'SELECT book_to, chapter_to, verse_to_start, verse_to_end, votes, rowid FROM cross_references WHERE book = ? AND chapter = ? AND verse = ?'
     const result = []
     const i = 0
     crossreferencesDir.forEach(fileName => {
       const crf = new Database(path.join(dir, 'modules', 'crossreferences', fileName), {readonly: true})
       const foundedRefs = crf.prepare(sql).all(args.bookNumber, args.chapterNumber, args.verse)
+      crf.close()
 
-      const sql1 = 'SELECT verse, text from verses WHERE book_number = ? AND chapter = ? AND verse BETWEEN ? AND ?'
+      const sql1 = 'SELECT verse, text FROM verses WHERE book_number = @bookNumber AND chapter = @chapterNumber AND verse BETWEEN @verseStart AND @verseEnd'
       const prepared = databases[args.bookFileName].prepare(sql1)
       for (const foundedRef of foundedRefs) {
         const unique = result.some(ref => ref.book_to === foundedRef.book_to &&
@@ -300,13 +310,18 @@ function useHandlers() {
           ref.verse_to_start === foundedRef.verse_to_start &&
           ref.verse_to_end === foundedRef.verse_to_end)
         if (!unique) {
-          const texts = prepared.all(foundedRef.book_to, foundedRef.chapter_to, foundedRef.verse_to_start, foundedRef.verse_to_end === 0 ? foundedRef.verse_to_start : foundedRef.verse_to_end)
-          if (!texts.length) {
+          const texts = prepared.all({
+            bookNumber: foundedRef.book_to,
+            chapterNumber: foundedRef.chapter_to,
+            verseStart: foundedRef.verse_to_start,
+            verseEnd: foundedRef.verse_to_end === 0 ? foundedRef.verse_to_start : foundedRef.verse_to_end
+          })
+          if (!texts.length)
             continue
-          }
           foundedRef.texts = texts
           foundedRef.module_name = fileName.split('.')[0]
           foundedRef.expanded = false
+          foundedRef.bookShortName = databases[args.bookFileName].prepare(`SELECT short_name FROM books WHERE book_number = ?`).pluck().get(foundedRef.book_to)
           result.push(foundedRef)
         }
       }
@@ -371,7 +386,7 @@ function useHandlers() {
     const commentariesDb = new Database(path.join(dir, 'modules', 'commentaries', args.commentaryFileName + '.commentaries.SQLite3'), {readonly: true})
     let res = null
     try {
-      const sql = `SELECT verse_number_from as verseNumber, text FROM commentaries WHERE book_number = ? AND chapter_number_from = ?`
+      const sql = `SELECT chapter_number_from as chapter, verse_number_from as verseNumber, text FROM commentaries WHERE book_number = ? AND chapter_number_from = ?`
       res = commentariesDb.prepare(sql).all(args.bookNumber, args.chapterNumber)
     } catch {
     }
@@ -380,9 +395,34 @@ function useHandlers() {
   })
 
   ipcMain.handle('save-program-settings', (_, state) => {
+    console.log('saved')
     fs.writeFileSync(path.join(dir, 'user', 'settings', 'settings.json'), state)
-    return
   })
+
+  ipcMain.on('minimize', () => BrowserWindow.getFocusedWindow().minimize())
+  ipcMain.on('toggle-maximize', () => {
+    const win = BrowserWindow.getFocusedWindow()
+
+    if (win.isMaximized()) {
+      win.unmaximize()
+    } else {
+      win.maximize()
+    }
+  })
+  ipcMain.on('close', () => BrowserWindow.getFocusedWindow().close())
+  ipcMain.handle('get-window-bounds', () => BrowserWindow.fromId(1).getBounds())
+
+  ipcMain.handle('get-themes', () => {
+    return fs.readdirSync(path.join(dir, 'user', 'themes'))
+      .map(theme => theme.split('.')[0])
+  })
+
+  ipcMain.handle('read-user-theme', (event, themeName) => {
+    return fs.readJSON(path.join(dir, 'user', 'themes', themeName) + '.json')
+  })
+
+  ipcMain.handle('get-font-list', () => getFonts())
 }
+
 
 export default useHandlers

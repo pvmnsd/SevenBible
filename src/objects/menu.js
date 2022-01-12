@@ -1,27 +1,27 @@
 export const menuList = [
     {
         icon: "home",
-        label: "Главная",
+        label: "mainPage",
         separator: true,
         path: "/",
     },
     {
         icon: "browser_updated",
-        label: "Модули",
+        label: "modulesPage",
     },
     {
         icon: "settings",
-        label: "Настройки",
+        label: "settingsPage",
         path: "/settings",
     },
     {
         icon: "feedback",
-        label: "Послать отзыв",
+        label: "feedbackPage",
     },
     {
         icon: "help",
         iconColor: "primary",
-        label: "Информация",
+        label: "helpPage",
         path: "/help",
     },
 ]

@@ -20,9 +20,11 @@
     "core-js": "^3.6.5",
     "font-list": "^1.4.2",
     "fs-extra": "^10.0.0",
+    "priority-nav": "^1.0.13",
     "quasar": "^2.3.2",
     "splitpanes": "^3.0.6",
     "vue-i18n": "^9.0.0",
+    "vue-virtual-scroller": "^2.0.0-alpha.1",
     "vuex": "^4.0.1"
   },
   "devDependencies": {

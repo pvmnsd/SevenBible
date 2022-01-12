@@ -1,35 +1,35 @@
 <template>
-  <div style="transition: 0.2s">
+  <div style="transition: 0.2s" class="q-gutter-y-sm">
 
     <div v-if="chapterNumber === 1 && (detailedInfo?.length || moduleIntroduction.length)">
 
               <span
-                class='introduction'
-                style="font-size: 1.3em"
+                class='introduction text-h6'
                 @click='moduleIntroductionWindow = true'
               >
                 {{ introductionString || "Введение" }}
             </span>
 
       <q-dialog v-model='moduleIntroductionWindow'>
-        <q-card style="word-wrap: break-word">
-          <q-card-section class='row items-center q-pb-none bg-background'>
-            <div class='text-h6'>{{ description }}</div>
+        <q-card>
+
+          <q-card-section class='row q-pb-none'>
+            <span class='text-h6'>{{ description }}</span>
             <q-space/>
             <q-btn icon='close' flat round dense v-close-popup/>
           </q-card-section>
 
-          <q-card-section v-html='detailedInfo'></q-card-section>
+          <q-separator/>
 
-          <div v-if="moduleIntroduction.length">
+          <q-card-section class="scroll-container" style="max-height: 50vh">
+            <span v-html='detailedInfo'/>
 
-            <q-card-section>
-              <q-separator color="separator"/>
-            </q-card-section>
+            <template v-if="moduleIntroduction.length">
+              <q-separator/>
+              <span v-html='moduleIntroduction'></span>
+            </template>
 
-            <q-card-section v-html='moduleIntroduction'></q-card-section>
-
-          </div>
+          </q-card-section>
 
         </q-card>
       </q-dialog>
@@ -37,8 +37,7 @@
 
     <div>
       <span
-        class='book-name'
-        style="font-size: 2.5em"
+        class='book-name text-h4'
         :class="{introduction: bookIntroduction}"
         @click="() => {if (bookIntroduction) bookIntroductionWindow = true}"
       >
@@ -46,27 +45,34 @@
       </span>
 
       <q-dialog v-model="bookIntroductionWindow">
-        <q-card style="word-wrap: break-word">
+        <q-card>
 
-          <q-card-section class='row items-center q-pb-none bg-background'>
+          <q-card-section class='row q-pb-none'>
             <div class='text-h6'>{{ bookFullName }}</div>
             <q-space/>
             <q-btn icon='close' flat round dense v-close-popup/>
           </q-card-section>
 
-          <q-card-section v-html='bookIntroduction'></q-card-section>
+          <q-separator/>
+
+          <q-card-section
+            v-html='bookIntroduction'
+            class="scroll-container"
+            style="max-height: 50vh"
+          />
 
         </q-card>
       </q-dialog>
 
     </div>
 
-    <span
-      class='chapter-number'
-      style="font-size: 2em"
+    <div
+      class='chapter-number text-h4'
     >
-      {{ String.hasReplacer(chapterString) ? chapterString.format(chapterNumber) : `${chapterString} ${chapterNumber}` }}
-    </span>
+      {{
+        String.hasReplacer(chapterString) ? chapterString.format(chapterNumber) : `${chapterString} ${chapterNumber}`
+      }}
+    </div>
 
   </div>
 </template>
@@ -76,7 +82,7 @@
 import {defineComponent, watch, onMounted, ref} from "vue";
 
 export default defineComponent({
-  setup(props){
+  setup(props) {
     const moduleIntroductionWindow = ref(false)
     const bookIntroductionWindow = ref(false)
     const chapterIntroductionWindow = ref(false)
@@ -95,8 +101,12 @@ export default defineComponent({
       const data = await window.electron.invoke('get-introductions', settings)
 
       data?.forEach(item => {
-        if (item.book_number === 0) { moduleIntroduction.value = item.introduction }
-        if (item.book_number === settings.bookNumber && !item.chapter_number) { bookIntroduction.value = item.introduction }
+        if (item.book_number === 0) {
+          moduleIntroduction.value = item.introduction
+        }
+        if (item.book_number === settings.bookNumber && !item.chapter_number) {
+          bookIntroduction.value = item.introduction
+        }
       })
     }
 

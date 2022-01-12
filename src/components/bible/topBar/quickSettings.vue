@@ -1,10 +1,12 @@
 <template>
   <q-btn-dropdown
-    class='col-auto without-icon'
+    class='without-icon'
     no-caps
     icon='more_vert'
     stretch
     unelevated
+    menu-anchor="bottom right"
+    menu-self="top right"
     :menu-offset="[0, 1]"
   >
     <div>
@@ -46,7 +48,7 @@
               flat
               size="xs"
               icon="settings"
-              @click="$parent.$emit('toggleWindow', 'subheadingsSettings')"
+              @click="transitions.subheadingsSettings = true"
             />
           </div>
           <div class="flex no-wrap">
@@ -61,7 +63,7 @@
               flat
               size="xs"
               icon="settings"
-              @click="$parent.$emit('toggleWindow', 'commentariesSettings')"
+              @click="transitions.commentariesSettings = true"
             />
           </div>
           <q-checkbox
@@ -69,7 +71,7 @@
             :model-value="bibleView.showVerseNumber"
             label="нумерацию стихов"
           />
-          <q-separator color="separator"/>
+          <q-separator/>
 
           <q-checkbox
             @update:model-value="changeViewState('showParagraphs', $event)"
@@ -82,7 +84,7 @@
             :model-value="bibleView.showContinuousText"
             label="непрерывный текст"
           />
-          <q-separator color='separator'/>
+          <q-separator/>
           <q-checkbox
             @update:model-value="changeViewState('showStrongNumbers', $event)"
             :model-value="bibleView.showStrongNumbers"
@@ -98,7 +100,7 @@
             :model-value="bibleView.showJesusWords"
             label="слова Иисуса"
           />
-          <q-separator color="separator" class="q-my-sm"/>
+          <q-separator class="q-my-sm"/>
           <div class="flex justify-center">
             <div>
               <q-btn
@@ -158,11 +160,11 @@
 import {useStore} from 'vuex'
 import {defineComponent, onMounted, onBeforeUnmount, inject, ref} from "vue"
 import {toggleModuleState} from "src/store/settings/mutations";
+import useSevenBible from "src/hooks/useSevenBible";
 
 export default defineComponent({
   setup(props) {
-    const id = inject('id')
-
+    const {id, transitions} = useSevenBible()
     const panels = ['show', 'open']
     const panel = ref('open')
 
@@ -189,28 +191,13 @@ export default defineComponent({
         changeModuleStateView({id, key: 'bible', name, value})
       } else changeModuleStateView({id, key: 'bible', name, value})
     }
-    const changeFontSize = (event) => {
-      const nextFontSize = event === '+' ? props.bibleView.fontSize + 1 : props.bibleView.fontSize - 1
-      changeModuleStateView({id, key: 'bible', name: 'fontSize', value: nextFontSize})
-    }
-    const keyListener = ({keyCode}) => {
-      if (keyCode === 107) {
-        changeFontSize('+')
-      } else if (keyCode === 109) {
-        changeFontSize('-')
-      }
-    }
 
-    onMounted(() => {
-      window.addEventListener('keyup', keyListener)
-    })
-    onBeforeUnmount(() => window.removeEventListener('keyup', keyListener))
     return {
       changeViewState,
-      changeFontSize,
       showNextPanel,
       toggleModuleState,
-      panel
+      panel,
+      transitions
     }
   },
   props: {bibleView: Object}

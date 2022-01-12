@@ -1,114 +1,16 @@
 /*::-webkit-scrollbar {
   display: none;
 }*/
-@import "themes/themes";
-@import "notifications";
-@import "markers";
+@import "theme";
 //@import "fonts/Noto_Sans";
 @import "fonts/Roboto";
-
+@import "helpers";
+@import "transitions";
+html{
+  height: 100%;
+}
 body {
-  color: var(--text);
-}
-
-.without-icon .q-btn-dropdown__arrow {
-  display: none
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: transform 300ms ease, opacity 300ms ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  transform-origin: center center;
-  transform: scale(0);
-  opacity: 0;
-}
-
-.finded {
-  background-color: rgba(255, 255, 0, 0.315);
-}
-
-::-webkit-scrollbar-button {
-  display: none;
-}
-
-.q-page ::-webkit-scrollbar {
-  display: none;
-}
-
-.no-selectable {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.transition {
-  z-index: 2;
-  color: var(--light);
-}
-
-.separator {
-  background-color: var(--separator);
-}
-
-.q-drawer--bordered {
-  border-color: var(--separator);
-}
-
-.introduction {
-  cursor: pointer;
-  text-decoration: underline;
-
-  &:hover {
-    color: var(--active-text);
-  }
-}
-
-
-.verse-num {
-  font-size: 0.8em;
-  cursor: pointer;
-  padding-right: 3px;
-
-  &:hover {
-    color: var(--active-text) !important;
-  }
-}
-
-.transition .q-item[dir="rtl"] .q-item__section .ellipsis > span:first-child {
-  float: right;
-}
-
-.splitpanes--vertical > .splitpanes__splitter {
-  min-width: 2px !important;
-  background: var(--separator);
-}
-
-.splitpanes--horizontal > .splitpanes__splitter {
-  min-height: 2px !important;
-  background: var(--separator);
-}
-
-.q-scrollarea__thumb {
-  border-radius: 0 !important;
-}
-
-.q-page {
-
-  a {
-    padding: 0 8px;
-    background-color: rgb(22, 150, 255);
-    border-radius: 20px;
-    text-decoration: none;
-    color: white;
-    cursor: pointer;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+  height: 100%;
+  overflow: hidden;
+  color: var(--q-text);
 }

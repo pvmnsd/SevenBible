@@ -1,70 +1,62 @@
 <template>
-  <q-page class='bg-background'>
+  <div class="fit flex d-column">
     <q-tabs
       v-model='tab'
       inline-label
-      class='bg-secondary-bg tabs'
     >
       <q-tab
         v-for="tab in tabs"
         :key="tab.name"
         :name='tab.name'
         :icon='tab.icon'
-        :label='tab.label'
+        :label='t(tab.label)'
       />
 
     </q-tabs>
-    <q-separator color='separator'/>
+    <q-separator/>
 
-    <q-tab-panels v-model='tab'>
+    <q-tab-panels v-model='tab' class="col">
 
       <q-tab-panel
         v-for="tab in [tabs[0]]"
         :key="tab.name"
         :name='tab.name'
+        class="overflow-hidden no-padding"
       >
         <component
-          :is="`${tab.name}Tab`"
-          :active-tab-label="activeTabLabel"
+          :is="`${tab.name}`"
         />
       </q-tab-panel>
 
     </q-tab-panels>
+  </div>
 
-  </q-page>
 </template>
 
 <script>
 
-import {computed, ref} from 'vue'
-import AppearanceTab from "components/Settings/appearanceTab"
+import {computed, ref } from 'vue'
+import GeneralTab from "components/Settings/generalTab"
+import {useI18n} from 'vue-i18n'
 
 export default {
   setup() {
 
+    const {t} = useI18n()
+
     const tabs = [
       {
-        name: 'appearance',
-        label: 'Внешний вид',
+        name: 'generalTab',
+        label: 'generalTab',
+        icon: 'settings'
+      },
+      {
+        name: 'themeEditorTab',
+        label: 'themeEditorTab',
         icon: 'brush'
-      },
-      {
-        name: 'modules',
-        label: 'Модули',
-        icon: 'library_books'
-      },
-      {
-        name: 'mouse',
-        label: 'Взаимодействие',
-        icon: 'mouse'
-      },
-      {
-        name: 'language',
-        label: 'Язык',
-        icon: 'language'
-      },
+      }
     ]
-    const tab = ref('appearance')
+    const tab = ref('generalTab')
 
     const activeTabLabel = computed(() => tabs.find(currTab => currTab.name = tab.value).label)
 
@@ -73,8 +65,9 @@ export default {
       tab,
       tabs,
       activeTabLabel,
+      t
     }
   },
-  components: {AppearanceTab},
+  components: {GeneralTab},
 }
 </script>

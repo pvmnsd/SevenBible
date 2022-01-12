@@ -1,55 +1,46 @@
 <template>
-  <q-layout
-    view="hHh Lpr ffr"
-    :theme="programSettings.theme"
-    :style="font"
-  >
-    <Header @toggleDrawer="toggleDrawer"/>
+  <div :style="font" class="flex d-column fit">
 
-    <Drawer
-      :drawer="drawer"
-    />
+    <SystemBar @toggleDrawer="visibleRight = !visibleRight"/>
+    <div class="flex col">
 
-    <q-page-container>
-      <router-view/>
-    </q-page-container>
-  </q-layout>
+      <div class="layout-main fit min-w-0">
+        <router-view/>
+      </div>
+
+      <SideMenu :visibleRight="visibleRight"/>
+    </div>
+
+  </div>
 </template>
 
 <script>
-import {computed, defineComponent, ref, onMounted} from 'vue'
+import {ref, computed, onMounted} from 'vue'
 import {useStore} from "vuex"
-import Header from "components/Header"
-import Drawer from "components/Drawer"
+import SystemBar from 'components/SystemBar.vue'
+import SideMenu from 'components/SideMenu.vue'
+import useTheme from "src/hooks/useTheme";
 
-export default defineComponent({
-  name: 'MainLayout',
-
-  components: {
-    Header,
-    Drawer
-  },
-  emits: ['toggleDrawer'],
+export default {
   setup() {
-    const drawer = ref(false)
-    const toggleDrawer = () => drawer.value = !drawer.value
+    const visibleRight = ref(true)
 
     const store = useStore()
-    const programSettings = computed(() => store.getters["settings/programSettings"])
+    const app = computed(() => store.getters["settings/app"])
 
-    const font = computed(() => ({fontFamily: `${programSettings.value.font}, sans-serif`}))
-    onMounted(() => {
-      document.body.setAttribute('theme', programSettings.value.theme)
-    })
+    const font = computed(() => ({fontFamily: `${app.value.appearance.font}, sans-serif`}))
 
+    const {setTheme} = useTheme()
+    setTheme(app.value.appearance.theme)
 
     const stringify = state => JSON.stringify(state, null, 2)
     const saveProgramSettings = (state) => window.electron.saveProgramSettings(stringify(state))
 
-    const changeProgramSettings = settings => store.commit('settings/changeProgramSettings', settings)
+    const changeAppSettings = settings => store.commit('settings/changeAppSettings', settings)
 
-    const saveProgramState = () => {
-      changeProgramSettings({win: window.myWindowAPI.getWindowBounds()})
+    const saveProgramState = async () => {
+      const bounds = await window.electron.getWindowBounds()
+      changeAppSettings({win: bounds})
       saveProgramSettings(store.state.settings)
     }
 
@@ -63,7 +54,15 @@ export default defineComponent({
       window.electron.closeApp()
     })
 
-    return {drawer, toggleDrawer, programSettings, font}
+    return {
+      visibleRight,
+      app,
+      font
+    }
+  },
+  components: {
+    SystemBar,
+    SideMenu
   }
-})
+}
 </script>

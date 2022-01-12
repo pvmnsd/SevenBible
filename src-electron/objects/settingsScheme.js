@@ -1,5 +1,5 @@
 export const settingsScheme = {
-  programSettings: {
+  app: {
     theme: "light",
     font: "Roboto",
     win: {
@@ -7,7 +7,7 @@ export const settingsScheme = {
       height: 700
     }
   },
-  windows: [
+  workPlace: [
     {
       active: true,
       bible: {

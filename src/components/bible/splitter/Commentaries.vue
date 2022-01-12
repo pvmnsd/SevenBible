@@ -1,98 +1,88 @@
 <template>
-  <CommentariesTopBar
-    :commentaries-file-name="commentariesFileName"
-    :book-short-name="bookShortName"
-    :chapter-number="chapterNumber"
-  />
-  <div class="relative-position column col">
-    <q-scroll-area
-      class="col"
-      id="scroll-target"
-    >
-      <div
-        class="q-px-xl q-py-sm text-center"
-        v-if="!commentaries.length && !showLoader"
-        v-text='`В модуле "${commentariesFileName}" не найдено комментариев на выбраную главу.`'
+  <UIWorkPlaceWindow>
+
+    <UIWorkPlaceWindowHeader>
+      <CommentariesTopBar
+        :commentaries-file-name="commentariesModule.fileName"
+        :book-short-name="bookShortName"
+        :chapter-number="chapterNumber"
       />
-      <q-virtual-scroll
-        v-else
-        scroll-target="#scroll-target > .scroll"
-        :items="commentaries"
-        virtual-scroll-slice-size="1"
-        virtual-scroll-slice-ratio-before="0.3"
-        class="q-px-xl q-py-sm q-gutter-sm"
-      >
-        <template v-slot="{ item }">
+    </UIWorkPlaceWindowHeader>
+
+    <UIWorkPlaceWindowBody>
+      <template v-if="!showLoader">
+        <div
+          class="text-center"
+          v-if="!commentaries.length"
+          v-text='`В модуле "${commentariesModule.fileName}" не найдено комментариев на выбраную главу.`'
+        />
+        <div
+          v-else
+          v-for="(item, id) in commentaries"
+          :key="id"
+          :items="commentaries"
+        >
           <div>
             <a
               class="text-weight-bold"
-              v-text="bookShortName + ' ' + chapterNumber + ':' + item.verseNumber"
+              v-text="bookShortName + ' ' + item.chapter + ':' + item.verseNumber"
             />
           </div>
           <span v-html="item.text"/>
-        </template>
-      </q-virtual-scroll>
+        </div>
+      </template>
 
-    </q-scroll-area>
+      <q-inner-loading v-else :showing="showLoader">
+        <q-spinner-gears size="50px"/>
+      </q-inner-loading>
+    </UIWorkPlaceWindowBody>
 
-    <q-inner-loading :showing="showLoader">
-      <q-spinner-gears size="50px" color="primary"/>
-    </q-inner-loading>
-  </div>
-
+  </UIWorkPlaceWindow>
 </template>
 
 <script>
 import CommentariesTopBar from "components/bible/splitter/commentaries/commentariesTopBar"
-import {onMounted, ref, watch, inject} from "vue"
-import {useStore} from "vuex";
+import {onMounted, watch} from "vue"
+import useStore from "src/hooks/useStore";
+import UIWorkPlaceWindow from "components/UI/WorkPlaceWindow/UIWorkPlaceWindow";
+import UIWorkPlaceWindowHeader from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowHeader";
+import UIWorkPlaceWindowBody from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowBody";
+import useSevenBible from "src/hooks/useSevenBible";
+import useCommentaries from "src/hooks/useCommentaries";
 
 export default {
   setup(props) {
-    const id = inject('id')
+    const {id, bookShortName} = useSevenBible()
     const store = useStore()
-    const changeModuleStatePointly = (moduleName, key, value) =>  store.commit('settings/changeModuleStatePointly',{id, moduleName, key, value})
+    const commentariesModule = store.state.getReactive(`workPlace.${id}.commentaries`)
+    const chapterNumber = store.state.getReactive(`workPlace.${id}.bible.chapterNumber`)
 
-    if (!props.commentariesFileName || !props.commentariesFileName.length)
-      changeModuleStatePointly('commentaries', 'fileName', window.system.getFirstExistsModuleName(['modules', 'commentaries']))
+    const {commentaries, showLoader, getCommentaries} = useCommentaries(id, store, commentariesModule)
 
-    const commentaries = ref([])
-    const showLoader = ref(false)
-
-    let watcherValue
-
-    const getCommentaries = (currVal) => {
-      showLoader.value = true
-      commentaries.value = []
-      setTimeout(async () => {
-        const settings = {
-          chapterNumber: props.chapterNumber,
-          bookNumber: props.bookNumber,
-          commentaryFileName: props.commentariesFileName
-        }
-        let commentariesData
-        if (watcherValue === currVal)
-          commentariesData = await window.electron.invoke('get-commentaries', settings)
-        if (watcherValue === currVal)
-          commentaries.value = commentariesData
-        showLoader.value = false
-      }, 700)
-    }
-    watch([() => props.chapterNumber, () => props.bookNumber, () => props.commentariesFileName], (newVal) => {
-      watcherValue = newVal
-      getCommentaries(newVal)
+    watch([
+      () => props.refString,
+      () => commentariesModule.value.fileName
+    ], () => {
+      getCommentaries()
     })
     onMounted(() => getCommentaries())
 
-    return {commentaries, showLoader}
+    return {
+      commentaries,
+      showLoader,
+      commentariesModule,
+      bookShortName,
+      chapterNumber
+    }
   },
   props: {
-    bookFileName: String,
-    chapterNumber: Number,
-    commentariesFileName: String,
-    bookNumber: Number,
-    bookShortName: String
+    refString: String
   },
-  components: {CommentariesTopBar}
+  components: {
+    UIWorkPlaceWindowBody,
+    UIWorkPlaceWindowHeader,
+    UIWorkPlaceWindow,
+    CommentariesTopBar
+  }
 }
 </script>

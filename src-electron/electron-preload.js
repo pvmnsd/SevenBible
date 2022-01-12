@@ -1,8 +1,7 @@
 import {contextBridge, ipcRenderer} from 'electron'
-import {BrowserWindow, app} from '@electron/remote'
+import {app} from '@electron/remote'
 import path from 'path'
 import fs from 'fs'
-import {getFonts} from 'font-list'
 
 const dir = process.env.DEBUGGING ? '' : path.join(app.getPath('userData'))
 
@@ -12,26 +11,17 @@ contextBridge.exposeInMainWorld('electron', {
   closeApp: () => ipcRenderer.send('close-app'),
   onCloseApp: callback => ipcRenderer.once('close-app', callback),
   saveProgramSettings: state => ipcRenderer.invoke('save-program-settings', state),
+  close: () => ipcRenderer.send('close'),
+  minimize: () => ipcRenderer.send('minimize'),
+  toggleMaximize: () => ipcRenderer.send('toggle-maximize'),
+  getWindowBounds: () => ipcRenderer.invoke('get-window-bounds'),
+  getUserThemes: () => ipcRenderer.invoke('get-themes'),
+  readUserTheme: themeName => ipcRenderer.invoke('read-user-theme', themeName),
+  getFontList: () => ipcRenderer.invoke('get-font-list')
 })
 contextBridge.exposeInMainWorld('system', {
   fsReaddirSync: (_path) => fs.readdirSync(path.join(dir, ..._path)),
   fsExistsSync: (_path) => fs.existsSync(path.join(dir, ..._path)),
-  getAllFonts: () => getFonts(),
   getSettings: () => fs.readFileSync(path.join(dir, 'user', 'settings', 'settings.json'), {encoding: 'utf8'}),
   getFirstExistsModuleName: (_path) => fs.readdirSync(path.join(dir, ..._path))[0].split('.')[0]
-})
-
-contextBridge.exposeInMainWorld('myWindowAPI', {
-  minimize: () => BrowserWindow.getFocusedWindow().minimize(),
-  toggleMaximize() {
-    const win = BrowserWindow.getFocusedWindow()
-
-    if (win.isMaximized()) {
-      win.unmaximize()
-    } else {
-      win.maximize()
-    }
-  },
-  close: () => BrowserWindow.getFocusedWindow().close(),
-  getWindowBounds: () => BrowserWindow.fromId(1).getBounds()
 })

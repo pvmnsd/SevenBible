@@ -1,25 +1,22 @@
 <template>
-  <div class='fit absolute-top transition bg-background column'>
-    <div>
-      <div class='row q-pa-md'>
-        <q-btn
-          flat
-          round
-          icon='arrow_back'
-          @click="$emit('toggleWindow', 'crossreferencesSearcher', false)"
-        />
-        <div class='flex direction-center items-center text-bold q-px-xs'>
-          {{ bookShortName }} {{ chapterNumber }}:{{ verse }} - ссылки
-        </div>
-        <q-space/>
-        <q-btn flat round icon='payments'/>
-        <q-btn flat round icon='more_vert'/>
-      </div>
-      <q-linear-progress color='blue' style='height: 2px' v-if='showLoader' query/>
-      <q-separator v-else color='blue' style='height: 2px'/>
-    </div>
+  <UIModalWindow>
 
-    <q-scroll-area class='col'>
+    <UIModalWindowHeader>
+      <q-btn
+        flat
+        round
+        icon='arrow_back'
+        @click="close"
+      />
+      <div class='flex direction-center items-center text-bold q-px-xs'>
+        {{ bookShortName }} {{ chapterNumber }}:{{ chosenVerse }} - ссылки
+      </div>
+      <q-space/>
+      <q-btn flat round icon='payments'/>
+      <q-btn flat round icon='more_vert'/>
+    </UIModalWindowHeader>
+
+    <div class='overlay'>
       <q-list separator bordered>
         <q-item
           clickable
@@ -33,14 +30,14 @@
 
             <q-item-label lines="1" class="q-gutter-x-md q-pb-sm">
               <bdo class="text-weight-light">{{ ref.module_name }}</bdo>
-              <span>{{ getRefString(ref) }}</span>
+              <span>{{ `${ref.bookShortName} ${ref.chapter_to}:${ref.verse_to_start}${ref.verse_to_end === 0 ? '' : '-' + ref.verse_to_end}` }}</span>
             </q-item-label>
 
             <q-item-label>
               <div class="q-gutter-x-sm">
                 <span
                   v-if="ref.expanded"
-                  class="text-grey text-subtitle2 text-body2"
+                  class="text-subtitle2 text-body2"
                 >
                   {{ ref.texts[0].verse }}
                 </span>
@@ -57,8 +54,8 @@
                   class="q-gutter-x-sm"
                 >
 
-                <span class="text-grey text-subtitle2 text-body2">
-                  {{ item.verse  }}
+                <span class="text-subtitle2 text-body2">
+                  {{ item.verse }}
                 </span>
 
                   <span v-html="item.text"></span>
@@ -91,55 +88,58 @@
 
         </q-item>
       </q-list>
-    </q-scroll-area>
+    </div>
 
-  </div>
+  </UIModalWindow>
 </template>
 
 <script>
-import { useStore} from 'vuex'
-import {defineComponent, inject, onMounted, ref} from "vue";
-import bookNamesFromNumber from 'src/hooks/bookNamesFromNumber'
+import useStore from "src/hooks/useStore";
+import {defineComponent, onMounted, ref} from "vue";
+import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
+import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
+import useSevenBible from "src/hooks/useSevenBible";
 
 export default defineComponent({
-  setup(props, {emit}){
-    const id = inject('id')
+  components: {UIModalWindowHeader, UIModalWindow},
+  setup() {
+    const {id, chosenVerse, transitions} = useSevenBible()
+    const close = () => transitions.crossreferencesSearcher = false
     const store = useStore()
-    const changeModuleState = settings => store.commit('settings/changeModuleState', settings)
+    const {
+      bookNumber,
+      chapterNumber,
+      fileName: bookFileName
+    } = store.native.state.settings.workPlace[id].bible
 
-    const showLoader = ref(true)
-    const crossreferencesCount =  ref(0)
+    const crossreferencesCount = ref(0)
     const crossreferences = ref([])
 
     const getCrosrefferences = async () => {
       const settings = {
-        bookNumber: props.bookNumber,
-        chapterNumber: props.chapterNumber,
-        verse: props.verse,
-        bookFileName: props.bookFileName
+        bookNumber: bookNumber,
+        chapterNumber: chapterNumber,
+        verse: chosenVerse.value,
+        bookFileName: bookFileName
       }
       const data = await window.electron.invoke('get-crossreferences', settings)
 
-      data.forEach(curr => {
-        curr.bookName = bookNamesFromNumber(curr.book_to, props.booksList).bookShortName
-      })
       data.sort((a, b) => {
         if (a.book_to === b.book_to) {
-          if (a.chapter_to === b.chapter_to) { return a.verse_to_start - b.verse_to_start }
+          if (a.chapter_to === b.chapter_to) {
+            return a.verse_to_start - b.verse_to_start
+          }
           return a.chapter_to - b.chapter_to
         } else return a.book_to - b.book_to
       })
 
       crossreferences.value = data
       crossreferencesCount.value = data.length
-      showLoader.value = false
     }
 
     onMounted(() => getCrosrefferences())
 
-    const getRefString = ref => `${ref.bookName} ${ref.chapter_to}:${ref.verse_to_start}${ref.verse_to_end === 0 ? '' : '-' + ref.verse_to_end}`
-
-    const openPanel = ({ target }, expanded, ref) => {
+    const openPanel = ({target}, expanded, ref) => {
       while (target.className !== 'q-item__label') {
         target = target.parentNode
       }
@@ -147,7 +147,9 @@ export default defineComponent({
 
       if (expanded) {
         eToExpand.style.maxHeight = 0
-        setTimeout(() => { ref.expanded = !ref.expanded }, 100)
+        setTimeout(() => {
+          ref.expanded = !ref.expanded
+        }, 100)
       } else {
         eToExpand.style.maxHeight = eToExpand.scrollHeight + 8 + 'px'
         ref.expanded = !ref.expanded
@@ -155,27 +157,25 @@ export default defineComponent({
     }
 
     const goToText = (bookNumber, chapterNumber) => {
-      changeModuleState({
-        id,
-        key: 'bible',
-        settings: { bookNumber, chapterNumber }
-      })
-      emit('toggleWindow', 'crossreferencesSearcher')
+      store.state.set(`workPlace.${id}.bible`, {bookNumber, chapterNumber})
+      close()
     }
 
-    return {goToText, getRefString, openPanel, showLoader, crossreferencesCount, crossreferences}
+    return {
+      goToText,
+      openPanel,
+      close,
+      crossreferencesCount,
+      crossreferences,
+      chosenVerse,
+      bookFileName,
+      chapterNumber,
+      bookNumber
+    }
   },
   props: {
-    bookNumber: Number,
-    chapterNumber: Number,
-    verse: Number,
     bookShortName: String,
-    bookFileName: String,
-    booksList: {
-      type: Array,
-      required: true
-    },
-    textDirections: String
+    textDirections: Object
   }
 })
 </script>

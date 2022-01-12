@@ -1,0 +1,99 @@
+@import "scrollbar";
+@import "splitter";
+@import "notifications";
+@import "markers";
+
+.q-separator {
+  background-color: var(--q-separator)
+}
+
+.q-bar {
+  background-color: var(--q-system-bar)
+}
+
+body {
+  color: var(--q-text);
+}
+
+.introduction:hover {
+  color: var(--q-text-active)
+}
+
+.layout-sidebar {
+  background-color: var(--q-drawer)
+}
+
+.top-bar {
+  background-color: var(--q-top-bar)
+}
+
+.q-tabs {
+  background-color: var(--q-tabs)
+}
+
+.ui-modal-window {
+  z-index: 1;
+  background-color: var(--q-background);
+}
+
+.verse-num {
+  font-size: 0.8em;
+  cursor: pointer;
+  padding-right: 3px;
+
+  &:hover {
+    color: var(--q-text-active);
+  }
+}
+
+.splitpanes--vertical > .splitpanes__splitter {
+  min-width: 2px !important;
+  background: var(--q-separator);
+}
+
+.splitpanes--horizontal > .splitpanes__splitter {
+  min-height: 2px !important;
+  background: var(--q-separator);
+}
+
+.transition {
+  z-index: 2;
+  background-color: var(--q-background);
+}
+
+.introduction {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.transition .q-item[dir="rtl"] .q-item__section .ellipsis > span:first-child {
+  float: right;
+}
+
+.torah{
+  color: var(--q-torah);
+}
+.poetry{
+  color: var(--q-poetry);
+}
+.major-prophets{
+  color: var(--q-major-prophets);
+}
+.minor-prophets{
+  color: var(--q-minor-prophets);
+}
+.gospels{
+  color: var(--q-gospels);
+}
+.acts{
+  color: var(--q-acts);
+}
+.epistles{
+  color: var(--q-epistles);
+}
+.revelations{
+  color: var(--q-revelations);
+}
+.non-canonical{
+  color: var(--q-non-canonical);
+}

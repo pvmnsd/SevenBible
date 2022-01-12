@@ -1,23 +1,20 @@
 <template>
-  <div class='fit transition absolute-top bg-background column'>
-    <div class='row q-pa-md'>
+  <UIModalWindow>
+    <UIModalWindowHeader>
       <q-btn
         flat
         round
         icon='arrow_back'
-        @click="$emit('toggleWindow', 'commentariesSettings', false)"
+        @click="close"
       />
       <div class='flex direction-center items-center text-bold q-px-xs'>
         Настройки отображения комментариев
       </div>
       <q-space/>
-      <q-btn flat round icon='payments'/>
-      <q-btn flat round icon='more_vert'/>
-    </div>
+      <q-btn disable flat round icon='more_vert'/>
+    </UIModalWindowHeader>
 
-    <q-separator color='blue' style='height: 2px'/>
-
-    <q-scroll-area class="q-pa-md col q-gutter-y-md">
+    <div class="overlay container">
 
       <span>Отмеченные ниже модули комментариев будут использоваться для всех модулей Библии</span>
 
@@ -25,35 +22,48 @@
         <q-checkbox
           :label="moduleName"
           :model-value="!!commentaries.activeModules.includes(moduleName)"
-          @update:model-value="addNewActiveCommentaryModule(moduleName, $event)"
+          @update:model-value="toggleCommentariesModule(moduleName, $event)"
         />
       </div>
 
-    </q-scroll-area>
+    </div>
 
-  </div>
+  </UIModalWindow>
 </template>
 
 <script>
-import {useStore} from 'vuex'
-import {defineComponent, inject, onMounted, ref} from "vue";
+import useStore from "src/hooks/useStore";
+import {onMounted, ref} from "vue";
+import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
+import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
+import useSevenBible from "src/hooks/useSevenBible";
 
-export default defineComponent({
-  setup(){
-    const id = inject('id')
+export default {
+  components: {UIModalWindowHeader, UIModalWindow},
+  setup() {
+    const {id, transitions, bibleTextKey} = useSevenBible()
 
     const store = useStore()
-    const changeActiveModules = settings => store.commit('settings/changeActiveModules', settings)
-
-    const addNewActiveCommentaryModule = (name, value) => changeActiveModules({ id, key: 'commentaries', name, value })
 
     const commentariesModules = ref([])
-    onMounted(() => {
-      commentariesModules.value = window.system.fsReaddirSync(['modules', 'commentaries']).map(moduleName => moduleName.match(/.+?(?=\.)/g)[0])
-    })
-
-    return{ commentariesModules, addNewActiveCommentaryModule }
-  },
-  props: {commentaries: Object}
-})
+    const toggleCommentariesModule = (moduleName, value) =>
+      store.mutations.toggleCommentariesModule(id, moduleName, value)
+    const commentaries = store.state.get(`workPlace.${id}.bible.view.commentaries`)
+    close = () => {
+      bibleTextKey.value++
+      transitions.commentariesSettings = false
+    }
+    onMounted(() => commentariesModules.value =
+      window.system.fsReaddirSync(['modules', 'commentaries'])
+        .map(moduleName => moduleName
+          .match(/.+?(?=\.)/g)[0])
+    )
+    return {
+      commentaries,
+      commentariesModules,
+      toggleCommentariesModule,
+      close
+    }
+  }
+}
 </script>
