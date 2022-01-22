@@ -1,17 +1,11 @@
-import BetterSqlite from "better-sqlite3";
-
-export default class Database{
-  #database
-
-  constructor(path, options = {}) {
-    this.#database = new BetterSqlite(path, options)
-  }
+export default class DatabaseApi {
+  database
 
   prepare(sql){
-    return new PreparedDatabase(this.#database, sql)
+    return new PreparedDatabase(this.database, sql)
   }
   close(){
-    this.#database.close()
+    this.database.close()
   }
 }
 class PreparedDatabase {
