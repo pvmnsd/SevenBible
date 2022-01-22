@@ -1,16 +1,15 @@
 import {app, BrowserWindow, nativeTheme, ipcMain} from 'electron'
-// import {initialize, enable} from '@electron/remote/main'
 import path from 'path'
 import fs from 'fs'
 import os from 'os'
-import useHandlers from './handlers'
-import {getSettings} from "./hooks/getSettings"
+import {getSettings} from "./helpers/getSettings"
+import useApi from "src-e/api/useApi";
 
-global.dir = process.env.DEBUGGING ? '' : path.resolve(app.getPath('userData'))
-
+const dir = process.env.DEBUGGING ? '' : path.resolve(app.getPath('userData'))
+global.dir = dir
+process.env.DIR = dir.toString()
 const {app: {win}} = getSettings()
 
-// initialize()
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
@@ -23,7 +22,7 @@ try {
 }
 
 
-useHandlers()
+useApi()
 
 let mainWindow
 
@@ -35,7 +34,6 @@ function createWindow() {
     frame: false,
     minHeight: 600,
     minWidth: 600,
-    'Content-Security-Policy': ['default-src none'],
     ...win,
     webPreferences: {
       contextIsolation: true,
@@ -60,7 +58,6 @@ function createWindow() {
   mainWindow.on('close', (e) => {
     e.preventDefault()
     ipcMain.once('close-app', () => {
-      console.log('destroy')
       mainWindow.destroy()
     })
     mainWindow.webContents.send('close-app')
