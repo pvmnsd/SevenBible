@@ -25,12 +25,16 @@ import UIWorkPlaceWindowBody from "components/UI/WorkPlaceWindow/UIWorkPlaceWind
 import StrongBody from "components/bible/splitter/StrongBody";
 import useSevenBible from "src/hooks/useSevenBible";
 import useStore from "src/hooks/useStore";
+import {useStrongDatabaseConnection} from "src/hooks/DBconnectionController";
+import {computed} from "vue";
 
 export default {
   setup() {
     const {id} = useSevenBible()
     const store = useStore()
     const strong = store.state.getReactive(`workPlace.${id}.strong`)
+    const strongFilename = computed(() => strong.value.fileName)
+    useStrongDatabaseConnection(strongFilename)
     // if (!props.strongFileName || !props.strongFileName.length) {
     //   console.log('sd')
     //   const firstModuleName = window.system.getFirstExistsModuleName(['modules', 'dictionaries', 'strong'])

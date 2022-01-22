@@ -43,9 +43,20 @@ export default defineComponent({
           .map(module => module.split('.')[0])
       } else console.log('Отсутствуют модули ... ')
     }
-    const onModuleClick = fileName => store.state.set(`workPlace.${id}.${props.module}.fileName`, fileName)
+    const onModuleClick = newFilename => {
+      const oldFilename = store.state.get(`workPlace.${id}.${props.module}.fileName`)
+      if (newFilename !== oldFilename) {
+        window[props.module].disconnectDatabase(oldFilename)
+        window[props.module].connectDatabase(newFilename)
+        store.state.set(`workPlace.${id}.${props.module}.fileName`, newFilename)
+      }
+    }
 
-    return {onModuleClick, loadStrongModules, modules}
+    return {
+      onModuleClick,
+      loadStrongModules,
+      modules
+    }
   },
   props: {
     fileName: String,

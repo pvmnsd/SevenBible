@@ -9,7 +9,7 @@
         @click="close"
       />
       <span class='flex items-center text-bold ellipsis'>
-        Поиск по библии - {{ bookFileName }}
+        Поиск по библии - {{ bibleFileName }}
       </span>
       <q-space/>
       <q-btn disable flat round icon='more_vert'/>
@@ -41,36 +41,27 @@
 
     <q-linear-progress v-if='showLoader' query/>
 
-    <DynamicScroller
+    <DynamicVirtualScroller
       :items="foundedTexts"
-      :min-item-size="54"
       class="overlay"
-      keyField="rowid"
     >
-      <template v-slot="{ item, index, active }">
-        <DynamicScrollerItem
-          :item="item"
-          :active="active"
-          buffer="20"
-          :data-index="index"
+      <template v-slot="{item}">
+        <q-separator/>
+        <q-item
+          clickable
+          class='q-px-md'
+          @click='goToText(item.book_number, item.chapter)'
         >
-          <q-separator/>
-          <q-item
-            clickable
-            class='q-px-md'
-            @click='goToText(item.book_number, item.chapter)'
-          >
-            <q-item-section>
-              <q-item-label caption>
-                {{ item.long_name }}
-                {{ item.chapter }}:{{ item.verse }}
-              </q-item-label>
-              <q-item-label v-html='item.text'></q-item-label>
-            </q-item-section>
-          </q-item>
-        </DynamicScrollerItem>
+          <q-item-section>
+            <q-item-label caption>
+              {{ item.long_name }}
+              {{ item.chapter }}:{{ item.verse }}
+            </q-item-label>
+            <q-item-label v-html='item.text'></q-item-label>
+          </q-item-section>
+        </q-item>
       </template>
-    </DynamicScroller>
+    </DynamicVirtualScroller>
 
 
   </UIModalWindow>
@@ -84,9 +75,11 @@ import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
 import UIModalWindowSettings from "components/UI/ModalWindow/UIModalWindowSettings";
 import useSevenBible from "src/hooks/useSevenBible";
 import useTextSearcher from "src/hooks/useTextSearcher";
+import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
 
 export default {
   components: {
+    DynamicVirtualScroller,
     UIModalWindowSettings,
     UIModalWindowHeader,
     UIModalWindow
@@ -96,14 +89,14 @@ export default {
     const {transitions, id} = useSevenBible()
     const close = () => transitions.bookSearcher = false
     const store = useStore()
-    const bookFileName = ref(store.native.state.settings.workPlace[id].bible.fileName)
+    const bibleFileName = ref(store.native.state.settings.workPlace[id].bible.fileName)
     const {
       showLoader,
       searchInput,
       textsCount,
       foundedTexts,
       searchText
-    } = useTextSearcher(bookFileName)
+    } = useTextSearcher(bibleFileName)
 
     const goToText = (bookNumber, chapterNumber) => {
       store.state.set(`workPlace.${id}.bible`, {bookNumber, chapterNumber})
@@ -117,7 +110,7 @@ export default {
     )
 
     return {
-      bookFileName,
+      bibleFileName,
       searchInput,
       showLoader,
       textsCount,

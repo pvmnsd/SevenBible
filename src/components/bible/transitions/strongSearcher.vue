@@ -64,37 +64,30 @@
 
 
     </UIModalWindowSettings>
-    <DynamicScroller
+
+    <DynamicVirtualScroller
       :items="foundedTexts"
-      :min-item-size="54"
       class="overlay"
-      keyField="rowid"
     >
-      <template v-slot="{ item, index, active }">
-        <DynamicScrollerItem
-          :item="item"
-          :active="active"
-          buffer="20"
-          :data-index="index"
+      <template v-slot="{item}">
+        <q-separator/>
+        <q-item
+          clickable
+          class='q-px-md'
+          @click='goToText(item.book_number,item.chapter)'
         >
-          <q-separator/>
-          <q-item
-            clickable
-            class='q-px-md'
-            @click='goToText(item.book_number,item.chapter)'
-          >
-            <q-item-section>
-              <q-item-label caption
-              >{{ item.bookShortName }}
-                {{ item.chapter }}:{{ item.verse }}
-              </q-item-label
-              >
-              <q-item-label v-html='item.text'></q-item-label>
-            </q-item-section>
-          </q-item>
-        </DynamicScrollerItem>
+          <q-item-section>
+            <q-item-label caption
+            >{{ item.bookShortName }}
+              {{ item.chapter }}:{{ item.verse }}
+            </q-item-label
+            >
+            <q-item-label v-html='item.text'></q-item-label>
+          </q-item-section>
+        </q-item>
       </template>
-    </DynamicScroller>
+    </DynamicVirtualScroller>
+
 
   </UIModalWindow>
 </template>
@@ -109,9 +102,11 @@ import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
 import UIModalWindowSettings from "components/UI/ModalWindow/UIModalWindowSettings";
 import useSevenBible from "src/hooks/useSevenBible";
 import StrongBody from "components/bible/splitter/StrongBody";
+import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
 
 export default defineComponent({
   components: {
+    DynamicVirtualScroller,
     UIModalWindowSettings,
     UIModalWindowHeader,
     UIModalWindow,
@@ -123,7 +118,7 @@ export default defineComponent({
     const store = useStore()
     const {
       bible: {
-        fileName: bookFileName
+        fileName: bibleFileName
       },
       strong: {
         strongNumbers: fixedStrongNumbers,
@@ -171,14 +166,13 @@ export default defineComponent({
         strongNumbers: [...strongNumbers.value],
         separator: searchMode.value.value,
         fixedStrongNumbersPrefix: props.strongNumbersPrefix,
-        bookFileName: bookFileName
+        filename: bibleFileName
       }
 
       const normalizedNumbers = strongNumbers.value.map(curr => curr.substring(1))
       const strongNumbersRegexString = normalizedNumbers.join('|')
-      const data = await window.electron.invoke('find-verse-by-strong', settings)
+      const data = await window.strong.getFindedVerseByStrong(settings)
 
-      console.log(data)
       const regex = new RegExp(`<S>(${strongNumbersRegexString})</S>`, 'gi')
       data.forEach(current => {
         current.text = current.text.replace(regex, `<mark>${current.strongNumbersPrefix}$1</mark>`)

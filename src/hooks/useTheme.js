@@ -1,14 +1,14 @@
 import defaultThemes from 'src/themes'
 
 export default () => {
-  const getUserThemes = () => window.electron.getUserThemes()
+  const getUserThemes = () => window.system.getUserThemes()
 
   const getAllThemes = async () => {
     return [...defaultThemes, ...await getUserThemes()]
   }
 
   const readDefaultTheme = (themeName) => import(`src/themes/${themeName}.js`)
-  const readUserTheme = (themeName) => window.electron.readUserTheme(themeName)
+  const readUserTheme = (themeName) => window.system.readUserTheme(themeName)
   const setCssVars = (theme) => {
     const body = document.body
     body.removeAttribute('style')

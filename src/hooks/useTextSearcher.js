@@ -1,7 +1,6 @@
 import {ref} from "vue";
 import normalizeSearchInput from "src/hooks/normalizeSearchInput";
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-export default (bookFileName) => {
+export default (bibleFileName) => {
   const showLoader = ref(false)
   const searchInput = ref('')
   let normalizedSearchInput = ''
@@ -18,9 +17,9 @@ export default (bookFileName) => {
 
     const settings = {
       searchString: normalizedSearchInput,
-      bookFileName: bookFileName.value
+      filename: bibleFileName.value
     }
-    foundedTexts.value = await window.electron.invoke('find-texts-in-bible', settings)
+    foundedTexts.value = await window.bible.getFindedTexts(settings)
     textsCount.value = foundedTexts.value.length
     showLoader.value = false
   }

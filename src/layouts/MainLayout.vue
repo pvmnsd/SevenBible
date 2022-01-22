@@ -34,7 +34,7 @@ export default {
     setTheme(app.value.appearance.theme)
 
     const stringify = state => JSON.stringify(state, null, 2)
-    const saveProgramSettings = (state) => window.electron.saveProgramSettings(stringify(state))
+    const saveProgramSettings = (state) => window.system.saveProgramSettings(stringify(state))
 
     const changeAppSettings = settings => store.commit('settings/changeAppSettings', settings)
 

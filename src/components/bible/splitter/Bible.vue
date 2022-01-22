@@ -37,7 +37,7 @@
   <UIWorkPlaceWindow>
     <UIWorkPlaceWindowHeader>
       <BibleTopBar
-        :book-file-name="bible.fileName"
+        :bible-file-name="bible.fileName"
         :book-number="bible.bookNumber"
         :chapter-number="bible.chapterNumber"
         :book-short-name="bookShortName"
@@ -70,7 +70,7 @@
           :book-full-name="bookFullName"
           :book-number="bible.bookNumber"
           :ref-string="refString"
-          :book-file-name="bible.fileName"
+          :bible-file-name="bible.fileName"
         />
 
         <div
@@ -145,7 +145,7 @@ import UIWorkPlaceWindowBody from "components/UI/WorkPlaceWindow/UIWorkPlaceWind
 import BibleTopBar from "components/bible/bibleTopBar";
 import useSevenBible from "src/hooks/useSevenBible";
 import useStore from "src/hooks/useStore";
-import {onMounted, watch, computed} from "vue";
+import {onMounted, watch, computed, onBeforeUnmount} from "vue";
 import useChapter from "src/hooks/useChapter";
 import useFootnotes from "src/hooks/useFootnotes";
 
@@ -153,7 +153,6 @@ export default {
   setup(props) {
     const {id, transitions} = useSevenBible()
     const store = useStore()
-
     const {bibleTextKey} = useSevenBible()
     const {chapter, getChapter, bookFullName, bookShortName} = useChapter(props)
     const {footnotes, getFootNotes} = useFootnotes(props)

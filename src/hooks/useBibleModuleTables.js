@@ -1,8 +1,8 @@
 import getBookCategory from "src/hooks/getBookCategory";
 
-export default async (bookFileName) => {
-  const settings = {bookFileName}
-  const tables = await window.electron.invoke('get-bible-module-info', settings)
+export default async (bibleFileName) => {
+  const settings = {filename: bibleFileName}
+  const tables = await window.bible.getModuleInfo(settings)
 
   const booksList = tables.booksList
   const info = tables.info

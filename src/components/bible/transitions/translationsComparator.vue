@@ -15,6 +15,7 @@
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
 
+    <UIModalWindowBody>
       <q-list separator>
         <q-item
           clickable
@@ -39,6 +40,7 @@
           </q-item-section>
         </q-item>
       </q-list>
+    </UIModalWindowBody>
 
   </UIModalWindow>
 </template>
@@ -49,9 +51,10 @@ import {ref, computed, onMounted} from "vue";
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
 import useSevenBible from "src/hooks/useSevenBible";
+import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody";
 
 export default {
-  components: {UIModalWindowHeader, UIModalWindow},
+  components: {UIModalWindowBody, UIModalWindowHeader, UIModalWindow},
   setup(props) {
     const {id, chosenVerse, transitions} = useSevenBible()
     const store = useStore()
@@ -72,7 +75,7 @@ export default {
         chapterNumber: chapterNumber,
         verseNumber: chosenVerse.value
       }
-      translationsTexts.value = await window.electron.invoke('get-compared-translations', settings)
+      translationsTexts.value = await window.bible.getCompared(settings)
     }
     onMounted(() => getComparedTranslations())
 

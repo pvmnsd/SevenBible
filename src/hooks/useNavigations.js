@@ -13,9 +13,9 @@ export default (props, store, id) => {
     const settings = {
       bookNumber: props.bookNumber,
       chapterNumber: props.chapterNumber,
-      bookFileName: props.bookFileName
+      filename: props.bibleFileName
     }
-    const data = await window.electron.invoke('get-top-bar-state', settings)
+    const data = await window.bible.getTopBarState(settings)
     arrows.value = data.arrows
   }
 

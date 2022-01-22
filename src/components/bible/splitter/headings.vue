@@ -96,9 +96,9 @@ export default defineComponent({
       const settings = {
         chapterNumber: props.chapterNumber,
         bookNumber: props.bookNumber,
-        bookFileName: props.bookFileName
+        filename: props.bibleFileName
       }
-      const data = await window.electron.invoke('get-introductions', settings)
+      const data = await window.bible.getIntroduction(settings)
 
       data?.forEach(item => {
         if (item.book_number === 0) {
@@ -132,7 +132,7 @@ export default defineComponent({
     introductionString: String,
     detailedInfo: String,
     refString: String,
-    bookFileName: String
+    bibleFileName: String
   }
 })
 </script>

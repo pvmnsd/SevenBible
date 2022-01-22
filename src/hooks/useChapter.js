@@ -8,7 +8,7 @@ export default (props) => {
 
   const getChapter = async () => {
     let settings = {
-      bookFileName: props.bible.fileName,
+      filename: props.bible.fileName,
       bookNumber: props.bible.bookNumber,
       chapterNumber: props.bible.chapterNumber,
       showSubheadings: props.bible.view.showSubheadings,
@@ -19,7 +19,7 @@ export default (props) => {
       activeModulesCommentaries: [...props.bible.view.commentaries.activeModules],
     }
 
-    let data =  await window.electron.invoke('get-chapter', settings)
+    let data =  await window.bible.getChapter(settings)
     //set abreviatures
     bookFullName.value = data.bookNames.bookFullName
     bookShortName.value = data.bookNames.bookShortName

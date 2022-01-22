@@ -8,14 +8,7 @@ export default (props) => {
   const store = useStore()
   const {arrows, onNavigateClick} = useNavigations(props, store, id)
 
-  const closeWindow = () => {
-    store.mutations.closeWorkPlace(id)
-    const settings = {
-      bookFileName: props.bookFileName,
-      activeBibleModules: activeWorkPlaces.value.fileNames
-    }
-    window.electron.invoke('close-db-connection', settings)
-  }
+  const closeWindow = () => store.mutations.closeWorkPlace(id)
 
   const activeWorkPlacesCount = computed(() => activeWorkPlaces.value.indexes.length)
 

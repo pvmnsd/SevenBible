@@ -1,7 +1,7 @@
 <template>
   <UIButtonset>
     <ModuleSelector
-      :file-name="bookFileName"
+      :file-name="bibleFileName"
       :path="['modules', 'books']"
       module="bible"
     />
@@ -99,7 +99,7 @@ export default {
     refString: String,
     bookNumber: Number,
     chapterNumber: Number,
-    bookFileName: String,
+    bibleFileName: String,
     bookShortName: String
   }
 }

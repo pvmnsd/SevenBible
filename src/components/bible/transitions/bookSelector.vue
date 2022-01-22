@@ -122,9 +122,9 @@ export default {
     const firstStep = async (bookNumber, bookFullName) => {
       const settings = {
         bookNumber,
-        bookFileName: fileName
+        filename: fileName
       }
-      countOfChapters.value = await window.electron.invoke('get-count-of-chapters', settings)
+      countOfChapters.value = await window.bible.getChaptersCount(settings)
       selectedBookNumber.value = bookNumber
       selectedBookName.value = bookFullName
       step.value++

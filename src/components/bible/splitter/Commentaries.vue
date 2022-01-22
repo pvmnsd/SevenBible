@@ -42,19 +42,22 @@
 
 <script>
 import CommentariesTopBar from "components/bible/splitter/commentaries/commentariesTopBar"
-import {onMounted, watch} from "vue"
+import {onMounted, watch, onBeforeUnmount, computed} from "vue"
 import useStore from "src/hooks/useStore";
 import UIWorkPlaceWindow from "components/UI/WorkPlaceWindow/UIWorkPlaceWindow";
 import UIWorkPlaceWindowHeader from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowHeader";
 import UIWorkPlaceWindowBody from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowBody";
 import useSevenBible from "src/hooks/useSevenBible";
 import useCommentaries from "src/hooks/useCommentaries";
+import {useCommentariesDatabaseConnection} from "src/hooks/DBconnectionController";
 
 export default {
   setup(props) {
     const {id, bookShortName} = useSevenBible()
     const store = useStore()
     const commentariesModule = store.state.getReactive(`workPlace.${id}.commentaries`)
+    const commentariesFilename = computed(() => commentariesModule.value.fileName)
+    useCommentariesDatabaseConnection(commentariesFilename)
     const chapterNumber = store.state.getReactive(`workPlace.${id}.bible.chapterNumber`)
 
     const {commentaries, showLoader, getCommentaries} = useCommentaries(id, store, commentariesModule)

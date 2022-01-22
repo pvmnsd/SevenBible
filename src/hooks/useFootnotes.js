@@ -5,15 +5,15 @@ export default (props) => {
   const footnotes = ref(null)
 
   const getFootNotes = async () => {
-    if(!props.bible.view.showDreamy || !window.system.fsExistsSync(['modules', 'commentaries', props.bible.bookFileName + '.commentaries.SQLite3']))
+    if(!props.bible.view.showDreamy || !window.system.fsExistsSync(['modules', 'commentaries', props.bible.fileName + '.commentaries.SQLite3']))
       return
 
     const settings = {
-      moduleName: props.bible.bookFileName,
+      filename: props.bible.fileName,
       bookNumber: props.bible.bookNumber,
       chapterNumber: props.bible.chapterNumber
     }
-    footnotes.value = await window.electron.invoke('get-footnotes', settings)
+    footnotes.value = await window.commentaries.getFootnotes(settings)
   }
 
   return {

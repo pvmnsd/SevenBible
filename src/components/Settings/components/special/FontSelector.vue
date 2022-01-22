@@ -27,7 +27,7 @@ export default {
   async setup(props) {
     const onSelect = (value) =>
       props.store.state.set(`app.${props.config.path}`, value)
-    const fontList = await window.electron.getFontList()
+    const fontList = await window.system.getFontList()
     let options = ref([...fontList])
 
     const filterFn =  (val, update, abort) => {

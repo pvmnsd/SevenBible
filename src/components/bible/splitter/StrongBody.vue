@@ -32,9 +32,9 @@ export default {
     const searchInfo = async () => {
       const settings = {
         strongNumbers: [...props.strongNumbers],
-        strongFileName: props.strongFileName
+        filename: props.strongFileName
       }
-      strongNumbersInfo.value = await window.electron.invoke('get-strong-numbers-info', settings)
+      strongNumbersInfo.value = await window.strong.getStrongNumbersInfo(settings)
     }
 
     onMounted(() => searchInfo())

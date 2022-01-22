@@ -9,10 +9,10 @@ export default (id, store, commentariesModule) => {
     const settings = {
       chapterNumber: store.native.state.settings.workPlace[id].bible.chapterNumber,
       bookNumber: store.native.state.settings.workPlace[id].bible.bookNumber,
-      commentaryFileName: commentariesModule.value.fileName
+      filename: commentariesModule.value.fileName
     }
     let commentariesData
-    commentariesData = await window.electron.invoke('get-commentaries', settings)
+    commentariesData = await window.commentaries.getCommentaries(settings)
     commentaries.value = commentariesData
     showLoader.value = false
   }, 500)

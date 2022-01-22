@@ -16,19 +16,13 @@
       <q-btn flat round icon='more_vert'/>
     </UIModalWindowHeader>
 
-    <DynamicScroller
-      :items="crossreferences"
-      :min-item-size="54"
-      class="overlay"
-      keyField="rowid"
-    >
-      <template v-slot="{ item, index, active }">
-        <DynamicScrollerItem
-          :item="item"
-          :active="active"
-          buffer="20"
-          :data-index="index"
-        >
+    <UIModalWindowBody>
+
+      <DynamicVirtualScroller
+        :items="crossreferences"
+        class="overlay"
+      >
+        <template v-slot="{item}">
           <q-item
             clickable
             v-ripple
@@ -38,7 +32,7 @@
             <q-item-section>
 
               <q-item-label lines="1" class="q-gutter-x-md q-pb-sm">
-                <bdo class="text-weight-light">{{ item.module_name }}</bdo>
+                <bdi class="text-weight-light">{{ item.module_name }}</bdi>
                 <span>{{
                     `${item.bookShortName} ${item.chapter_to}:${item.verse_to_start}${item.verse_to_end === 0 ? '' : '-' + item.verse_to_end}`
                   }}</span>
@@ -98,9 +92,10 @@
             </q-item-section>
 
           </q-item>
-        </DynamicScrollerItem>
-      </template>
-    </DynamicScroller>
+        </template>
+      </DynamicVirtualScroller>
+
+    </UIModalWindowBody>
 
   </UIModalWindow>
 </template>
@@ -111,9 +106,11 @@ import {defineComponent, onMounted, ref} from "vue";
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
 import useSevenBible from "src/hooks/useSevenBible";
+import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody";
+import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
 
-export default defineComponent({
-  components: {UIModalWindowHeader, UIModalWindow},
+export default {
+  components: {DynamicVirtualScroller, UIModalWindowBody, UIModalWindowHeader, UIModalWindow},
   setup() {
     const {id, chosenVerse, transitions} = useSevenBible()
     const close = () => transitions.crossreferencesSearcher = false
@@ -121,7 +118,7 @@ export default defineComponent({
     const {
       bookNumber,
       chapterNumber,
-      fileName: bookFileName
+      fileName: bibleFileName
     } = store.native.state.settings.workPlace[id].bible
 
     const crossreferencesCount = ref(0)
@@ -132,9 +129,9 @@ export default defineComponent({
         bookNumber: bookNumber,
         chapterNumber: chapterNumber,
         verse: chosenVerse.value,
-        bookFileName: bookFileName
+        filename: bibleFileName
       }
-      const data = await window.electron.invoke('get-crossreferences', settings)
+      const data = await window.crossreferences.getCrossreferences(settings)
 
       data.sort((a, b) => {
         if (a.book_to === b.book_to) {
@@ -180,7 +177,7 @@ export default defineComponent({
       crossreferencesCount,
       crossreferences,
       chosenVerse,
-      bookFileName,
+      bibleFileName,
       chapterNumber,
       bookNumber
     }
@@ -189,5 +186,5 @@ export default defineComponent({
     bookShortName: String,
     textDirections: Object
   }
-})
+}
 </script>

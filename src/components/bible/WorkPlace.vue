@@ -58,7 +58,7 @@ import {computed, watch} from "vue";
 import useTransitions from "src/hooks/useTransitions";
 import initWorkPlaceGlobalState from "src/hooks/initWorkPlaceGlobalState";
 import useBibleModuleInfo from "src/hooks/useBibleModuleInfo";
-import useBibleModuleDBConnection from "src/hooks/useBibleModuleDBConnection";
+import {useBibleDatabaseConnection} from "src/hooks/DBconnectionController";
 
 export default {
   setup({id}) {
@@ -70,12 +70,9 @@ export default {
 
     const bible = store.state.getReactive(`workPlace.${id}.bible`)
     const bibleFileName = computed(() => bible.value.fileName)
+    useBibleDatabaseConnection(bibleFileName)
 
-    const {getBibleModuleInfo, info: bibleModuleInfo} = useBibleModuleInfo(bibleFileName)
-    const {changeBibleModuleDBConnection} = useBibleModuleDBConnection(id, store, getBibleModuleInfo)
-    watch(bibleFileName, (bookFileName, oldBookFileName) => {
-      changeBibleModuleDBConnection(bookFileName, oldBookFileName)
-    })
+    const {info: bibleModuleInfo} = useBibleModuleInfo(bibleFileName)
 
     const activeWorkPlaceWindows = computed(() => {
       return store.getters.getActiveWorkPlaceWindows(id)
