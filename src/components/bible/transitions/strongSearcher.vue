@@ -13,10 +13,8 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-    <UIModalWindowHeader>
-      <q-btn flat round icon='arrow_back' @click="close"/>
-      <div class='flex direction-center items-center text-bold q-px-xs'>Поиск по номеру стронга</div>
-      <q-space/>
+    <UIModalWindowHeader @close="close">
+      <template #title>Поиск по номеру стронга</template>
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
 

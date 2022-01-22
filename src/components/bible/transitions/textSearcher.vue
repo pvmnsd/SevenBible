@@ -1,17 +1,8 @@
 <template>
   <UIModalWindow>
 
-    <UIModalWindowHeader>
-      <q-btn
-        flat
-        round
-        icon='arrow_back'
-        @click="close"
-      />
-      <span class='flex items-center text-bold ellipsis'>
-        Поиск по библии - {{ bibleFileName }}
-      </span>
-      <q-space/>
+    <UIModalWindowHeader @close="close">
+      <template #title>Поиск по библии - {{ bibleFileName }}</template>
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
 

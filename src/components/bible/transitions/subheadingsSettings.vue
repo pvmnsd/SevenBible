@@ -1,16 +1,7 @@
 <template>
   <UIModalWindow>
-    <UIModalWindowHeader>
-      <q-btn
-        flat
-        round
-        icon='arrow_back'
-        @click="close"
-      />
-      <div class='flex direction-center items-center text-bold q-px-xs'>
-        Настройки отображения подзаголовков
-      </div>
-      <q-space/>
+    <UIModalWindowHeader @close="close">
+      <template #title>Настройки отображения подзаголовков</template>
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
 
@@ -44,7 +35,8 @@
 import useSubheadingsSettings from "src/hooks/useSubheadingsSettings";
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
-export default{
+
+export default {
   components: {UIModalWindowHeader, UIModalWindow},
   setup() {
 

@@ -1,6 +1,18 @@
 <template>
   <div>
     <div class="q-pa-sm flex q-gutter-x-sm">
+
+      <q-btn
+        flat
+        round
+        icon='arrow_back'
+        @click="$emit('close')"
+      />
+      <span class='flex items-center text-bold ellipsis'>
+       <slot name="title"/>
+    </span>
+      <q-space/>
+
       <slot/>
     </div>
     <q-separator v-if="bordered"/>
@@ -14,6 +26,7 @@ export default {
       type: Boolean,
       default: true
     }
-  }
+  },
+  emits: ['close']
 }
 </script>

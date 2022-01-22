@@ -1,17 +1,8 @@
 <template>
   <UIModalWindow>
 
-    <UIModalWindowHeader>
-      <q-btn
-        flat
-        round
-        icon='arrow_back'
-        @click="close"
-      />
-      <div class='flex direction-center items-center text-bold q-px-xs'>
-        {{ bookShortName }} {{ chapterNumber }}:{{ chosenVerse }} - ссылки
-      </div>
-      <q-space/>
+    <UIModalWindowHeader @close="close">
+      <template #title>{{ bookShortName }} {{ chapterNumber }}:{{ chosenVerse }} - ссылки</template>
       <q-btn flat round icon='payments'/>
       <q-btn flat round icon='more_vert'/>
     </UIModalWindowHeader>

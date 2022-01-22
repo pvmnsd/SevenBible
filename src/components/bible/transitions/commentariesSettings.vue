@@ -1,16 +1,7 @@
 <template>
   <UIModalWindow>
-    <UIModalWindowHeader>
-      <q-btn
-        flat
-        round
-        icon='arrow_back'
-        @click="close"
-      />
-      <div class='flex direction-center items-center text-bold q-px-xs'>
-        Настройки отображения комментариев
-      </div>
-      <q-space/>
+    <UIModalWindowHeader @close="close">
+      <template #title>Настройки отображения комментариев</template>
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
 
