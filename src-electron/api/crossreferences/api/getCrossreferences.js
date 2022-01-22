@@ -15,7 +15,7 @@ export default (args) => {
       crossreferencesDatabase.close()
 
       const sql1 = 'SELECT verse, text FROM verses WHERE book_number = @bookNumber AND chapter = @chapterNumber AND verse BETWEEN @verseStart AND @verseEnd'
-      const prepared = bibleDatabase.db.prepare(sql1)
+      const prepared = bibleDatabase.prepare(sql1)
       for (const foundedRef of foundedRefs) {
         const unique = result.some(ref => ref.book_to === foundedRef.book_to &&
           ref.chapter_to === foundedRef.chapter_to &&
@@ -33,7 +33,7 @@ export default (args) => {
           foundedRef.texts = texts
           foundedRef.module_name = filename.split('.')[0]
           foundedRef.expanded = false
-          foundedRef.bookShortName = bibleDatabase.db.prepare(`SELECT short_name FROM books WHERE book_number = ?`).pluck().get(foundedRef.book_to)
+          foundedRef.bookShortName = bibleDatabase.prepare(`SELECT short_name FROM books WHERE book_number = ?`).pluck().get(foundedRef.book_to)
           result.push(foundedRef)
         }
       }

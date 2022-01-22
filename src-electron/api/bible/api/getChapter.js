@@ -9,9 +9,9 @@ export default (args) => {
     const res = {}
     try {
       let sql = 'SELECT text FROM verses WHERE book_number = ? AND chapter = ?'
-      res.texts = bibleDatabase.db.prepare(sql).all(args.bookNumber, args.chapterNumber)
+      res.texts = bibleDatabase.prepare(sql).all(args.bookNumber, args.chapterNumber)
       sql = "SELECT long_name as bookFullName, short_name as bookShortName from books WHERE book_number = ?"
-      res.bookNames = bibleDatabase.db.prepare(sql).get(args.bookNumber)
+      res.bookNames = bibleDatabase.prepare(sql).get(args.bookNumber)
     } catch {
     }
 
@@ -19,7 +19,7 @@ export default (args) => {
     if (args.showSubheadings) {
       try {
         const sql = 'SELECT verse, title from stories where book_number = ? AND chapter = ?'
-        res.stories = bibleDatabase.db.prepare(sql).all(args.bookNumber, args.chapterNumber)
+        res.stories = bibleDatabase.prepare(sql).all(args.bookNumber, args.chapterNumber)
       } catch {
       }
 

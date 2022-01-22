@@ -19,14 +19,14 @@ export default (args) => {
     if (args.separator === 'AND') {
       let sql = `SELECT v.*, v.rowid b.short_name as bookShortName FROM verses v, books b WHERE v.book_number ${parsedNumbers[0].testament} AND v.book_number = b.book_number `
       parsedNumbers.forEach(item => sql += `AND v.text like '%<S>${item.number}</S>%' `)
-      res = bibleDatabase.db.prepare(sql).all()
+      res = bibleDatabase.prepare(sql).all()
       res.forEach(item => item.strongNumbersPrefix = parsedNumbers[0].testament === '<=460' ? 'H' : 'G')
     }
     else if (args.separator === 'OR') {
       const texts = {}
       parsedNumbers.forEach(parsedNumber => {
         const sql = `SELECT v.*, v.rowid, b.short_name as bookShortName FROM verses v, books b WHERE v.book_number ${parsedNumber.testament} AND v.book_number = b.book_number AND v.text like '%<S>${parsedNumber.number}</S>%'`
-        const findedTexts = bibleDatabase.db.prepare(sql).all()
+        const findedTexts = bibleDatabase.prepare(sql).all()
         findedTexts.forEach(item => {
           const prop = item.book_number + '-' + item.chapter + '-' + item.verse
           if (!(prop in texts)) {

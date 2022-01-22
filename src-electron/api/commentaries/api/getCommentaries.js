@@ -8,7 +8,7 @@ export default (args) => {
                  FROM commentaries
                  WHERE book_number = ?
                    AND chapter_number_from = ?`
-    const res = commentariesDatabase.db.prepare(sql).all(args.bookNumber, args.chapterNumber)
+    const res = commentariesDatabase.prepare(sql).all(args.bookNumber, args.chapterNumber)
 
     return res
   }

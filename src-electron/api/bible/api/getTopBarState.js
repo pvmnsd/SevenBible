@@ -11,7 +11,7 @@ export default (args) => {
     // before
     let sql = `SELECT book_number, chapter FROM verses WHERE chapter < ${args.chapterNumber} AND book_number = ${args.bookNumber} ORDER BY chapter DESC`
     const bibleDatabase = new BibleDatabase(args.filename)
-    let data = bibleDatabase.db.prepare(sql).get()
+    let data = bibleDatabase.prepare(sql).get()
     if (data) {
       res.arrows.before = {
         ref: {
@@ -22,7 +22,7 @@ export default (args) => {
       }
     } else {
       sql = `SELECT book_number, chapter FROM verses WHERE book_number < ${args.bookNumber} ORDER BY book_number DESC`
-      data = bibleDatabase.db.prepare(sql).get()
+      data = bibleDatabase.prepare(sql).get()
 
       if (data) {
         res.arrows.before = {
@@ -39,7 +39,7 @@ export default (args) => {
 
     // next
     sql = `SELECT book_number, chapter FROM verses WHERE chapter > ${args.chapterNumber} AND book_number = ${args.bookNumber}`
-    data = bibleDatabase.db.prepare(sql).get()
+    data = bibleDatabase.prepare(sql).get()
 
     if (data) {
       res.arrows.next = {
@@ -51,7 +51,7 @@ export default (args) => {
       }
     } else {
       sql = `SELECT book_number FROM verses WHERE book_number > ${args.bookNumber}`
-      data = bibleDatabase.db.prepare(sql).get()
+      data = bibleDatabase.prepare(sql).get()
       if (data) {
         res.arrows.next = {
           ref: {

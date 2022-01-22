@@ -1,4 +1,4 @@
-import BetterSqlite from 'better-sqlite3'
+import WrapperDatabase from "src-e/wrappers/Database/Database";
 import path from 'path'
 
 export class Database {
@@ -31,8 +31,7 @@ export class Database {
 
       if (this._keepConnections) {
         if (!this.constructor._instance[filename]) {
-          this.constructor._instance[filename] = this
-          this._createConnection()
+          this.constructor._instance[filename] = this._getConnection()
         }
 
         if (!this.constructor._connections[filename]) {
@@ -45,26 +44,25 @@ export class Database {
     }
   }
 
-  _createConnection() {
-    try {
-      this.db = this._getConnection()
-    } catch (e) {
-      console.error(`error while connecting`, e)
-    }
-  }
-
-  _getConnection = () => new BetterSqlite(path.join(this._directory, ...this._path, this._filename), {readonly: this._readonly})
+  _getConnection = () => new WrapperDatabase(path.join(this._directory, ...this._path, this._filename), {readonly: this._readonly})
 
   disconnect() {
     this.constructor._connections[this._filename]--
     if (this.constructor._connections[this._filename] === 0) {
-      this.db.close()
+      this.constructor._instance[this._filename].close()
       delete this.constructor._instance[this._filename]
       delete this.constructor._connections[this._filename]
     }
   }
 
-  get Filename() {
-    return this._filename
+  prepare(sql) {
+    return {
+      pluck: () => ({
+        all: (...args) => this.db.prepare(sql).pluck().all(args),
+        get: (...args) => this.db.prepare(sql).pluck().get(args),
+      }),
+      all: (...args) => this.db.prepare(sql).all(args),
+      get: (...args) => this.db.prepare(sql).get(args),
+    }
   }
 }
