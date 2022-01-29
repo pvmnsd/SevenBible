@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="q-pa-sm flex q-gutter-x-sm">
-
+      <slot name="close"/>
       <q-btn
+        v-if="!$slots.close"
         flat
         round
         icon='arrow_back'

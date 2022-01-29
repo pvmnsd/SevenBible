@@ -17,7 +17,7 @@
     padding: 1rem;
 }
 .border-right{
-    border-right: 1px solid var(--q-separator) !important;
+    border-right: 1px solid var(--separator) !important;
 }
 .p-buttonset.dense > .p-button{
 
@@ -69,7 +69,7 @@
   flex-grow: 1;
 }
 .border-left{
-  border-left: 1px solid var(--q-separator);
+  border-left: 1px solid var(--separator);
 }
 .overflow-hidden-x{
   overflow-x: hidden;
@@ -111,4 +111,7 @@ h4, .text-h4{
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+.visible{
+  opacity: 1 !important;
 }

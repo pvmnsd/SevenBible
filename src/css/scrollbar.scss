@@ -19,7 +19,7 @@
   background-color: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: var(--q-scrollbar);
+  background-color: var(--scrollbar);
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: content-box;
@@ -27,17 +27,17 @@
   //transition: 0.3s all linear;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--q-scrollbar-hover);
+  background-color: var(--scrollbar-hover);
 }
 ::-webkit-scrollbar-thumb:horizontal {
-  background-color: var(--q-scrollbar);
+  background-color: var(--scrollbar);
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: content-box;
   min-width: 25px;
 }
 ::-webkit-scrollbar-thumb:horizontal:hover {
-  background-color: var(--q-scrollbar-hover);
+  background-color: var(--scrollbar-hover);
 }
 ::-webkit-scrollbar-corner {
   background: transparent;

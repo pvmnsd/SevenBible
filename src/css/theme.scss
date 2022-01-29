@@ -4,36 +4,36 @@
 @import "markers";
 
 .q-separator {
-  background-color: var(--q-separator)
+  background-color: var(--separator)
 }
 
 .q-bar {
-  background-color: var(--q-system-bar)
+  background-color: var(--system-bar)
 }
 
 body {
-  color: var(--q-text);
+  color: var(--text);
 }
 
 .introduction:hover {
-  color: var(--q-text-active)
+  color: var(--text-active)
 }
 
 .layout-sidebar {
-  background-color: var(--q-drawer)
+  background-color: var(--drawer)
 }
 
 .top-bar {
-  background-color: var(--q-top-bar)
+  background-color: var(--top-bar)
 }
 
 .q-tabs {
-  background-color: var(--q-tabs)
+  background-color: var(--tabs)
 }
 
 .ui-modal-window {
   z-index: 1;
-  background-color: var(--q-background);
+  background-color: var(--background);
 }
 
 .verse-num {
@@ -42,23 +42,23 @@ body {
   padding-right: 3px;
 
   &:hover {
-    color: var(--q-text-active);
+    color: var(--text-active);
   }
 }
 
 .splitpanes--vertical > .splitpanes__splitter {
   min-width: 2px !important;
-  background: var(--q-separator);
+  background: var(--separator);
 }
 
 .splitpanes--horizontal > .splitpanes__splitter {
   min-height: 2px !important;
-  background: var(--q-separator);
+  background: var(--separator);
 }
 
 .transition {
   z-index: 2;
-  background-color: var(--q-background);
+  background-color: var(--background);
 }
 
 .introduction {
@@ -71,29 +71,45 @@ body {
 }
 
 .torah{
-  color: var(--q-torah);
+  color: var(--torah);
 }
 .poetry{
-  color: var(--q-poetry);
+  color: var(--poetry);
 }
 .major-prophets{
-  color: var(--q-major-prophets);
+  color: var(--major-prophets);
 }
 .minor-prophets{
-  color: var(--q-minor-prophets);
+  color: var(--minor-prophets);
 }
 .gospels{
-  color: var(--q-gospels);
+  color: var(--gospels);
 }
 .acts{
-  color: var(--q-acts);
+  color: var(--acts);
 }
 .epistles{
-  color: var(--q-epistles);
+  color: var(--epistles);
 }
 .revelations{
-  color: var(--q-revelations);
+  color: var(--revelations);
 }
 .non-canonical{
-  color: var(--q-non-canonical);
+  color: var(--non-canonical);
+}
+
+.checkbox {
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  transition: opacity var(--transition-delay);
+}
+.verse{
+  transition: background-color var(--transition-delay);
+}
+.selected-verse{
+  background-color: var(--selected-verse);
+}
+.verse-block:hover .checkbox {
+  opacity: .7;
 }

@@ -5,6 +5,10 @@ export default {
   feedbackPage: 'Обратная связь',
   helpPage: 'Информация',
 
+  compareTranslations: 'Сравнить переводы',
+  addBookmark: 'Добавить закладку',
+  searchCrossreferences: 'Искать ссылки',
+
   generalTab: 'Общие',
   themeEditorTab: 'Редактор тем',
 

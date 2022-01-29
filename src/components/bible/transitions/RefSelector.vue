@@ -1,18 +1,19 @@
 <template>
   <UIModalWindow>
     <UIModalWindowHeader>
-      <q-btn
-        flat
-        round
-        icon="arrow_back"
-        @click.stop="step === 1 ? transitions.bookSelector = false : step--"
-      />
-      <div
-        class="flex items-center text-bold"
-        v-text="step === 1 ? `Выбор книги - ${fileName}`
-        : `${selectedBookName} - ${fileName}`"
-      />
-      <q-space/>
+      <template #close>
+        <q-btn
+          flat
+          round
+          icon="arrow_back"
+          @click.stop="step === 1 ? close() : step--"
+        />
+      </template>
+      <template #title>{{
+          step === 1 ? `Выбор книги - ${fileName}`
+            : `${selectedBookName} - ${fileName}`
+        }}
+      </template>
       <q-btn
         disable
         flat
@@ -85,7 +86,7 @@ import {ref} from "vue";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow"
 import useSevenBible from "src/hooks/useSevenBible";
-import useBibleModuleTables from "src/hooks/useBibleModuleTables";
+import {initBooksCategories} from "src/utils";
 
 export default {
   components: {
@@ -93,8 +94,8 @@ export default {
     UIModalWindow
   },
 
-  async setup(props) {
-    const {id, transitions} = useSevenBible()
+  setup({}, {emit}) {
+    const {id, textDirections, bookFullName, booksList} = useSevenBible()
     const store = useStore()
     const {fileName, chapterNumber, bookNumber} = store.native.state.settings.workPlace[id].bible
 
@@ -103,21 +104,12 @@ export default {
     const selectedBookNumber = ref(0)
     const selectedBookName = ref('')
 
-    const {booksList, initBooksCategories} = await useBibleModuleTables(fileName)
-    initBooksCategories()
+    initBooksCategories(booksList.value)
 
-    const newTestamentBooks = booksList.filter(book => book.book_number >= 470)
-    const oldTestamentBooks = booksList.filter(book => book.book_number <= 460)
+    const newTestamentBooks = booksList.value.filter(book => book.book_number >= 470)
+    const oldTestamentBooks = booksList.value.filter(book => book.book_number <= 460)
 
-
-    const secondStep = newChapterNumber => {
-      const newRef = {
-        bookNumber: selectedBookNumber.value,
-        chapterNumber: newChapterNumber
-      }
-      store.state.set(`workPlace.${id}.bible`, newRef)
-      transitions.bookSelector = false
-    }
+    const close = (ref) => emit('close', ref)
 
     const firstStep = async (bookNumber, bookFullName) => {
       const settings = {
@@ -130,25 +122,28 @@ export default {
       step.value++
     }
 
+    const secondStep = newChapterNumber => {
+      close({
+        bookNumber: selectedBookNumber.value,
+        chapterNumber: newChapterNumber
+      })
+    }
 
     return {
-      transitions,
       newTestamentBooks,
       oldTestamentBooks,
       firstStep,
       secondStep,
+      close,
       selectedBookName,
       countOfChapters,
       step,
       fileName,
       chapterNumber,
-      bookNumber
+      bookNumber,
+      textDirections,
+      bookFullName
     }
-  },
-
-  props: {
-    textDirections: Object,
-    bookFullName: String
   }
 }
 </script>
@@ -156,7 +151,7 @@ export default {
 <style lang="scss">
 
 .active {
-  background: var(--q-background-active);
+  background: var(--background-active);
 }
 
 .bordered-buttons {
@@ -164,8 +159,8 @@ export default {
     margin: 0 -1px 0 0;
 
     button {
-      border-bottom: 1px solid var(--q-separator);
-      border-right: 1px solid var(--q-separator);
+      border-bottom: 1px solid var(--separator);
+      border-right: 1px solid var(--separator);
     }
 
     &.rtl {
@@ -173,19 +168,19 @@ export default {
       direction: rtl;
 
       button {
-        border-left: 1px solid var(--q-separator);
+        border-left: 1px solid var(--separator);
         border-right: none !important;
       }
     }
   }
 
   &.bottom {
-    border-top: 1px solid var(--q-separator);
+    border-top: 1px solid var(--separator);
     margin: -1px -1px 0 0;
 
     button {
-      border-bottom: 1px solid var(--q-separator);
-      border-right: 1px solid var(--q-separator);
+      border-bottom: 1px solid var(--separator);
+      border-right: 1px solid var(--separator);
     }
 
     &.rtl {
@@ -193,7 +188,7 @@ export default {
       direction: rtl;
 
       button {
-        border-left: 1px solid var(--q-separator);
+        border-left: 1px solid var(--separator);
         border-right: none !important;
       }
     }

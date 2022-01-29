@@ -8,12 +8,15 @@ export default () => {
   const state = {
     get: (path) => Object.getValue(path, store.state.settings),
     getReactive: (path) => computed(() => Object.getValue(path, store.state.settings)),
-    set: (path, value) => store.commit('settings/setState', {path, value}),
+    set(path, value) {
+      store.commit('settings/setState', {path, value})
+    },
+    setBibleRef: (id, ref) => state.set(`workPlace.${id}.bible`, ref),
     native: store.state
   }
   const getters = {
     getActiveWorkPlaces: () => store.getters["settings/bibleActiveModules"],
-    getActiveWorkPlaceWindows : (id) => store.getters["settings/activeWorkPlaceWindows"](id)
+    getActiveWorkPlaceWindows: (id) => store.getters["settings/activeWorkPlaceWindows"](id)
   }
   const mutations = {
     closeWorkPlace: id => store.commit('settings/closeWorkPlace', id),

@@ -1,8 +1,7 @@
 <template>
   <UIModalWindow>
-
     <UIModalWindowHeader @close="close">
-      <template #title>{{ bookShortName }} {{ chapterNumber }}:{{ chosenVerse }} - ссылки</template>
+      <template #title>{{ bookShortName }} {{ chapterNumber }}:{{ selectedVerses[0] }} - ссылки</template>
       <q-btn flat round icon='payments'/>
       <q-btn flat round icon='more_vert'/>
     </UIModalWindowHeader>
@@ -102,10 +101,11 @@ import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
 
 export default {
   components: {DynamicVirtualScroller, UIModalWindowBody, UIModalWindowHeader, UIModalWindow},
-  setup() {
-    const {id, chosenVerse, transitions} = useSevenBible()
-    const close = () => transitions.crossreferencesSearcher = false
+  setup(props, {emit}) {
+    const {id, textDirections, bookShortName} = useSevenBible()
+    const close = (ref) => emit('close', ref)
     const store = useStore()
+
     const {
       bookNumber,
       chapterNumber,
@@ -119,7 +119,7 @@ export default {
       const settings = {
         bookNumber: bookNumber,
         chapterNumber: chapterNumber,
-        verse: chosenVerse.value,
+        verse: props.selectedVerses[0],
         filename: bibleFileName
       }
       const data = await window.crossreferences.getCrossreferences(settings)
@@ -157,8 +157,7 @@ export default {
     }
 
     const goToText = (bookNumber, chapterNumber) => {
-      store.state.set(`workPlace.${id}.bible`, {bookNumber, chapterNumber})
-      close()
+      close({bookNumber, chapterNumber})
     }
 
     return {
@@ -167,15 +166,15 @@ export default {
       close,
       crossreferencesCount,
       crossreferences,
-      chosenVerse,
       bibleFileName,
       chapterNumber,
-      bookNumber
+      bookNumber,
+      textDirections,
+      bookShortName
     }
   },
   props: {
-    bookShortName: String,
-    textDirections: Object
+    selectedVerses: Array
   }
 }
 </script>

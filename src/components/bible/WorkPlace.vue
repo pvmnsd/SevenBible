@@ -1,11 +1,21 @@
 <template>
-  <Transitions
-    :text-directions="textDirections"
-    :transitions="transitions"
-    :book-full-name="bookFullName"
-    :book-short-name="bookShortName"
-    :strong-numbers-prefix="bibleModuleInfo.strong_numbers_prefix"
-  />
+<!--  <Transitions-->
+<!--    :text-directions="textDirections"-->
+<!--    :transitions="transitions"-->
+<!--    :book-full-name="bookFullName"-->
+<!--    :book-short-name="bookShortName"-->
+<!--    :strong-numbers-prefix="bibleModuleInfo.strong_numbers_prefix"-->
+<!--  />-->
+
+  <div class="popup-windows">
+    <transition name="fade">
+      <component
+        v-if="isPopupShown"
+        :is="component"
+      />
+    </transition>
+  </div>
+
   <Splitpanes
     horizontal
     class="full-height"
@@ -14,13 +24,7 @@
       min-size="10"
       class="overflow-hidden flex d-column"
     >
-      <Bible
-        :bible="bible"
-        :info="bibleModuleInfo"
-        :ref-string="refString"
-        :view-params-requiring-rerender="viewParamsRequiringRerender"
-        :strong-numbers-prefix="strongNumbersPrefix"
-      />
+      <Bible/>
     </Pane>
     <Pane
       v-if="!allModulesClosed"
@@ -33,7 +37,7 @@
           v-if="activeWorkPlaceWindows.showCommentaries"
           min-size="10"
         >
-          <Commentaries :ref-string="refString"/>
+          <Commentaries/>
         </Pane>
         <Pane
           v-if='activeWorkPlaceWindows.showStrong'
@@ -52,27 +56,21 @@ import Strong from 'components/bible/splitter/strong.vue'
 import Bible from 'components/bible/splitter/Bible.vue'
 import Commentaries from "components/bible/splitter/Commentaries";
 import {Splitpanes, Pane} from 'splitpanes'
-import Transitions from "components/bible/Transitions";
 import useStore from "src/hooks/useStore";
-import {computed, watch} from "vue";
-import useTransitions from "src/hooks/useTransitions";
-import initWorkPlaceGlobalState from "src/hooks/initWorkPlaceGlobalState";
+import {computed, provide, ref} from "vue";
 import useBibleModuleInfo from "src/hooks/useBibleModuleInfo";
 import {useBibleDatabaseConnection} from "src/hooks/DBconnectionController";
+import {usePopupWindows} from "boot/popupWindows";
 
 export default {
   setup({id}) {
-    const {bookFullName, bookShortName} = initWorkPlaceGlobalState(id)
-
-    const store = useStore();
-    const {transitions} = useTransitions()
-
-
+    const store = useStore()
     const bible = store.state.getReactive(`workPlace.${id}.bible`)
     const bibleFileName = computed(() => bible.value.fileName)
     useBibleDatabaseConnection(bibleFileName)
 
     const {info: bibleModuleInfo} = useBibleModuleInfo(bibleFileName)
+    const {component, isPopupShown} = usePopupWindows()
 
     const activeWorkPlaceWindows = computed(() => {
       return store.getters.getActiveWorkPlaceWindows(id)
@@ -81,7 +79,6 @@ export default {
       return !activeWorkPlaceWindows.value.showStrong &&
         !activeWorkPlaceWindows.value.showCommentaries
     })
-
     const viewParamsRequiringRerender = computed(() => {
       const view = bible.value.view
       return view.showSubheadings + view.showCommentaries + view.showDreamy
@@ -124,11 +121,31 @@ export default {
       }
     });
 
+    const bibleTextKey = ref(0)
+    const bookFullName = ref(null)
+    const bookShortName = ref(null)
+    const popupWindows = ref(null)
+
+    provide('id', id)
+    provide("bibleTextKey", bibleTextKey)
+    provide('bookShortName', bookShortName)
+    provide('bookFullName', bookFullName)
+    provide('popupWindows', popupWindows)
+    provide('bible', bible)
+    provide('bibleModuleInfo', bibleModuleInfo)
+    provide('activeWorkPlaceWindows', activeWorkPlaceWindows)
+    provide('allModulesClosed', allModulesClosed)
+    provide('viewParamsRequiringRerender', viewParamsRequiringRerender)
+    provide('textDirections', textDirections)
+    provide('refString', refString)
+    provide('strongNumbersPrefix', strongNumbersPrefix)
 
     return {
+      component,
+      isPopupShown,
+
       activeWorkPlaceWindows,
       allModulesClosed,
-      transitions,
       bible,
       bibleModuleInfo,
       bookShortName,
@@ -136,7 +153,8 @@ export default {
       textDirections,
       refString,
       viewParamsRequiringRerender,
-      strongNumbersPrefix
+      strongNumbersPrefix,
+      popupWindows
     }
   },
   props: {
@@ -146,7 +164,6 @@ export default {
     }
   },
   components: {
-    Transitions,
     Commentaries,
     Bible,
     Strong,

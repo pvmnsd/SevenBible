@@ -27,7 +27,8 @@ module.exports = configure(function (ctx) {
       'directives',
       'i18n',
       'prototype',
-      'globalComponents'
+      'globalComponents',
+      'popupWindows'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css

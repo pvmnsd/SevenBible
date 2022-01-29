@@ -19,17 +19,12 @@
   >
     <q-list>
       <q-item
+        v-for="(item, i) in verseMenuItems"
+        :key="i"
         clickable
-        @click="openCrossreferencesSearcher"
+        @click="item.callback"
       >
-        <q-item-section>Искать перекрестные ссылки</q-item-section>
-      </q-item>
-
-      <q-item
-        clickable
-        @click="openTranslationsComparator"
-      >
-        <q-item-section>Сравнить переводы</q-item-section>
+        <q-item-section v-t="item.title"/>
       </q-item>
     </q-list>
   </q-menu>
@@ -40,8 +35,8 @@
         :bible-file-name="bible.fileName"
         :book-number="bible.bookNumber"
         :chapter-number="bible.chapterNumber"
-        :book-short-name="bookShortName"
-        :ref-string="refString"
+        :selected-verses="selectedVerses"
+        @clearSelectedVerses="clearSelectedVerses"
       />
     </UIWorkPlaceWindowHeader>
 
@@ -63,13 +58,9 @@
 
         <headings
           :chapter-string="chapterString"
-          :introduction-string="info.introduction_string"
           :chapter-number="bible.chapterNumber"
-          :description="info.description"
-          :detailed-info="info.detailed_info"
           :book-full-name="bookFullName"
           :book-number="bible.bookNumber"
-          :ref-string="refString"
           :bible-file-name="bible.fileName"
         />
 
@@ -81,8 +72,12 @@
           <div
             v-for='(verse, i) in chapter'
             :key='i'
-            class='verse'
+            class="flex verse-block"
           >
+            <div
+              class='verse grow-1'
+              :class="{'selected-verse' : selectedVerses.includes(i + 1)}"
+            >
 
           <span
             v-if="verse.story"
@@ -91,9 +86,9 @@
             {{ verse.story }}
           </span>
 
-            <template
-              v-if="verse.subheadings"
-            >
+              <template
+                v-if="verse.subheadings"
+              >
             <span
               class="h"
               v-for="(subheading, index) in verse.subheadings"
@@ -101,32 +96,45 @@
               :key="'A' + index"
               v-html="subheading.subheading"
             />
-            </template>
+              </template>
 
-            <span>
+              <span>
           <span
             class="verse-num no-selectable text-caption"
             @click.stop="onVerseNumberClick($event, i + 1)"
-            @contextmenu="onVerseNumberContextMenu($event, i + 1)"
+            @contextmenu.stop="onVerseNumberContextMenu($event, i + 1)"
             v-text="i + 1"
           />
-            <span class="text" v-html='verse.text'/>
+            <span
+              class="verse-text"
+              v-html='verse.text'
+            />
           </span>
 
-            <span
-              class="commentary q-pl-xs"
-              v-for="(commentary, idx) in verse.commentaries"
-              :key="'B' + idx"
-              @click="({target}) => {
+              <span
+                class="commentary q-pl-xs"
+                v-for="(commentary, idx) in verse.commentaries"
+                :key="'B' + idx"
+                @click="({target}) => {
               htmlPopupTarget = target
               htmlPopupText = commentary.text
               $refs.htmlPopup.toggle()
             }"
-            >
+              >
             {{ commentary.moduleName }}
           </span>
 
+            </div>
+            <span class="checkbox" :class="{visible: selectedVerses.includes(i + 1)}">
+              <q-checkbox
+                @click="onSelectorClick(i + 1)"
+                v-touch-hold.mouse="() => onSelectorHold(i + 1)"
+                :model-value="selectedVerses.includes(i + 1)"
+                size="1.7em"
+              />
+            </span>
           </div>
+
         </div>
       </div>
     </UIWorkPlaceWindowBody>
@@ -145,42 +153,60 @@ import UIWorkPlaceWindowBody from "components/UI/WorkPlaceWindow/UIWorkPlaceWind
 import BibleTopBar from "components/bible/bibleTopBar";
 import useSevenBible from "src/hooks/useSevenBible";
 import useStore from "src/hooks/useStore";
-import {onMounted, watch, computed, onBeforeUnmount} from "vue";
+import {onMounted, watch, computed, ref} from "vue";
 import useChapter from "src/hooks/useChapter";
 import useFootnotes from "src/hooks/useFootnotes";
+import {WorkModes} from "src/objects";
+import useVerseSelector from "src/hooks/useVerseSelector";
 
 export default {
-  setup(props) {
-    const {id, transitions} = useSevenBible()
+  setup() {
+    const {
+      id,
+      refString,
+      viewParamsRequiringRerender,
+      bible,
+      bibleModuleInfo: info
+    } = useSevenBible()
     const store = useStore()
     const {bibleTextKey} = useSevenBible()
-    const {chapter, getChapter, bookFullName, bookShortName} = useChapter(props)
-    const {footnotes, getFootNotes} = useFootnotes(props)
+    const {chapter, getChapter, bookFullName, bookShortName} = useChapter(bible)
+    const {footnotes, getFootNotes} = useFootnotes(bible)
+
+    let workMode = ref(WorkModes.standard)
 
     watch([
-      () => props.refString,
-      () => props.viewParamsRequiringRerender,
+      refString,
+      viewParamsRequiringRerender,
       bibleTextKey
     ], async () => {
       await getChapter()
       await getFootNotes()
     })
 
-
     const {
       onVerseClick,
       htmlPopup,
       htmlPopupText,
       htmlPopupTarget
-    } = useBibleEvents(id, store, footnotes, props)
+    } = useBibleEvents(id, store, footnotes)
 
     const {
+      selectedVerses,
+      onSelectorClick,
+      onSelectorHold,
+      clearSelectedVerses
+    } = useVerseSelector()
+
+    const {
+      verseMenuItems,
       verseNumberPopup,
       verseNumberPopupTarget,
       onVerseNumberClick,
       onVerseNumberContextMenu,
       openCrossreferencesSearcher,
-      openTranslationsComparator
+      openTranslationsComparator,
+      openBookmarkCreator
     } = useVerseNumber()
 
 
@@ -190,17 +216,17 @@ export default {
     });
 
     const chapterString = computed(() => {
-      return props.info.chapter_string_ps &&
-      props.bible.bookNumber === 230
-        ? props.info.chapter_string_ps
-        : props.info.chapter_string_nt &&
-        props.bible.bookNumber >= 470
-          ? props.info.chapter_string_nt
-          : props.info.chapter_string_ot &&
-          props.bible.bookNumber < 470
-            ? props.info.chapter_string_ot
-            : props.info.chapter_string
-              ? props.info.chapter_string
+      return info.value.chapter_string_ps &&
+      bible.value.bookNumber === 230
+        ? info.value.chapter_string_ps
+        : info.value.chapter_string_nt &&
+        bible.value.bookNumber >= 470
+          ? info.value.chapter_string_nt
+          : info.value.chapter_string_ot &&
+          bible.value.bookNumber < 470
+            ? info.value.chapter_string_ot
+            : info.value.chapter_string
+              ? info.value.chapter_string
               : "Глава";
     })
 
@@ -211,23 +237,30 @@ export default {
     //   navigator.clipboard.writeText(text)
     // }
 
-
     return {
-      transitions,
+      bible,
       chapter,
       htmlPopup,
       htmlPopupText,
       htmlPopupTarget,
       verseNumberPopup,
+      verseMenuItems,
       verseNumberPopupTarget,
       bookFullName,
       bookShortName,
       chapterString,
+
+      selectedVerses,
+      onSelectorClick,
+      onSelectorHold,
+      clearSelectedVerses,
+
       onVerseClick,
       onVerseNumberClick,
       onVerseNumberContextMenu,
       openCrossreferencesSearcher,
-      openTranslationsComparator
+      openTranslationsComparator,
+      openBookmarkCreator
     }
   },
   components: {
@@ -237,13 +270,6 @@ export default {
     ContextMenu,
     Headings,
     BibleTopBar
-  },
-  props: {
-    bible: Object,
-    info: Object,
-    refString: String,
-    viewParamsRequiringRerender: Number,
-    strongNumbersPrefix: String
   }
 }
 </script>

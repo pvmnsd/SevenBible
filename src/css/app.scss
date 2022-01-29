@@ -13,5 +13,8 @@ html{
 body {
   height: 100%;
   overflow: hidden;
-  color: var(--q-text);
+  color: var(--text);
+}
+:root{
+  --transition-delay: .2s;
 }

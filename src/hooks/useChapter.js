@@ -2,21 +2,21 @@ import {ref} from 'vue'
 import parseText from "src/hooks/parseText";
 import useSevenBible from "src/hooks/useSevenBible";
 
-export default (props) => {
+export default (bible) => {
   const chapter = ref(null)
   const {bookFullName, bookShortName} = useSevenBible()
 
   const getChapter = async () => {
     let settings = {
-      filename: props.bible.fileName,
-      bookNumber: props.bible.bookNumber,
-      chapterNumber: props.bible.chapterNumber,
-      showSubheadings: props.bible.view.showSubheadings,
-      showCommentaries: props.bible.view.showCommentaries,
-      showDreamy: props.bible.view.showDreamy,
-      embededOverwriteOthers: props.bible.view.subheadings.embededOverwriteOthers,
-      activeModulesSubheadings: [...props.bible.view.subheadings.activeModules],
-      activeModulesCommentaries: [...props.bible.view.commentaries.activeModules],
+      filename: bible.value.fileName,
+      bookNumber: bible.value.bookNumber,
+      chapterNumber: bible.value.chapterNumber,
+      showSubheadings: bible.value.view.showSubheadings,
+      showCommentaries: bible.value.view.showCommentaries,
+      showDreamy: bible.value.view.showDreamy,
+      embededOverwriteOthers: bible.value.view.subheadings.embededOverwriteOthers,
+      activeModulesSubheadings: [...bible.value.view.subheadings.activeModules],
+      activeModulesCommentaries: [...bible.value.view.commentaries.activeModules],
     }
 
     let data =  await window.bible.getChapter(settings)

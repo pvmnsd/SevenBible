@@ -1,11 +1,13 @@
 import {computed} from "vue";
 import {useQuasar} from "quasar";
+import useSevenBible from "src/hooks/useSevenBible";
 
-export default (id, store, props) => {
+export default (id, store, strongNumbersPrefix) => {
   const {notify} = useQuasar()
+  const {bibleModuleInfo: info} = useSevenBible()
 
   const isStrong = computed(() =>
-    props.info.strong_numbers === 'false' ? false : ('strong_numbers') in props.info
+    info.value.strong_numbers === 'false' ? false : ('strong_numbers') in info.value
   )
   const onStrongSearch = (target) => {
     if (target.nextElementSibling?.tagName !== 'S' || !isStrong.value) {
@@ -23,7 +25,7 @@ export default (id, store, props) => {
     let strongNumbers = []
     while (target.nextElementSibling?.tagName === 'S') {
       target = target.nextElementSibling
-      strongNumbers.push(props.strongNumbersPrefix + target.innerText)
+      strongNumbers.push(strongNumbersPrefix.value + target.innerText)
     }
     store.state.set(`workPlace.${id}.strong`, {
       show: true,

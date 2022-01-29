@@ -5,6 +5,10 @@ export default {
   feedbackPage: 'Feedback',
   helpPage: 'Information',
 
+  compareTranslations: 'CompareTranslations',
+  addBookmark: 'Add bookmark',
+  searchCrossreferences: 'Search crossreferences',
+
   generalTab: 'General',
   themeEditorTab: 'Theme editor',
 

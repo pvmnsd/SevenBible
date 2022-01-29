@@ -41,7 +41,6 @@
       />
 
       <BookmarkCreator v-if="transitions.bookmarkCreator"/>
-
     </transition-group>
   </suspense>
 </template>
@@ -53,7 +52,7 @@ import SubheadingsSettings from "components/bible/transitions/subheadingsSetting
 import CrossreferencesSearcher from "components/bible/transitions/crossreferencesSearcher";
 import StrongSearcher from "components/bible/transitions/strongSearcher";
 import TextSearcher from "components/bible/transitions/textSearcher";
-import BookSelector from "components/bible/transitions/bookSelector";
+import BookSelector from "components/bible/transitions/RefSelector";
 import BookmarkCreator from "components/bible/transitions/BookmarkCreator";
 
 export default {

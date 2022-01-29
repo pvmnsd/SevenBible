@@ -1,9 +1,10 @@
 import useStrongSearchEvent from "src/hooks/useStrongSearchEvent";
 import useGetCommentByFootnoteEvent from "src/hooks/useGetCommentByFootnoteEvent";
+import useSevenBible from "src/hooks/useSevenBible";
 
-export default (id, store, footnotes, props) => {
-
-  const {onStrongSearch} = useStrongSearchEvent(id, store, props, props)
+export default (id, store, footnotes) => {
+  const {strongNumbersPrefix} = useSevenBible()
+  const {onStrongSearch} = useStrongSearchEvent(id, store, strongNumbersPrefix)
   const {
     onGetCommentByFootnote,
     htmlPopup,
@@ -15,7 +16,7 @@ export default (id, store, footnotes, props) => {
     if (target.tagName === "S")
       store.state.set(`workPlace.${id}.strong`, {
         show: true,
-        strongNumbers: [props.strongNumbersPrefix + target.innerText]
+        strongNumbers: [strongNumbersPrefix.value + target.innerText]
       })
 
     if (target.tagName === "W")

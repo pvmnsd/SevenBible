@@ -1,4 +1,3 @@
-import getBookCategory from "src/hooks/getBookCategory";
 
 export default async (bibleFileName) => {
   const settings = {filename: bibleFileName}
@@ -7,15 +6,8 @@ export default async (bibleFileName) => {
   const booksList = tables.booksList
   const info = tables.info
 
-  const initBooksCategories = () => {
-    booksList.forEach(book => {
-      book.bookCategory = getBookCategory(book.book_number)
-    })
-  }
-
   return {
     booksList,
-    info,
-    initBooksCategories
+    info
   }
 }

@@ -1,20 +1,20 @@
 <template>
   <div style="transition: 0.2s" class="q-gutter-y-sm">
 
-    <div v-if="chapterNumber === 1 && (detailedInfo?.length || moduleIntroduction.length)">
+    <div v-if="chapterNumber === 1 && (info.detailed_info?.length || moduleIntroduction.length)">
 
               <span
                 class='introduction text-h6'
                 @click='moduleIntroductionWindow = true'
               >
-                {{ introductionString || "Введение" }}
+                {{ info.introduction_string || "Введение" }}
             </span>
 
       <q-dialog v-model='moduleIntroductionWindow'>
         <q-card>
 
           <q-card-section class='row q-pb-none'>
-            <span class='text-h6'>{{ description }}</span>
+            <span class='text-h6'>{{ info.description }}</span>
             <q-space/>
             <q-btn icon='close' flat round dense v-close-popup/>
           </q-card-section>
@@ -22,7 +22,7 @@
           <q-separator/>
 
           <q-card-section class="scroll-container" style="max-height: 50vh">
-            <span v-html='detailedInfo'/>
+            <span v-html='info.detailed_info'/>
 
             <template v-if="moduleIntroduction.length">
               <q-separator/>
@@ -79,10 +79,14 @@
 
 <script>
 
-import {defineComponent, watch, onMounted, ref} from "vue";
+import {watch, onMounted, ref} from "vue";
+import useSevenBible from "src/hooks/useSevenBible";
+import useStore from "src/hooks/useStore";
 
-export default defineComponent({
+export default {
   setup(props) {
+    const {bibleModuleInfo: info, refString, id} = useSevenBible()
+    const store = useStore()
     const moduleIntroductionWindow = ref(false)
     const bookIntroductionWindow = ref(false)
     const chapterIntroductionWindow = ref(false)
@@ -111,7 +115,9 @@ export default defineComponent({
     }
 
     onMounted(() => getIntroductions())
-    watch(() => props.refString, () => getIntroductions())
+    watch(refString, () => {
+      setTimeout(() => getIntroductions())
+    })
 
     return {
       moduleIntroductionWindow,
@@ -119,7 +125,8 @@ export default defineComponent({
       chapterIntroductionWindow,
       chapterIntroduction,
       moduleIntroduction,
-      bookIntroduction
+      bookIntroduction,
+      info
     }
   },
 
@@ -128,11 +135,7 @@ export default defineComponent({
     bookNumber: Number,
     chapterNumber: Number,
     bookFullName: String,
-    description: String,
-    introductionString: String,
-    detailedInfo: String,
-    refString: String,
     bibleFileName: String
   }
-})
+}
 </script>

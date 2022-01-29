@@ -14,7 +14,7 @@ export default () => {
     body.removeAttribute('style')
 
     Object.keys(theme).forEach(key => {
-      body.style.setProperty('--q-' + key, theme[key])
+      body.style.setProperty('--' + key, theme[key])
     })
   }
   const setTheme = async (themeName) => {

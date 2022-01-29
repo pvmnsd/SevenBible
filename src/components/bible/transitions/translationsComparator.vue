@@ -2,7 +2,7 @@
   <UIModalWindow>
 
     <UIModalWindowHeader @click="close">
-      <template #title>{{ bookShortName }} {{ chapterNumber }}:{{ chosenVerse }} в разных местах</template>
+      <template #title>{{ bookShortName }} {{ chapterNumber }}:{{ convertVerses(selectedVerses) }} в разных местах</template>
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
 
@@ -11,21 +11,24 @@
         <q-item
           clickable
           v-ripple
-          v-for="(translationText, idx) in translationsTexts"
-          :key="idx"
-          @click="goToModule(translationText.moduleName)"
-          :dir="translationText.direction[testament]"
+          v-for="(item, i) in translationsTexts"
+          :key="i"
+          @click="goToModule(item.moduleName)"
+          :dir="item.direction[testament]"
         >
           <q-item-section>
             <q-item-label
               class="q-gutter-x-md q-pb-sm"
             >
-              <span class="text-weight-bold">{{ translationText.moduleName }}</span>
-              <span class="text-weight-light">{{ translationText.moduleDescription }}</span>
+              <span class="text-weight-bold">{{ item.moduleName }}</span>
+              <span class="text-weight-light">{{ item.moduleDescription }}</span>
             </q-item-label>
 
             <q-item-label>
-              <div v-html="translationText.text"/>
+              <p v-for="(item1, i) in item.texts" :key="'text-' + i" class="q-gutter-x-sm">
+                <span v-if="item.texts.length > 1" v-text="item1.verse"/>
+                <span v-html="item1.text"/>
+              </p>
             </q-item-label>
 
           </q-item-section>
@@ -43,20 +46,20 @@ import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
 import useSevenBible from "src/hooks/useSevenBible";
 import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody";
+import {convertVerses} from "src/helpers";
 
 export default {
   components: {UIModalWindowBody, UIModalWindowHeader, UIModalWindow},
-  setup(props) {
-    const {id, chosenVerse, transitions} = useSevenBible()
+  setup(props, {emit}) {
+    const {id, bookShortName} = useSevenBible()
     const store = useStore()
     const {chapterNumber, bookNumber} = store.native.state.settings.workPlace[id].bible
     const testament = computed(() => props.bookNumber >= 470 ? 'nt' : 'ot')
 
-    const close = () => transitions.translationsComparator = false
+    const close = (ref) => emit('close', ref)
 
-    const goToModule = moduleName => {
-      store.state.set(`workPlace.${id}.bible.fileName`, moduleName)
-      close()
+    const goToModule = filename => {
+      close({fileName: filename})
     }
 
     const translationsTexts = ref([])
@@ -64,24 +67,25 @@ export default {
       const settings = {
         bookNumber: bookNumber,
         chapterNumber: chapterNumber,
-        verseNumber: chosenVerse.value
+        versesNumbers: props.selectedVerses
       }
       translationsTexts.value = await window.bible.getCompared(settings)
     }
     onMounted(() => getComparedTranslations())
 
     return {
+      bookShortName,
       testament,
       translationsTexts,
-      chosenVerse,
       chapterNumber,
       bookNumber,
       goToModule,
-      close
+      close,
+      convertVerses
     }
   },
   props: {
-    bookShortName: String
+    selectedVerses: Array
   }
 }
 </script>

@@ -29,5 +29,20 @@ export default async (/* { app, router, Vue ... } */) => {
     else proxy[lastKey] = value
   }
 
+  Array.prototype.remove = function (value) {
+    this.splice(this.indexOf(value), 1)
+  }
+  Array.prototype.insert = function (value) {
+    let index
+    for (let i = 0, max = 0; i < this.length; i++){
+      let el = this[i]
+      if (el > max && el < value) {
+        max = el
+        index = i + 1
+      }
+    }
+    this.splice(index, 0, value)
+  }
+
 
 }

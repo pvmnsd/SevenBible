@@ -21,5 +21,6 @@ module.exports = {
   "system-bar": "green",
   "scrollbar": "#26a69a",
   "scrollbar-hover": "#1f5751",
-  "secondary-hover": "#26a69a"
+  "secondary-hover": "#26a69a",
+  'selected-verse': "#26a69a"
 }

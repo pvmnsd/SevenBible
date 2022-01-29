@@ -5,12 +5,6 @@ export default () => {
     get id(){
       return inject('id')
     },
-    get transitions(){
-      return inject('transitions')
-    },
-    get chosenVerse(){
-      return inject('chosenVerse')
-    },
     get bibleTextKey(){
       return inject('bibleTextKey')
     },
@@ -22,6 +16,36 @@ export default () => {
     },
     get bookShortName(){
       return inject('bookShortName')
+    },
+    get popupWindows(){
+      return inject('popupWindows')
+    },
+    get bible(){
+      return inject('bible')
+    },
+    get bibleModuleInfo(){
+      return inject('bibleModuleInfo')
+    },
+    get activeWorkPlaceWindows(){
+      return inject('activeWorkPlaceWindows')
+    },
+    get allModulesClosed(){
+      return inject('allModulesClosed')
+    },
+    get viewParamsRequiringRerender(){
+      return inject('viewParamsRequiringRerender')
+    },
+    get textDirections(){
+      return inject('textDirections')
+    },
+    get refString(){
+      return inject('refString')
+    },
+    get strongNumbersPrefix(){
+      return inject('strongNumbersPrefix')
+    },
+    get booksList(){
+      return inject('booksList')
     }
   }
 }

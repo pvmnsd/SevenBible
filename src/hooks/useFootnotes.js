@@ -1,17 +1,17 @@
 import {ref} from "vue";
 
 
-export default (props) => {
+export default (bible) => {
   const footnotes = ref(null)
 
   const getFootNotes = async () => {
-    if(!props.bible.view.showDreamy || !window.system.fsExistsSync(['modules', 'commentaries', props.bible.fileName + '.commentaries.SQLite3']))
+    if(!bible.value.view.showDreamy || !window.system.fsExistsSync(['modules', 'commentaries', bible.value.fileName + '.commentaries.SQLite3']))
       return
 
     const settings = {
-      filename: props.bible.fileName,
-      bookNumber: props.bible.bookNumber,
-      chapterNumber: props.bible.chapterNumber
+      filename: bible.value.fileName,
+      bookNumber: bible.value.bookNumber,
+      chapterNumber: bible.value.chapterNumber
     }
     footnotes.value = await window.commentaries.getFootnotes(settings)
   }

@@ -75,10 +75,10 @@ export default {
     UIModalWindowHeader,
     UIModalWindow
   },
-  setup() {
+  setup(props, {emit}) {
+    const {id} = useSevenBible()
+    const close = (ref) => emit('close', ref)
 
-    const {transitions, id} = useSevenBible()
-    const close = () => transitions.bookSearcher = false
     const store = useStore()
     const bibleFileName = ref(store.native.state.settings.workPlace[id].bible.fileName)
     const {
@@ -90,8 +90,8 @@ export default {
     } = useTextSearcher(bibleFileName)
 
     const goToText = (bookNumber, chapterNumber) => {
-      store.state.set(`workPlace.${id}.bible`, {bookNumber, chapterNumber})
-      close()
+      const ref = {bookNumber, chapterNumber}
+      close(ref)
     }
 
 
@@ -112,6 +112,6 @@ export default {
       close
     }
 
-  },
+  }
 }
 </script>

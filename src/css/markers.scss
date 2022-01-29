@@ -8,7 +8,7 @@ m {
 }
 
 n {
-  color: var(--q-n);
+  color: var(--n);
 }
 
 h, .h {
@@ -33,7 +33,7 @@ h, .h {
     border-radius: 1px;
 
     &:hover {
-      background: var(--q-background-active);
+      background: var(--background-active);
     }
   }
 
@@ -51,7 +51,7 @@ h, .h {
   }
 
   j {
-    color: var(--q-jesus)
+    color: var(--jesus)
   }
 
   pb {
@@ -64,7 +64,7 @@ h, .h {
 
   //вставка
   i {
-    color: var(--q-i);
+    color: var(--i);
   }
 
   pb {
@@ -79,7 +79,7 @@ h, .h {
 .bible-text[showsubheadings="true"] {
   h, .h {
     font-size: 1.1em;
-    color: var(--q-heading);
+    color: var(--heading);
     font-weight: bold;
     margin: 4px 0;
     display: block;
@@ -105,11 +105,11 @@ h, .h {
     font-size: 0.9em;
     padding: 0 5px;
     text-decoration: none;
-    color: var(--q-strong);
+    color: var(--strong);
     cursor: pointer;
 
     &:hover {
-      color: var(--q-text-active);
+      color: var(--text-active);
     }
 
     & + S::before {
@@ -155,7 +155,7 @@ h, .h {
 }
 
 font{
-  color: var(--q-text);
+  color: var(--text);
 }
 a{
   white-space: nowrap;

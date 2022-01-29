@@ -25,11 +25,12 @@ module.exports = {
   "text": "#000000",
   "text-active": "rgb(0, 71, 196)",
 
-  "tabs": "var(--q-background)",
+  "tabs": "var(--background)",
   "separator": "#AFAFAFFF",
-  "top-bar": "var(--q-background)",
-  "drawer": "var(--q-background)",
+  "top-bar": "var(--background)",
+  "drawer": "var(--background)",
   "system-bar": "#ababab",
-  "scrollbar": "var(--q-separator)",
+  "scrollbar": "var(--separator)",
   "scrollbar-hover": "#8c8c8c",
+  'selected-verse': "#26a69a"
 }
