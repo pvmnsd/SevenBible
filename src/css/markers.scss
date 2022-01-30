@@ -27,6 +27,10 @@ h, .h {
 }
 
 .bible-text {
+  e{
+    font-weight: bold;
+  }
+
   w {
     cursor: pointer;
     transition: 0.2s ease;
@@ -90,7 +94,7 @@ h, .h {
   display: none;
 }
 
-.bible-text[showversenumber="false"] .number {
+.bible-text[showversenumber="false"] .verse-number {
   display: none;
 }
 
@@ -126,28 +130,31 @@ h, .h {
 }
 
 .bible-text[showcontinuoustext="true"] {
-  & .verse {
+  & .verse-block {
     display: inline;
+  }
+  & .checkbox {
+    display: none;
   }
 }
 
-.bible-text[showparagraphs="true"] {
-  .verse {
-    display: inline;
-  }
-
-  .aaa::before {
-    content: '';
-    display: block;
-    padding-bottom: 20px;
-  }
-
-  & t {
-    margin: 0 20px;
-    display: block;
-    padding-bottom: 20px;
-  }
-}
+//.bible-text[showparagraphs="true"] {
+//  .verse {
+//    display: inline;
+//  }
+//
+//  .aaa::before {
+//    content: '';
+//    display: block;
+//    padding-bottom: 20px;
+//  }
+//
+//  & t {
+//    margin: 0 20px;
+//    display: block;
+//    padding-bottom: 20px;
+//  }
+//}
 .bible-text[showcommentaries]{
   .commentary {
     display: inline;

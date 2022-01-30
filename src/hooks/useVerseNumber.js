@@ -5,7 +5,7 @@ import {VerseNumberActions, WorkModes} from "src/objects";
 import useSevenBible from "src/hooks/useSevenBible";
 
 
-export default () => {
+export default ({copyVerses}) => {
   const store = useStore()
   const {id} = useSevenBible()
   const popup = usePopupWindows()
@@ -57,6 +57,10 @@ export default () => {
     {
       title: 'searchCommentaries',
       callback: () => openCommentariesComparator()
+    },
+    {
+      title: 'copy',
+      callback: () => copyVerses([selectedVerse])
     },
   ]
 

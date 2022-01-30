@@ -26,6 +26,8 @@ export default async (/* { app, router, Vue ... } */) => {
     }, obj)
     if (typeof proxy[lastKey] === 'object')
       proxy[lastKey] = {...proxy[lastKey], ...value}
+    else if (!value)
+      proxy[lastKey] = !proxy[lastKey]
     else proxy[lastKey] = value
   }
 

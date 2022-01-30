@@ -39,7 +39,7 @@
     />
     <q-separator vertical/>
 
-    <quick-settings :bible-view="bibleView"/>
+    <quick-settings/>
 
     <template v-if="activeWorkPlacesCount > 1">
       <q-separator vertical/>
@@ -165,7 +165,6 @@ export default {
   },
   components: {UIButton, UIButtonset, QuickSettings, ModuleSelector},
   props: {
-    bibleView: Object,
     bookNumber: Number,
     chapterNumber: Number,
     bibleFileName: String,

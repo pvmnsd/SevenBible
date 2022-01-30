@@ -8,6 +8,7 @@
               icon="arrow_left"
               round
               unelevated
+              @click="showPrevPanel('show')"
             />
             <span class="text-center text-h6 col">Показывать</span>
             <q-btn
@@ -39,7 +40,7 @@
               flat
               size="xs"
               icon="settings"
-              @click="transitions.subheadingsSettings = true"
+              @click="popup.showSubheadingsSettings"
             />
           </div>
           <div class="flex no-wrap">
@@ -54,7 +55,7 @@
               flat
               size="xs"
               icon="settings"
-              @click="transitions.commentariesSettings = true"
+              @click="popup.showCommentariesSettings"
             />
           </div>
           <q-checkbox
@@ -113,6 +114,7 @@
               icon="arrow_left"
               round
               unelevated
+              @click="showPrevPanel('open')"
             />
             <span class="text-center text-h6 col">Открыть</span>
             <q-btn
@@ -127,19 +129,19 @@
               label="Словарь стронга"
               icon-right="menu_book"
               align="between"
-              @click="toggleModuleState('strong', 'show')"
+              @click="changeState('strong.show')"
             />
             <q-btn
               label="Словарь"
               icon-right="auto_stories"
               align="between"
-              @click="toggleModuleState('dictionary', 'show')"
+              @click="changeState('dictionary.show')"
             />
             <q-btn
               label="Комментарии"
               icon-right="forum"
               align="between"
-              @click="toggleModuleState('commentaries', 'show')"
+              @click="changeState('commentaries.show')"
             />
         </div>
       </div>
@@ -148,16 +150,17 @@
 </template>
 
 <script>
-import {useStore} from 'vuex'
-import {defineComponent, onMounted, onBeforeUnmount, inject, ref} from "vue"
-import {toggleModuleState} from "src/store/settings/mutations";
+import useStore from "src/hooks/useStore";
+import {defineComponent, ref} from "vue"
 import useSevenBible from "src/hooks/useSevenBible";
 import UIButtonDropdown from "components/UI/UIButtonDropdown";
+import {usePopupWindows} from "boot/popupWindows";
 
 export default defineComponent({
   components: {UIButtonDropdown},
-  setup(props) {
-    const {id, transitions} = useSevenBible()
+  setup() {
+    const {id, bible} = useSevenBible()
+    const popup = usePopupWindows()
     const panels = ['show', 'open']
     const panel = ref('open')
 
@@ -165,34 +168,29 @@ export default defineComponent({
       const index = panels.indexOf(current)
       panel.value =  panels.length > index + 1 ? panels[index + 1] : panels[0]
     }
+    const showPrevPanel = current => {
+      const index = panels.indexOf(current)
+      panel.value = index - 1 !== -1 ? panels[index - 1] : panels[panels.length - 1]
+    }
 
     const store = useStore()
-    const changeModuleStateView = settings => store.commit('settings/changeModuleStateView', settings)
-    const toggleModuleState = (key, name) => store.commit('settings/toggleModuleState', {id, key, name})
 
-    const changeViewState = (name, value) => {
-      if (name === 'showParagraphs') {
-        if (props.bibleView.showContinuousText) {
-          changeModuleStateView({id, key: 'bible', name: 'showContinuousText', value: false})
-        }
-        this.changeModuleStateView({id, key: 'bible', name, value})
-      }
-      if (name === 'showContinuousText') {
-        if (props.bibleView.showParagraphs) {
-          changeModuleStateView({id, key: 'bible', name: 'showParagraphs', value: false})
-        }
-        changeModuleStateView({id, key: 'bible', name, value})
-      } else changeModuleStateView({id, key: 'bible', name, value})
+    const changeViewState = (key, value) => {
+      store.state.set(`workPlace.${id}.bible.view.${key}`, value)
+    }
+    const changeState = (key, value) => {
+      store.state.set(`workPlace.${id}.${key}`, value)
     }
 
     return {
       changeViewState,
+      changeState,
       showNextPanel,
-      toggleModuleState,
+      showPrevPanel,
       panel,
-      transitions
+      popup,
+      bibleView: bible.value.view
     }
-  },
-  props: {bibleView: Object}
+  }
 })
 </script>

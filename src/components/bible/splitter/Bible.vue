@@ -9,6 +9,7 @@
   >
     <div class="q-pa-md" v-html="htmlPopupText"/>
   </q-menu>
+
   <q-menu
     ref="verseNumberPopup"
     transition-show="jump-down"
@@ -25,6 +26,28 @@
         @click="item.callback"
       >
         <q-item-section v-t="item.title"/>
+      </q-item>
+    </q-list>
+  </q-menu>
+
+  <q-menu
+    ref="versePopup"
+    auto-close
+    transition-show="jump-down"
+    transition-hide="jump-up"
+    no-parent-event
+    :target="versePopupTarget"
+  >
+    <q-list>
+      <q-item
+        v-for="(item, i) in versePopupOptions"
+        :key="i"
+        clickable
+      >
+        <q-item-section
+          v-t="(item.label)"
+          @click="item.callback"
+        />
       </q-item>
     </q-list>
   </q-menu>
@@ -64,17 +87,15 @@
           :bible-file-name="bible.fileName"
         />
 
-        <div
-          class='verses'
-          @click.stop="onVerseClick"
-          @copy="copyText"
-        >
+        <div class='verses'>
           <div
             v-for='(verse, i) in chapter'
             :key='i'
             class="flex verse-block"
+            @click.stop="onVerseClick"
+            @contextmenu.stop="onVerseContextmenu"
           >
-            <div
+            <span
               class='verse grow-1'
               :class="{'selected-verse' : selectedVerses.includes(i + 1)}"
             >
@@ -100,7 +121,7 @@
 
               <span>
           <span
-            class="verse-num no-selectable text-caption"
+            class="verse-number no-selectable text-caption"
             @click.stop="onVerseNumberClick($event, i + 1)"
             @contextmenu.stop="onVerseNumberContextMenu($event, i + 1)"
             v-text="i + 1"
@@ -124,7 +145,7 @@
             {{ commentary.moduleName }}
           </span>
 
-            </div>
+            </span>
             <span class="checkbox" :class="{visible: selectedVerses.includes(i + 1)}">
               <q-checkbox
                 @click="onSelectorClick(i + 1)"
@@ -158,6 +179,7 @@ import useChapter from "src/hooks/useChapter";
 import useFootnotes from "src/hooks/useFootnotes";
 import {WorkModes} from "src/objects";
 import useVerseSelector from "src/hooks/useVerseSelector";
+import useVerse from "src/hooks/useVerse";
 
 export default {
   setup() {
@@ -173,6 +195,22 @@ export default {
     const {chapter, getChapter, bookFullName, bookShortName} = useChapter(bible)
     const {footnotes, getFootNotes} = useFootnotes(bible)
 
+    const copyVerses = (selectedVerses) => {
+      let text = ''
+      console.log(chapter)
+      console.time('t')
+      selectedVerses.forEach(verseNumber => {
+        const html = chapter.value[verseNumber - 1].text
+        text = html.replace(/(<[Sm]>[0-9]+<\/[^>]>|<[^>]+>)/g, "")
+        // text = html.replace(/(<[^]+\/>|<(S|m)>[^<]+<\/.>)/g, "")
+        // const el = document.createElement("span")
+        // el.innerHTML = html
+        // el.querySelectorAll('s').forEach(node => node.remove())
+      })
+      console.timeEnd('t')
+      console.log(text)
+    }
+
     let workMode = ref(WorkModes.standard)
 
     watch([
@@ -183,6 +221,13 @@ export default {
       await getChapter()
       await getFootNotes()
     })
+
+    const {
+      onVerseContextmenu,
+      versePopup,
+      versePopupOptions,
+      versePopupTarget
+    } = useVerse()
 
     const {
       onVerseClick,
@@ -207,7 +252,7 @@ export default {
       openCrossreferencesSearcher,
       openTranslationsComparator,
       openBookmarkCreator,
-    } = useVerseNumber()
+    } = useVerseNumber({copyVerses})
 
 
     onMounted(() => {
@@ -250,6 +295,11 @@ export default {
       bookShortName,
       chapterString,
 
+      onVerseContextmenu,
+      versePopup,
+      versePopupOptions,
+      versePopupTarget,
+
       selectedVerses,
       onSelectorClick,
       onSelectorHold,
@@ -260,7 +310,8 @@ export default {
       onVerseNumberContextMenu,
       openCrossreferencesSearcher,
       openTranslationsComparator,
-      openBookmarkCreator
+      openBookmarkCreator,
+      copyVerses
     }
   },
   components: {
