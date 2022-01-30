@@ -7,7 +7,7 @@ import useApi from "src-e/api/useApi";
 
 const dir = process.env.DEBUGGING ? '' : path.resolve(app.getPath('userData'))
 global.dir = dir
-process.env.DIR = dir.toString()
+process.env.dir = dir.toString()
 const {app: {win}} = getSettings()
 
 

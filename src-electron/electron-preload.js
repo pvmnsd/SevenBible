@@ -2,7 +2,7 @@ import {contextBridge, ipcRenderer} from 'electron'
 import path from 'path'
 import fs from 'fs'
 
-global.dir = process.env.DIR
+global.dir = process.env.dir
 
 contextBridge.exposeInMainWorld('bible', {
   connectDatabase: (filename) => ipcRenderer.send('connect-bible-database', filename),
@@ -25,7 +25,8 @@ contextBridge.exposeInMainWorld('commentaries', {
   connectDatabase: (filename) => ipcRenderer.send('connect-commentaries-database', filename),
   disconnectDatabase: (filename) => ipcRenderer.send('disconnect-commentaries-database', filename),
   getCommentaries: (args) => ipcRenderer.invoke('get-commentaries', args),
-  getFootnotes: (args) => ipcRenderer.invoke('get-footnotes', args)
+  getFootnotes: (args) => ipcRenderer.invoke('get-footnotes', args),
+  getCompared: (args) => ipcRenderer.invoke('commentaries:get-compared', args)
 })
 contextBridge.exposeInMainWorld('crossreferences', {
   getCrossreferences: (args) => ipcRenderer.invoke('get-crossreferences', args)

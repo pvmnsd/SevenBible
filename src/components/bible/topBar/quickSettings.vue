@@ -1,14 +1,5 @@
 <template>
-  <q-btn-dropdown
-    class='without-icon'
-    no-caps
-    icon='more_vert'
-    stretch
-    unelevated
-    menu-anchor="bottom right"
-    menu-self="top right"
-    :menu-offset="[0, 1]"
-  >
+  <UIButtonDropdown icon='more_vert'>
     <div>
       <div  v-if="panel === 'show'">
         <div class="q-py-sm q-px-md no-selectable column">
@@ -153,7 +144,7 @@
         </div>
       </div>
     </div>
-  </q-btn-dropdown>
+  </UIButtonDropdown>
 </template>
 
 <script>
@@ -161,8 +152,10 @@ import {useStore} from 'vuex'
 import {defineComponent, onMounted, onBeforeUnmount, inject, ref} from "vue"
 import {toggleModuleState} from "src/store/settings/mutations";
 import useSevenBible from "src/hooks/useSevenBible";
+import UIButtonDropdown from "components/UI/UIButtonDropdown";
 
 export default defineComponent({
+  components: {UIButtonDropdown},
   setup(props) {
     const {id, transitions} = useSevenBible()
     const panels = ['show', 'open']

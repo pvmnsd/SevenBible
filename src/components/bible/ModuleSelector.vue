@@ -1,11 +1,6 @@
 <template>
-  <q-btn-dropdown
+  <UIButtonDropdown
     :label='fileName'
-    class='without-icon'
-    stretch
-    unelevated
-    no-caps
-    no-wrap
     @before-show="loadStrongModules"
   >
     <q-list>
@@ -22,7 +17,7 @@
         <q-separator class='separator'/>
       </div>
     </q-list>
-  </q-btn-dropdown>
+  </UIButtonDropdown>
 </template>
 
 <script>
@@ -30,8 +25,10 @@
 import {defineComponent, ref} from "vue"
 import useStore from "src/hooks/useStore";
 import useSevenBible from "src/hooks/useSevenBible";
+import UIButtonDropdown from "components/UI/UIButtonDropdown";
 
 export default defineComponent({
+  components: {UIButtonDropdown},
   setup(props) {
     const {id} = useSevenBible()
     const modules = ref([])

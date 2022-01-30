@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import useStore from "src/hooks/useStore";
 import {ref, computed, onMounted} from "vue";
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
@@ -51,9 +50,7 @@ import {convertVerses} from "src/helpers";
 export default {
   components: {UIModalWindowBody, UIModalWindowHeader, UIModalWindow},
   setup(props, {emit}) {
-    const {id, bookShortName} = useSevenBible()
-    const store = useStore()
-    const {chapterNumber, bookNumber} = store.native.state.settings.workPlace[id].bible
+    const {bookShortName, bible: {value: {bookNumber, chapterNumber}}} = useSevenBible()
     const testament = computed(() => props.bookNumber >= 470 ? 'nt' : 'ot')
 
     const close = (ref) => emit('close', ref)
@@ -67,7 +64,7 @@ export default {
       const settings = {
         bookNumber: bookNumber,
         chapterNumber: chapterNumber,
-        versesNumbers: props.selectedVerses
+        versesNumbers: [...props.selectedVerses]
       }
       translationsTexts.value = await window.bible.getCompared(settings)
     }

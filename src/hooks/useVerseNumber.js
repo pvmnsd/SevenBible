@@ -8,7 +8,7 @@ import useSevenBible from "src/hooks/useSevenBible";
 export default () => {
   const store = useStore()
   const {id} = useSevenBible()
-  const {showCrossreferencesSearcher, showTranslationsComparator} = usePopupWindows()
+  const popup = usePopupWindows()
   const verseNumberPopupTarget = ref(undefined)
   const verseNumberPopup = ref(null)
 
@@ -29,13 +29,14 @@ export default () => {
   }
 
   const openCrossreferencesSearcher = async () => {
-    const ref = await showCrossreferencesSearcher({selectedVerses: [selectedVerse]})
+    const ref = await popup.showCrossreferencesSearcher({selectedVerses: [selectedVerse]})
     store.state.setBibleRef(id, ref)
   }
   const openTranslationsComparator = async () => {
-    const ref = await showTranslationsComparator({selectedVerses: [selectedVerse]})
+    const ref = await popup.showTranslationsComparator({selectedVerses: [selectedVerse]})
     store.state.setBibleRef(id, ref)
   }
+  const openCommentariesComparator = () => popup.showCommentariesComparator({verseNumber: selectedVerse})
   const openBookmarkCreator = () => {
     // transitions.bookmarkCreator = true
   }
@@ -52,7 +53,10 @@ export default () => {
     {
       title: 'searchCrossreferences',
       callback: () => openCrossreferencesSearcher()
-
+    },
+    {
+      title: 'searchCommentaries',
+      callback: () => openCommentariesComparator()
     },
   ]
 
@@ -65,6 +69,6 @@ export default () => {
     onVerseNumberContextMenu,
     openCrossreferencesSearcher,
     openTranslationsComparator,
-    openBookmarkCreator
+    openBookmarkCreator,
   }
 }

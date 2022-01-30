@@ -11,7 +11,10 @@ export default () => {
     set(path, value) {
       store.commit('settings/setState', {path, value})
     },
-    setBibleRef: (id, ref) => state.set(`workPlace.${id}.bible`, ref),
+    setBibleRef: (id, ref) => {
+      if (ref)
+        state.set(`workPlace.${id}.bible`, ref)
+    },
     native: store.state
   }
   const getters = {

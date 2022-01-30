@@ -206,7 +206,7 @@ export default {
       onVerseNumberContextMenu,
       openCrossreferencesSearcher,
       openTranslationsComparator,
-      openBookmarkCreator
+      openBookmarkCreator,
     } = useVerseNumber()
 
 

@@ -8,6 +8,8 @@ export default {
   compareTranslations: 'CompareTranslations',
   addBookmark: 'Add bookmark',
   searchCrossreferences: 'Search crossreferences',
+  searchCommentaries: 'Search commentaries',
+
 
   generalTab: 'General',
   themeEditorTab: 'Theme editor',

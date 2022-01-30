@@ -13,7 +13,7 @@ export const getBookCategory = bookNumber => {
 }
 
 export const convertVerses = (verses = [1, 3, 4, 5,6,7,8,9, 11,13,14]) => {
-  let res = verses[0]
+  let res = verses[0].toString()
   for (let i = 1; i < verses.length; i++) {
     const verse = verses[i]
     if (verse - 1 !== verses[i - 1])

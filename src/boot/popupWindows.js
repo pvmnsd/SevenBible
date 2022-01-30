@@ -25,6 +25,7 @@ import SubheadingsSettings from "components/bible/transitions/subheadingsSetting
 import StrongSearcher from "components/bible/transitions/strongSearcher";
 import BookmarkCreator from "components/bible/transitions/BookmarkCreator";
 import CrossreferencesSearcher from "components/bible/transitions/crossreferencesSearcher";
+import CommentariesComparator from "components/bible/transitions/CommentariesComparator";
 
 export const usePopupWindows = () => {
   return {
@@ -41,7 +42,8 @@ export const usePopupWindows = () => {
     showSubheadingsSettings: (props) => showPopup(SubheadingsSettings, props),
     showStrongSearcher: (props) => showPopup(StrongSearcher, props),
     showBookmarkCreator: (props) => showPopup(BookmarkCreator, props),
-    showCrossreferencesSearcher: (props) => showPopup(CrossreferencesSearcher, props)
+    showCrossreferencesSearcher: (props) => showPopup(CrossreferencesSearcher, props),
+    showCommentariesComparator: (props) => showPopup(CommentariesComparator, props)
 
   }
 }

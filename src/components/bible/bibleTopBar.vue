@@ -9,44 +9,32 @@
 
     <q-separator vertical/>
 
-    <q-btn
+    <UIButton
       class='grow-1'
       :label='`${bookShortName ?? "..."} ${chapterNumber}`'
-      no-caps
-      no-wrap
-      stretch
-      unelevated
       @click.stop="openRefSelector"
     />
 
     <q-separator vertical/>
 
-    <q-btn
-      stretch
-      unelevated
+    <UIButton
       icon='search'
       @click="openTextSearcher"
     />
 
     <q-separator vertical/>
 
-    <q-btn
-      no-caps
+    <UIButton
       icon='navigate_before'
       :disable='arrows.before.disabled'
-      stretch
-      unelevated
       @click='onNavigateClick("before")'
     />
 
     <q-separator vertical/>
 
-    <q-btn
-      no-caps
+    <UIButton
       icon='navigate_next'
       :disable='arrows.next.disabled'
-      stretch
-      unelevated
       @click='onNavigateClick("next")'
     />
     <q-separator vertical/>
@@ -55,33 +43,64 @@
 
     <template v-if="activeWorkPlacesCount > 1">
       <q-separator vertical/>
-      <q-btn
+      <UIButton
         icon="close"
-        stretch
-        unelevated
         @click.stop="closeWorkPlace"
       />
     </template>
   </UIButtonset>
 
   <UIButtonset v-else key="selector">
-    <q-btn
-      class='grow-1'
-      :label='convertVerses(selectedVerses)'
-      no-caps
-      no-wrap
-      stretch
-      unelevated
-    />
-    <q-separator vertical/>
-    <q-btn
+
+    <UIButton
+      :tooltip="$t('cancelSelection')"
       icon="cancel"
-      no-caps
-      no-wrap
-      stretch
-      unelevated
       @click="$emit('clear-selected-verses')"
     />
+
+    <q-separator vertical/>
+
+    <UIButton
+      :tooltip="$t('copyRef')"
+      class='grow-1'
+      :label="`${bookShortName} ${chapterNumber}:${convertVerses(selectedVerses)}`"
+    />
+
+
+    <q-separator vertical/>
+
+    <UIButton
+      :tooltip="$t('copy')"
+      icon="content_copy"
+    />
+
+    <q-separator vertical/>
+
+    <UIButton
+      @click="openCrossreferencesSearcher"
+      :tooltip="$t('searchCrossreferences')"
+      icon="shuffle"
+      :disable="selectedVerses.length > 1"
+    />
+
+    <q-separator vertical/>
+
+    <UIButton
+      @click="compareSelectedVerses"
+      :tooltip="$t('compareTranslations')"
+      icon="book"
+    />
+
+    <q-separator vertical/>
+
+    <UIButton
+      @click="openCommentariesComparator"
+      :tooltip="$t('searchCommentaries')"
+      icon="question_answer"
+      :disable="selectedVerses.length > 1"
+    />
+
+
   </UIButtonset>
 
   <q-separator/>
@@ -99,9 +118,10 @@ import useNavigations from "src/hooks/useNavigations";
 import {computed} from "vue";
 import {usePopupWindows} from "boot/popupWindows";
 import {convertVerses} from "src/helpers";
+import UIButton from "components/UI/UIButton";
 
 export default {
-  setup() {
+  setup(props) {
     const {id, activeWorkPlaces, bookFullName, bookShortName} = useSevenBible()
     const store = useStore()
     const {arrows, onNavigateClick} = useNavigations(store, id)
@@ -110,18 +130,23 @@ export default {
 
     const activeWorkPlacesCount = computed(() => activeWorkPlaces.value.indexes.length)
 
-    const {showTextSearcher, showRefSelector} = usePopupWindows()
+    const popup = usePopupWindows()
 
-    const openRefSelector = async () => {
-      const ref = await showRefSelector()
+    const openPopupAndSetRef = async (callback, props = {}) => {
+      const ref = await callback(props)
       if (!ref) return
       store.state.setBibleRef(id, ref)
     }
-    const openTextSearcher = async () => {
-      const ref = await showTextSearcher()
-      if (!ref) return
-      store.state.setBibleRef(id, ref)
-    }
+    const openRefSelector = () => openPopupAndSetRef(popup.showRefSelector)
+    const openTextSearcher = () => openPopupAndSetRef(popup.showTextSearcher)
+    const compareSelectedVerses = () => openPopupAndSetRef(
+      popup.showTranslationsComparator, {selectedVerses: props.selectedVerses}
+    )
+    const openCrossreferencesSearcher = () => openPopupAndSetRef(
+      popup.showCrossreferencesSearcher, {selectedVerses: props.selectedVerses}
+    )
+    const openCommentariesComparator = () =>
+      popup.showCommentariesComparator({verseNumber: props.selectedVerses[0]})
 
     return {
       arrows,
@@ -132,10 +157,13 @@ export default {
       openRefSelector,
       convertVerses,
       activeWorkPlacesCount,
-      bookShortName
+      bookShortName,
+      compareSelectedVerses,
+      openCrossreferencesSearcher,
+      openCommentariesComparator
     }
   },
-  components: {UIButtonset, QuickSettings, ModuleSelector},
+  components: {UIButton, UIButtonset, QuickSettings, ModuleSelector},
   props: {
     bibleView: Object,
     bookNumber: Number,

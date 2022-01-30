@@ -8,6 +8,11 @@ export default {
   compareTranslations: 'Сравнить переводы',
   addBookmark: 'Добавить закладку',
   searchCrossreferences: 'Искать ссылки',
+  searchCommentaries: 'Искать комментарии',
+  copy: 'Копировать',
+  cancelSelection: 'Отменить выделение',
+  copyRef: 'Копировать ссылку',
+
 
   generalTab: 'Общие',
   themeEditorTab: 'Редактор тем',
