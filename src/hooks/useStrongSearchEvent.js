@@ -1,9 +1,9 @@
 import {computed} from "vue";
-import {useQuasar} from "quasar";
 import useSevenBible from "src/hooks/useSevenBible";
+import useNotify from "src/wrappers/useNotify";
 
 export default (id, store, strongNumbersPrefix) => {
-  const {notify} = useQuasar()
+  const notify = useNotify()
   const {bibleModuleInfo: info} = useSevenBible()
 
   const isStrong = computed(() =>
@@ -13,13 +13,7 @@ export default (id, store, strongNumbersPrefix) => {
     if (target.nextElementSibling?.tagName !== 'S' || !isStrong.value) {
       const message = !isStrong.value ? 'Для выбраного модуля отсутствует поддержка номеров стронга' :
         `Слово '${target.innerText}' не найдено в словаре стронга`
-      notify({
-        classes: 'not-found',
-        type: 'info',
-        position: 'bottom-right',
-        timeout: 500,
-        message,
-      })
+      notify.showWarning(message)
       return
     }
     let strongNumbers = []

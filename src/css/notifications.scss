@@ -1,4 +1,12 @@
-.not-found {
-  color: var(--text) !important;
+.notify-info{
   background-color: var(--info) !important;
+  color: var(--info-text) !important;
+}
+.notify-warning {
+  background-color: var(--warning) !important;
+  color: var(--warning-text) !important;
+}
+.notify-error {
+  background-color: var(--error) !important;
+  color: var(--error-text) !important;
 }

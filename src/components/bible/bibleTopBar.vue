@@ -63,7 +63,8 @@
     <UIButton
       :tooltip="$t('copyRef')"
       class='grow-1'
-      :label="`${bookShortName} ${chapterNumber}:${convertVerses(selectedVerses)}`"
+      :label="selectionRef"
+      @click="copySelectionRef"
     />
 
 
@@ -72,6 +73,7 @@
     <UIButton
       :tooltip="$t('copy')"
       icon="content_copy"
+      @click="$emit('copyVerses')"
     />
 
     <q-separator vertical/>
@@ -117,8 +119,10 @@ import useStore from "src/hooks/useStore";
 import useNavigations from "src/hooks/useNavigations";
 import {computed} from "vue";
 import {usePopupWindows} from "boot/popupWindows";
-import {convertVerses} from "src/helpers";
+import {convertVerses, cropString} from "src/helpers";
 import UIButton from "components/UI/UIButton";
+import useNotify from "src/wrappers/useNotify";
+import {useI18n} from "vue-i18n";
 
 export default {
   setup(props) {
@@ -131,6 +135,8 @@ export default {
     const activeWorkPlacesCount = computed(() => activeWorkPlaces.value.indexes.length)
 
     const popup = usePopupWindows()
+    const notify = useNotify()
+    const {t} = useI18n()
 
     const openPopupAndSetRef = async (callback, props = {}) => {
       const ref = await callback(props)
@@ -148,6 +154,13 @@ export default {
     const openCommentariesComparator = () =>
       popup.showCommentariesComparator({verseNumber: props.selectedVerses[0]})
 
+    const selectionRef = computed(() => `${bookShortName.value} ${props.chapterNumber}:${convertVerses(props.selectedVerses)}`)
+
+    const copySelectionRef = () => {
+      const text = selectionRef.value
+      navigator.clipboard.writeText(text)
+      notify.showInfo(`${t('textCopied')}: "${cropString(text, 30)}"`)
+    }
     return {
       arrows,
       horizontalScrollOnWheel,
@@ -158,6 +171,8 @@ export default {
       convertVerses,
       activeWorkPlacesCount,
       bookShortName,
+      selectionRef,
+      copySelectionRef,
       compareSelectedVerses,
       openCrossreferencesSearcher,
       openCommentariesComparator
@@ -173,6 +188,6 @@ export default {
       default: () => []
     }
   },
-  emits: ['clear-selected-verses']
+  emits: ['clearSelectedVerses', 'copyVerses']
 }
 </script>

@@ -13,6 +13,7 @@ export default {
   cancelSelection: 'Отменить выделение',
   copyRef: 'Копировать ссылку',
 
+  textCopied: 'Текст скопирован',
 
   generalTab: 'Общие',
   themeEditorTab: 'Редактор тем',

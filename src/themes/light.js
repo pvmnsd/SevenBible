@@ -16,13 +16,19 @@ module.exports = {
   "non-canonical": "#000000",
 
   "warning": "#f2c037",
+  "warning-text": "var(--text)",
+  "info": "#49eecd",
+  "info-text": "var(--text)",
+  "error": '#b70341',
+  "error-text": 'var(--primary-text)',
+
   "mark": "yellow",
   "primary": "#006fb6",
-  "info": "#49eecd",
   "secondary": "#26a69a",
   "background": "#ffffff",
   "background-active": "rgb(255, 227, 150)",
   "text": "#000000",
+  "primary-text": "#ffffff",
   "text-active": "rgb(0, 71, 196)",
 
   "tabs": "var(--background)",

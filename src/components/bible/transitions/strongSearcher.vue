@@ -93,7 +93,6 @@
 <script>
 import useStore from "src/hooks/useStore";
 import {defineComponent, onMounted, ref} from "vue"
-import {useQuasar} from "quasar"
 import normalizeSearchInput from "src/hooks/normalizeSearchInput"
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
@@ -101,6 +100,7 @@ import UIModalWindowSettings from "components/UI/ModalWindow/UIModalWindowSettin
 import useSevenBible from "src/hooks/useSevenBible";
 import StrongBody from "components/bible/splitter/StrongBody";
 import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
+import useNotify from "src/wrappers/useNotify";
 
 export default defineComponent({
   components: {
@@ -110,9 +110,8 @@ export default defineComponent({
     UIModalWindow,
     StrongBody
   },
-  setup(props) {
-    const {id, transitions} = useSevenBible()
-    const {notify} = useQuasar()
+  setup(props, {emit}) {
+    const {id, bibleModuleInfo} = useSevenBible()
     const store = useStore()
     const {
       bible: {
@@ -125,7 +124,7 @@ export default defineComponent({
     } = store.native.state.settings.workPlace[id]
 
 
-    const close = () => transitions.strongSearcher = false
+    const close = (ref) => emit('close', ref)
 
     const options = [
       {
@@ -143,19 +142,14 @@ export default defineComponent({
     const showLoader = ref(false)
     const strongNumbers = ref([])
 
+    const notify = useNotify()
     const foundedTexts = ref([])
     const searchByStrong = async () => {
       showLoader.value = true
       strongNumbers.value = normalizeSearchInput(searchInput.value).split(' ')
 
       if (searchInput.value.toUpperCase().includes('H') && searchInput.value.toUpperCase().includes('G') && searchMode.value.value === 'AND') {
-        notify({
-          classes: 'not-found',
-          type: 'info',
-          position: 'bottom-right',
-          timeout: 3000,
-          message: 'Строка поиска не может сожержать одновременно два префикса (H и G) в текущем режиме поиска.'
-        })
+        notify.showInfo('Строка поиска не может сожержать одновременно два префикса (H и G) в текущем режиме поиска.')
         return
       }
 
@@ -163,7 +157,7 @@ export default defineComponent({
       const settings = {
         strongNumbers: [...strongNumbers.value],
         separator: searchMode.value.value,
-        fixedStrongNumbersPrefix: props.strongNumbersPrefix,
+        fixedStrongNumbersPrefix: bibleModuleInfo.value.strong_numbers_prefix,
         filename: bibleFileName
       }
 
@@ -180,10 +174,7 @@ export default defineComponent({
       textsCount.value = data.length
       showLoader.value = false
     }
-    const goToText = (bookNumber, chapterNumber) => {
-      store.state.set(`workPlace.${id}.bible`, {bookNumber, chapterNumber})
-      close()
-    }
+    const goToText = (bookNumber, chapterNumber) => close({bookNumber, chapterNumber})
 
 
     onMounted(() => {
@@ -204,9 +195,6 @@ export default defineComponent({
       strongFileName,
       foundedTexts
     }
-  },
-  props: {
-    strongNumbersPrefix: String
   }
 })
 </script>

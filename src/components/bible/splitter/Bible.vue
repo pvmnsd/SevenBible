@@ -60,6 +60,7 @@
         :chapter-number="bible.chapterNumber"
         :selected-verses="selectedVerses"
         @clearSelectedVerses="clearSelectedVerses"
+        @copyVerses="copyVerses(selectedVerses)"
       />
     </UIWorkPlaceWindowHeader>
 
@@ -180,6 +181,9 @@ import useFootnotes from "src/hooks/useFootnotes";
 import {WorkModes} from "src/objects";
 import useVerseSelector from "src/hooks/useVerseSelector";
 import useVerse from "src/hooks/useVerse";
+import {clearTags, convertVerses, cropString} from "src/helpers";
+import useNotify from "src/wrappers/useNotify";
+import {useI18n} from "vue-i18n";
 
 export default {
   setup() {
@@ -195,21 +199,6 @@ export default {
     const {chapter, getChapter, bookFullName, bookShortName} = useChapter(bible)
     const {footnotes, getFootNotes} = useFootnotes(bible)
 
-    const copyVerses = (selectedVerses) => {
-      let text = ''
-      console.log(chapter)
-      console.time('t')
-      selectedVerses.forEach(verseNumber => {
-        const html = chapter.value[verseNumber - 1].text
-        text = html.replace(/(<[Sm]>[0-9]+<\/[^>]>|<[^>]+>)/g, "")
-        // text = html.replace(/(<[^]+\/>|<(S|m)>[^<]+<\/.>)/g, "")
-        // const el = document.createElement("span")
-        // el.innerHTML = html
-        // el.querySelectorAll('s').forEach(node => node.remove())
-      })
-      console.timeEnd('t')
-      console.log(text)
-    }
 
     let workMode = ref(WorkModes.standard)
 
@@ -242,6 +231,23 @@ export default {
       onSelectorHold,
       clearSelectedVerses
     } = useVerseSelector()
+
+    const notify = useNotify()
+    const {t} = useI18n()
+
+    const copyVerses = (verses) => {
+      const ref = `${bookShortName.value} ${bible.value.chapterNumber}:${convertVerses(verses)}`
+      let text = ''
+      text+= '['
+      verses.forEach(verseNumber => {
+        const html = chapter.value[verseNumber - 1].text
+        text += clearTags(html)
+      })
+      text+=']'
+      text+= `\n${ref}`
+      navigator.clipboard.writeText(text)
+      notify.showInfo(`${t('textCopied')}: "${cropString(text, 20)}"`)
+    }
 
     const {
       verseMenuItems,

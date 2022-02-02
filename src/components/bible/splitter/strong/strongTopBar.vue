@@ -17,7 +17,7 @@
     <q-separator vertical/>
 
     <q-btn
-      @click="transitions.strongSearcher = true"
+      @click="openStrongSearcher"
       stretch
       unelevated
       icon='manage_search'
@@ -35,7 +35,7 @@
       icon='close'
       stretch
       unelevated
-      @click="changeModuleState({ id, key: 'strong', settings: {show: false}})"
+      @click="close"
     />
   </UIButtonset>
 
@@ -43,11 +43,11 @@
 </template>
 <script>
 import ModuleSelector from 'components/bible/ModuleSelector.vue'
-import {computed, defineComponent, inject, ref} from 'vue'
-import {useStore} from 'vuex'
-import {horizontalScrollOnWheel} from "src/hooks/HorizontalScrollOnWheel"
+import {computed, defineComponent} from 'vue'
+import useStore from "src/hooks/useStore";
 import UIButtonset from "components/UI/UIButtonset";
 import useSevenBible from "src/hooks/useSevenBible";
+import {usePopupWindows} from "boot/popupWindows";
 
 export default defineComponent({
   components: {UIButtonset, ModuleSelector},
@@ -55,18 +55,23 @@ export default defineComponent({
     strongNumbers: Array,
     strongFileName: {
       type: String,
-      defaults: '...'
+      default: ''
     }
   },
   setup(props) {
-    const id = inject('id')
     const store = useStore()
-    const {transitions} = useSevenBible()
+    const {id} = useSevenBible()
+    const {showStrongSearcher} = usePopupWindows()
+
+    const openStrongSearcher = async () => {
+      const ref = await showStrongSearcher()
+      store.state.setBibleRef(id, ref)
+    }
+
     return {
-      transitions,
-      horizontalScrollOnWheel: horizontalScrollOnWheel,
+      openStrongSearcher,
       id,
-      changeModuleState: (settings) => store.commit('settings/changeModuleState', settings),
+      close: () => store.state.set(`workPlace.${id}.strong.show`, false),
       strongNumbersToString: computed(() => props.strongNumbers.join(' '))
     }
   },
