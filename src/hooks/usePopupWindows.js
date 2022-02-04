@@ -1,22 +1,4 @@
 import {ref, h} from "vue";
-
-const isPopupShown = ref(true)
-const component = ref(null)
-
-const showPopup = (Component, _props = {}) => {
-  return new Promise(resolve => {
-    const vNode = h(Component, {..._props})
-
-    vNode.props.onClose = (response) => {
-      resolve(response)
-      isPopupShown.value = false
-    }
-
-    component.value = vNode
-    isPopupShown.value = true
-  })
-}
-
 import RefSelector from "components/bible/transitions/RefSelector";
 import TextSearcher from "components/bible/transitions/textSearcher";
 import TranslationsComparator from "components/bible/transitions/translationsComparator";
@@ -27,8 +9,25 @@ import BookmarkCreator from "components/bible/transitions/BookmarkCreator";
 import CrossreferencesSearcher from "components/bible/transitions/crossreferencesSearcher";
 import CommentariesComparator from "components/bible/transitions/CommentariesComparator";
 
-export const usePopupWindows = () => {
-  return {
+export const initPopupWindows = () => {
+  const isPopupShown = ref(true)
+  const component = ref(null)
+
+  const showPopup = (Component, _props = {}) => {
+    return new Promise(resolve => {
+      const vNode = h(Component, {..._props})
+
+      vNode.props.onClose = (response) => {
+        resolve(response)
+        isPopupShown.value = false
+      }
+
+      component.value = vNode
+      isPopupShown.value = true
+    })
+  }
+
+  const popup = {
     get isPopupShown() {
       return isPopupShown
     },
@@ -44,6 +43,10 @@ export const usePopupWindows = () => {
     showBookmarkCreator: (props) => showPopup(BookmarkCreator, props),
     showCrossreferencesSearcher: (props) => showPopup(CrossreferencesSearcher, props),
     showCommentariesComparator: (props) => showPopup(CommentariesComparator, props)
-
+  }
+  return {
+    popup,
+    component,
+    isPopupShown
   }
 }

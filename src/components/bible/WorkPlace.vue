@@ -60,7 +60,7 @@ import useStore from "src/hooks/useStore";
 import {computed, provide, ref} from "vue";
 import useBibleModuleInfo from "src/hooks/useBibleModuleInfo";
 import {useBibleDatabaseConnection} from "src/hooks/DBconnectionController";
-import {usePopupWindows} from "boot/popupWindows";
+import {initPopupWindows} from "src/hooks/usePopupWindows";
 
 export default {
   setup({id}) {
@@ -70,7 +70,7 @@ export default {
     useBibleDatabaseConnection(bibleFileName)
 
     const {info: bibleModuleInfo} = useBibleModuleInfo(bibleFileName)
-    const {component, isPopupShown} = usePopupWindows()
+    const {component, isPopupShown, popup} = initPopupWindows()
 
     const activeWorkPlaceWindows = computed(() => {
       return store.getters.getActiveWorkPlaceWindows(id)
@@ -124,13 +124,12 @@ export default {
     const bibleTextKey = ref(0)
     const bookFullName = ref(null)
     const bookShortName = ref(null)
-    const popupWindows = ref(null)
 
     provide('id', id)
     provide("bibleTextKey", bibleTextKey)
     provide('bookShortName', bookShortName)
     provide('bookFullName', bookFullName)
-    provide('popupWindows', popupWindows)
+    provide('popup', popup)
     provide('bible', bible)
     provide('bibleModuleInfo', bibleModuleInfo)
     provide('activeWorkPlaceWindows', activeWorkPlaceWindows)
@@ -154,7 +153,6 @@ export default {
       refString,
       viewParamsRequiringRerender,
       strongNumbersPrefix,
-      popupWindows
     }
   },
   props: {

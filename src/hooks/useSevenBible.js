@@ -17,9 +17,6 @@ export default () => {
     get bookShortName(){
       return inject('bookShortName')
     },
-    get popupWindows(){
-      return inject('popupWindows')
-    },
     get bible(){
       return inject('bible')
     },
@@ -46,6 +43,9 @@ export default () => {
     },
     get booksList(){
       return inject('booksList')
-    }
+    },
+    get popup(){
+      return inject('popup')
+    },
   }
 }

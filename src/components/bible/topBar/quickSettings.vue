@@ -154,13 +154,11 @@ import useStore from "src/hooks/useStore";
 import {defineComponent, ref} from "vue"
 import useSevenBible from "src/hooks/useSevenBible";
 import UIButtonDropdown from "components/UI/UIButtonDropdown";
-import {usePopupWindows} from "boot/popupWindows";
 
 export default defineComponent({
   components: {UIButtonDropdown},
   setup() {
-    const {id, bible} = useSevenBible()
-    const popup = usePopupWindows()
+    const {id, bible, popup} = useSevenBible()
     const panels = ['show', 'open']
     const panel = ref('open')
 

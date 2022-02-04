@@ -1,14 +1,11 @@
 import {ref} from "vue";
-import {usePopupWindows} from "boot/popupWindows";
 import useStore from "src/hooks/useStore";
-import {VerseNumberActions, WorkModes} from "src/objects";
 import useSevenBible from "src/hooks/useSevenBible";
 
 
 export default ({copyVerses}) => {
   const store = useStore()
-  const {id} = useSevenBible()
-  const popup = usePopupWindows()
+  const {id, popup} = useSevenBible()
   const verseNumberPopupTarget = ref(undefined)
   const verseNumberPopup = ref(null)
 

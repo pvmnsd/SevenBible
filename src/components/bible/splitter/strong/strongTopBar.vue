@@ -47,7 +47,6 @@ import {computed, defineComponent} from 'vue'
 import useStore from "src/hooks/useStore";
 import UIButtonset from "components/UI/UIButtonset";
 import useSevenBible from "src/hooks/useSevenBible";
-import {usePopupWindows} from "boot/popupWindows";
 
 export default defineComponent({
   components: {UIButtonset, ModuleSelector},
@@ -60,11 +59,10 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
-    const {id} = useSevenBible()
-    const {showStrongSearcher} = usePopupWindows()
+    const {id, popup} = useSevenBible()
 
     const openStrongSearcher = async () => {
-      const ref = await showStrongSearcher()
+      const ref = await popup.showStrongSearcher()
       store.state.setBibleRef(id, ref)
     }
 

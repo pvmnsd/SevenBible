@@ -118,7 +118,6 @@ import useSevenBible from "src/hooks/useSevenBible";
 import useStore from "src/hooks/useStore";
 import useNavigations from "src/hooks/useNavigations";
 import {computed} from "vue";
-import {usePopupWindows} from "boot/popupWindows";
 import {convertVerses, cropString} from "src/helpers";
 import UIButton from "components/UI/UIButton";
 import useNotify from "src/wrappers/useNotify";
@@ -126,7 +125,7 @@ import {useI18n} from "vue-i18n";
 
 export default {
   setup(props) {
-    const {id, activeWorkPlaces, bookFullName, bookShortName} = useSevenBible()
+    const {id, activeWorkPlaces, popup, bookShortName} = useSevenBible()
     const store = useStore()
     const {arrows, onNavigateClick} = useNavigations(store, id)
 
@@ -134,7 +133,6 @@ export default {
 
     const activeWorkPlacesCount = computed(() => activeWorkPlaces.value.indexes.length)
 
-    const popup = usePopupWindows()
     const notify = useNotify()
     const {t} = useI18n()
 
