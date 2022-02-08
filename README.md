@@ -1,33 +1,26 @@
 # SevenBible
-Лучшее кроссплатформенное настольное приложение для изучения Библии / Best cross-platform desktop app to study bible
+Лучшее настольное кроссплатформенное приложение для изучения Библии / Best cross-platform desktop app to study bible
 
 Поддержка модулей MyBible / MyBible modules support
 
-Планируемые возможности программы / Planned program features
-
-- [x] Поддержка модулей комментариев
-- [x] Поддержка модулей словаря Стронга
-- [ ] Поддержка модулей словарей
-- [x] Поддержка модулей Библии
-- [ ] Управление (удаление/скачивание) модулями
-- [x] Поиск перекрестных ссылок
-- [x] Сравнение переводов
-- [ ] Заметки
-- [ ] Закладки
-- [x] Поиск по Библии
-- [x] Поиск по номерам стронга
-- [x] Быстрые настройки отображения текста Библии
-- [x] Поддержка нескольких рабочих пространств
-
-![image](https://user-images.githubusercontent.com/93146235/142481769-725b00e8-e7a9-4158-81cf-9bdc6947c3ef.png)
+Скриншоты
 ***
-![image](https://user-images.githubusercontent.com/93146235/142482206-c2654906-74f8-4d6f-a330-651a51708a4c.png)
+Рабочие области:
+![image](https://user-images.githubusercontent.com/93146235/153063422-5e78b932-2a5f-4175-8a28-79c5307afad8.png)
 ***
-![image](https://user-images.githubusercontent.com/93146235/142482345-b9d931b3-f7cc-43ad-9e93-7b49f801d817.png)
+Возможности взаимодействия со стихами:
+![image](https://user-images.githubusercontent.com/93146235/153063784-fc6a0b8a-bd40-4dfc-941b-c6816b0b14d7.png)
 ***
-![image](https://user-images.githubusercontent.com/93146235/142482446-90788c63-c6f4-4576-8c7d-d07cb28df278.png)
+Поиск по номерам стронга:
+![image](https://user-images.githubusercontent.com/93146235/153063949-580a8a27-125a-4f84-be5d-1d2075aa2809.png)
 ***
-![image](https://user-images.githubusercontent.com/93146235/142482511-4604098f-1f25-41ca-b9d1-702853d05328.png)
+Сравнение переводов:
+![image](https://user-images.githubusercontent.com/93146235/153064231-19bb044a-df32-4133-9508-0b485257983f.png)
 ***
-![image](https://user-images.githubusercontent.com/93146235/142482606-a51da7b4-cfc8-47f7-8d67-36963be8da95.png)
+Поиск перекрестных ссылок:
+![image](https://user-images.githubusercontent.com/93146235/153064574-1d591efc-a9be-46ec-9241-741218dbfc65.png)
 ***
+Поиск всех комментариев:
+![image](https://user-images.githubusercontent.com/93146235/153064427-a5851f33-831a-4884-8b21-125a096d7f91.png)
+Поиск по Библии:
+![image](https://user-images.githubusercontent.com/93146235/153064732-aab15878-dd13-4ae4-b32f-eb2a8a44f221.png)
