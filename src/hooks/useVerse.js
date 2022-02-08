@@ -10,7 +10,6 @@ export default () => {
   ]
 
   const onVerseContextmenu = ({target}) => {
-    console.log('aa')
     versePopupTarget.value = target
     versePopup.value.toggle()
   }

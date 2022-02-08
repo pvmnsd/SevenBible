@@ -65,7 +65,8 @@
     </UIWorkPlaceWindowHeader>
 
     <UIWorkPlaceWindowBody>
-      <div
+      <UIError v-if="bibleError.show" v-text="bibleError.message"/>
+      <div v-else
         class='bible-text scroll-container container'
         :style="{fontSize: bible.view.fontSize + 'px'}"
         :showBookName="bible.view.showBookName.toString()"
@@ -178,12 +179,12 @@ import useStore from "src/hooks/useStore";
 import {onMounted, watch, computed, ref} from "vue";
 import useChapter from "src/hooks/useChapter";
 import useFootnotes from "src/hooks/useFootnotes";
-import {WorkModes} from "src/objects";
 import useVerseSelector from "src/hooks/useVerseSelector";
 import useVerse from "src/hooks/useVerse";
 import {clearTags, convertVerses, cropString} from "src/helpers";
 import useNotify from "src/wrappers/useNotify";
 import {useI18n} from "vue-i18n";
+import UIError from "components/UI/UIError";
 
 export default {
   setup() {
@@ -196,7 +197,11 @@ export default {
     } = useSevenBible()
     const store = useStore()
     const {bibleTextKey} = useSevenBible()
-    const {chapter, getChapter, bookFullName, bookShortName} = useChapter(bible)
+    const bibleError = ref({
+      show: false,
+      message: ''
+    })
+    const {chapter, getChapter, bookFullName, bookShortName} = useChapter({bible, bibleError})
     const {footnotes, getFootNotes} = useFootnotes(bible)
 
 
@@ -289,6 +294,7 @@ export default {
     // }
 
     return {
+      bibleError,
       bible,
       chapter,
       htmlPopup,
@@ -321,6 +327,7 @@ export default {
     }
   },
   components: {
+    UIError,
     UIWorkPlaceWindowBody,
     UIWorkPlaceWindowHeader,
     UIWorkPlaceWindow,

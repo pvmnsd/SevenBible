@@ -51,13 +51,12 @@ export default (args) => {
       res.commentaries = {}
       args.activeModulesCommentaries.forEach(moduleName => {
         try {
-          const commentariesDatabese = new CommentariesDatabase(moduleName, {native: true})
-          const sql = 'SELECT text, verse_number_from, verse_number_to from commentaries WHERE book_number = ? AND chapter_number_from = ?'
-          const commentaries = commentariesDatabese.prepare(sql).all(args.bookNumber, args.chapterNumber)
+          const commentariesDatabase = new CommentariesDatabase(moduleName, {native: true})
+          const sql = 'SELECT * from commentaries WHERE book_number = ? AND chapter_number_from = ?'
+          const commentaries = commentariesDatabase.prepare(sql).all(args.bookNumber, args.chapterNumber)
           if (commentaries.length) res.commentaries[moduleName] = commentaries
-          commentariesDatabese.close()
-        } catch {
-        }
+          commentariesDatabase.close()
+        } catch {}
       })
     }
 

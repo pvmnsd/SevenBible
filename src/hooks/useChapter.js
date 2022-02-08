@@ -1,8 +1,10 @@
 import {ref} from 'vue'
-import parseText from "src/hooks/parseText";
 import useSevenBible from "src/hooks/useSevenBible";
+import {useI18n} from "vue-i18n";
+import {splitWords} from "src/helpers/regex";
 
-export default (bible) => {
+export default ({bible, bibleError}) => {
+  const {t} = useI18n()
   const chapter = ref(null)
   const {bookFullName, bookShortName} = useSevenBible()
 
@@ -18,13 +20,21 @@ export default (bible) => {
       activeModulesSubheadings: [...bible.value.view.subheadings.activeModules],
       activeModulesCommentaries: [...bible.value.view.commentaries.activeModules],
     }
-    let data =  await window.api.bible.getChapter(settings)
+    bibleError.value.show = false
+    let data = await window.api.bible.getChapter(settings)
+    console.log(data)
+    if (!data.bookNames) {
+      bibleError.value.message = t('bookNotFounded').format(settings.filename)
+      bibleError.value.show = true
+      return
+    }
+
     //set abreviatures
     bookFullName.value = data.bookNames.bookFullName
     bookShortName.value = data.bookNames.bookShortName
 
     //parse text
-    data.texts.forEach(element => element.text = parseText(element.text))
+    data.texts.forEach(element => element.text = splitWords(element.text))
     //stories
     data.stories?.forEach(story => {
       data.texts[story.verse - 1].story = story.title
@@ -38,18 +48,19 @@ export default (bible) => {
     //commentaries
     if (data.commentaries) {
       Object.keys(data.commentaries).forEach(moduleName => {
-        data.commentaries[moduleName].forEach(commentaryModule => {
+        for (let commentaryModule of data.commentaries[moduleName]) {
           commentaryModule.moduleName = moduleName
           const idx = commentaryModule.verse_number_to ? commentaryModule.verse_number_to - 1 : commentaryModule.verse_number_from - 1
+          if (idx <= 0) continue
           if (!data.texts[idx].commentaries) data.texts[idx].commentaries = []
           data.texts[idx].commentaries.push(commentaryModule)
-        })
+        }
       })
     }
     chapter.value = data.texts
   }
 
-  return{
+  return {
     chapter,
     getChapter,
     bookFullName,

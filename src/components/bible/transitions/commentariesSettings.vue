@@ -31,8 +31,8 @@ import useSevenBible from "src/hooks/useSevenBible";
 
 export default {
   components: {UIModalWindowHeader, UIModalWindow},
-  setup() {
-    const {id, transitions, bibleTextKey} = useSevenBible()
+  setup({}, {emit}) {
+    const {id, bibleTextKey} = useSevenBible()
 
     const store = useStore()
 
@@ -42,13 +42,14 @@ export default {
     const commentaries = store.state.get(`workPlace.${id}.bible.view.commentaries`)
     close = () => {
       bibleTextKey.value++
-      transitions.commentariesSettings = false
+      emit('close')
     }
-    onMounted(() => commentariesModules.value =
-      window.api.system.fsReaddirSync(['modules', 'commentaries'])
-        .map(moduleName => moduleName
-          .match(/.+?(?=\.)/g)[0])
-    )
+    onMounted(() => {
+      commentariesModules.value =
+        window.api.system.fsReaddirSync(['modules', 'commentaries'])
+          .map(moduleName => moduleName
+            .match(/.+?(?=\.)/g)[0])
+    })
     return {
       commentaries,
       commentariesModules,

@@ -1,5 +1,5 @@
 <template>
-<div class="flex fit justify-center items-center">
+<div class="flex fit text-center justify-center items-center">
   <slot/>
 </div>
 </template>
