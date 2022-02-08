@@ -1,6 +1,6 @@
 import {ref} from "vue";
 import normalizeSearchInput from "src/hooks/normalizeSearchInput";
-import {highlightWords} from "src/utils";
+import {highlightWords} from "src/helpers/highlight";
 
 export default (bibleFileName) => {
   const showLoader = ref(false)

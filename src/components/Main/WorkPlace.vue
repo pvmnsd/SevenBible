@@ -53,9 +53,9 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import Strong from 'components/bible/splitter/strong.vue'
-import Bible from 'components/bible/splitter/Bible.vue'
-import Commentaries from "components/bible/splitter/Commentaries.vue";
+import Strong from 'components/Main/strong/strong.vue'
+import Bible from 'components/Main/bible/Bible.vue'
+import Commentaries from "components/Main/commentaries/Commentaries.vue";
 import {Splitpanes, Pane} from 'splitpanes'
 import useStore from "src/hooks/useStore";
 import {computed, provide, ref} from "vue";

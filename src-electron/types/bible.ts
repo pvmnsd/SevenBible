@@ -1,6 +1,6 @@
-import {BookNumbers} from "src-e/types/bookNumbers";
-import {BookColors} from "src-e/types/bookColors";
-import {InfoTable} from "src-e/types/infoTable";
+import {BookNumbers} from "src-electron/types/bookNumbers";
+import {BookCategories} from "src-electron/types/bookCategory";
+import {InfoTable} from "src-electron/types/infoTable";
 
 type boolstr = 'true' | 'false'
 type strongprefix = 'H'| 'G'
@@ -23,7 +23,7 @@ export interface BibleInfo extends InfoTable{
 
 export interface BibleBooks {
   book_number: BookNumbers,
-  book_color?: BookColors,
+  book_color?: BookCategories,
   short_name: string,
   long_name: string
 }

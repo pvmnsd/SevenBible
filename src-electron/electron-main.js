@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import os from 'os'
 import {getSettings} from "./helpers/getSettings"
-import useApi from "src-e/api/useApi";
+import useApi from "src-electron/api/useApi";
 
 const dir = process.env.DEBUGGING ? '' : path.resolve(app.getPath('userData'))
 global.dir = dir

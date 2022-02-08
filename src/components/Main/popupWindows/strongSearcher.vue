@@ -98,7 +98,7 @@ import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
 import UIModalWindowSettings from "components/UI/ModalWindow/UIModalWindowSettings";
 import useSevenBible from "src/hooks/useSevenBible";
-import StrongBody from "components/bible/splitter/StrongBody";
+import StrongBody from "components/Main/strong/StrongBody";
 import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
 import useNotify from "src/wrappers/useNotify";
 

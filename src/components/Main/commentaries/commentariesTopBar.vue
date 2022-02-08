@@ -27,7 +27,7 @@
   <q-separator/>
 </template>
 <script>
-import ModuleSelector from "components/bible/ModuleSelector"
+import ModuleSelector from "components/Main/popupWindows/ModuleSelector"
 import useStore from "src/hooks/useStore";
 import {horizontalScrollOnWheel} from "src/hooks/HorizontalScrollOnWheel";
 import UIButtonset from "components/UI/UIButtonset";

@@ -22,7 +22,6 @@ export default ({bible, bibleError}) => {
     }
     bibleError.value.show = false
     let data = await window.api.bible.getChapter(settings)
-    console.log(data)
     if (!data.bookNames) {
       bibleError.value.message = t('bookNotFounded').format(settings.filename)
       bibleError.value.show = true

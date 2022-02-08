@@ -1,18 +1,21 @@
 import {inject, InjectionKey} from "vue";
-import {BookNumbers} from "src-e/types/bookNumbers";
+import {BibleBooksFront} from "src/types/bibleModule";
+import {BookNumbers, nonCanonicalBooks} from "src-electron/types/bookNumbers";
+import {BookCategories} from "src-electron/types/bookCategory";
 
 export const myRef = (value: any) => ({value})
 
-export const getBookCategory = (bookNumber: BookNumbers) => {
-  return (bookNumber <= 50) ? 'torah'
-    : (bookNumber <= 160 || bookNumber === 190) ? 'poetry'
-      : (bookNumber >= 220 && bookNumber <= 260) ? 'major-prophets'
-        : (bookNumber >= 290 && bookNumber <= 460) ? 'minor-prophets'
-          : (bookNumber >= 470 && bookNumber <= 500) ? 'gospels'
-            : (bookNumber === 510) ? 'acts'
-              : (bookNumber >= 520 && bookNumber <= 720) ? 'epistles'
-                : (bookNumber === 730) ? 'revelations'
-                  : 'non-canonical'
+export const getBookCategory = (bookNumber: BookNumbers): BookCategories => {
+  return nonCanonicalBooks.includes(bookNumber) ? BookCategories.NonCanonical
+    : (bookNumber <= BookNumbers.Deu) ? BookCategories.Torah
+      : (bookNumber <= BookNumbers.Esth) ? BookCategories.MajorProphets
+        : (bookNumber <= BookNumbers.Song) ? BookCategories.Poetry
+          : (bookNumber <= BookNumbers.Mal) ? BookCategories.MinorProphets
+            : (bookNumber <= BookNumbers.John) ? BookCategories.Gospels
+              : (bookNumber === BookNumbers.Acts) ? BookCategories.Acts
+                : (bookNumber <= BookNumbers.Jud) ? BookCategories.Epistles
+                  : (bookNumber === BookNumbers.Rev) ? BookCategories.Revelations
+                    : BookCategories.NonCanonical
 }
 
 export const convertVerses = (verses: number[]) => {
@@ -49,4 +52,12 @@ export const injectStrict = <T>(key: InjectionKey<T>, fallback?: T) => {
   if (resolved === null || resolved === undefined)
     throw new Error(`Could not resolve ${key.description}`)
   return resolved
+}
+
+
+export const initBooksCategories = (booksList: BibleBooksFront[]) => {
+  if (booksList[0].bookCategory) return
+  booksList.forEach((book: BibleBooksFront) => {
+    book.bookCategory = getBookCategory(book.book_number)
+  })
 }

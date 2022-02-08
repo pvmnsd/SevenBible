@@ -1,4 +1,4 @@
-import {BibleDatabase} from "src-e/models/Database/BibleDatabase";
+import {BibleDatabase} from "src-electron/models/Database/BibleDatabase";
 
 export const connectDatabase = (filename) => {
   new BibleDatabase(filename, {keepConnections: true})

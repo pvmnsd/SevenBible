@@ -1,5 +1,5 @@
-import {BookNumbers} from "src-e/types/bookNumbers";
-import {InfoTable} from "src-e/types/infoTable";
+import {BookNumbers} from "src-electron/types/bookNumbers";
+import {InfoTable} from "src-electron/types/infoTable";
 
 type nullable = 0 | null
 

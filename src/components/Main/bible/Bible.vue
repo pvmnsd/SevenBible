@@ -166,14 +166,14 @@
 </template>
 
 <script>
-import Headings from 'components/bible/splitter/headings.vue'
-import ContextMenu from "components/bible/splitter/bibleText/ContextMenu";
+import Headings from 'components/Main/bible/headings.vue'
+import ContextMenu from "components/Main/bible/ContextMenu";
 import useBibleEvents from "src/hooks/useBibleEvents";
 import useVerseNumber from "src/hooks/useVerseNumber";
 import UIWorkPlaceWindow from "components/UI/WorkPlaceWindow/UIWorkPlaceWindow";
 import UIWorkPlaceWindowHeader from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowHeader";
 import UIWorkPlaceWindowBody from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowBody";
-import BibleTopBar from "components/bible/bibleTopBar";
+import BibleTopBar from "components/Main/bible/bibleTopBar";
 import useSevenBible from "src/hooks/useSevenBible";
 import useStore from "src/hooks/useStore";
 import {onMounted, watch, computed, ref} from "vue";

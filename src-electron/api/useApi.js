@@ -1,9 +1,9 @@
-import useBibleApi from "src-e/api/bible/useBibleApi";
-import useCommentariesApi from "src-e/api/commentaries/useCommentariesApi";
-import useStrongApi from "src-e/api/strong/useStrongApi";
-import useElectronApi from "src-e/api/electron/useElectronApi";
-import useSystemApi from "src-e/api/system/useSystemApi";
-import useCrossreferences from "src-e/api/crossreferences/useCrossreferences";
+import useBibleApi from "src-electron/api/bible/useBibleApi";
+import useCommentariesApi from "src-electron/api/commentaries/useCommentariesApi";
+import useStrongApi from "src-electron/api/strong/useStrongApi";
+import useElectronApi from "src-electron/api/electron/useElectronApi";
+import useSystemApi from "src-electron/api/system/useSystemApi";
+import useCrossreferences from "src-electron/api/crossreferences/useCrossreferences";
 
 export default () => {
   useBibleApi()

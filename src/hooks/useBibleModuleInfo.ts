@@ -1,7 +1,7 @@
 import {provide, ref, watch, Ref} from "vue";
 import useBibleModuleTables from "src/hooks/useBibleModuleTables";
 import {myRef} from "src/helpers";
-import {BibleBooks, BibleInfo} from "src-e/types/bible";
+import {BibleBooks, BibleInfo} from "src-electron/types/bible";
 import {MyRef} from "src/types/myRef";
 
 export default (bibleFileName: Ref<string>) => {

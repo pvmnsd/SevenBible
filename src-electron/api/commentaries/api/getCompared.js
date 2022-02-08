@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import {CommentariesDatabase} from "src-e/models/Database/CommentariesDatabase";
+import {CommentariesDatabase} from "src-electron/models/Database/CommentariesDatabase";
 
 export default (args) => {
   const {

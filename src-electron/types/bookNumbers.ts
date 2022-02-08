@@ -85,3 +85,23 @@ export enum BookNumbers {
   Rev = 730,
   Lao = 780
 }
+
+export const nonCanonicalBooks = [
+  BookNumbers.Iudif,
+  BookNumbers.Mol,
+  BookNumbers.Ezr2,
+  BookNumbers.Tob,
+  BookNumbers.Wis,
+  BookNumbers.Sir,
+  BookNumbers.PrAz,
+  BookNumbers.Bar,
+  BookNumbers.SgThr,
+  BookNumbers.Sus,
+  BookNumbers.Bel,
+  BookNumbers.Mac1,
+  BookNumbers.Mac2,
+  BookNumbers.Mac3,
+  BookNumbers.Mac4,
+  BookNumbers.Esd2,
+  BookNumbers.Lao
+]

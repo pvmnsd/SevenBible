@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
-import getDirection from "src-e/helpers/getDirection";
-import {BibleDatabase} from "src-e/models/Database/BibleDatabase";
+import getDirection from "src-electron/helpers/getDirection";
+import {BibleDatabase} from "src-electron/models/Database/BibleDatabase";
 
 export default (args) => {
   {

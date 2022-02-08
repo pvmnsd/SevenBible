@@ -1,4 +1,4 @@
-import {Database} from "src-e/models/Database/Database";
+import {Database} from "src-electron/models/Database/Database";
 
 export class ModuleDatabase extends Database {
 

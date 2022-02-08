@@ -1,8 +1,8 @@
 import {contextBridge, ipcRenderer} from 'electron'
 import path from 'path'
 import fs from 'fs'
-import {BibleBooks, BibleBooksAll, BibleInfo} from "src-e/types/bible";
-import {Commentaries} from "src-e/types/commentaries";
+import {BibleBooks, BibleInfo} from "src-electron/types/bible";
+import {Commentaries} from "src-electron/types/commentaries";
 
 
 window.dir = process.env.dir!
@@ -13,7 +13,7 @@ const bible = {
   getChapter: (args: any) => ipcRenderer.invoke('get-chapter', args),
   getTopBarState: (args: any) => ipcRenderer.invoke('get-top-bar-state', args),
   getBibleInfo: (args: any): Promise<BibleInfo> => ipcRenderer.invoke('get-bible-info', args),
-  getBibleBooks: (args: any): Promise<BibleBooks | BibleBooksAll> => ipcRenderer.invoke('get-bible-books', args),
+  getBibleBooks: (args: any): Promise<BibleBooks> => ipcRenderer.invoke('get-bible-books', args),
   getChaptersCount: (args: any) => ipcRenderer.invoke('get-count-of-chapters', args),
   getFindedTexts: (args: any) => ipcRenderer.invoke('find-texts-in-bible', args),
   getIntroduction: (args: any) => ipcRenderer.invoke('get-introductions', args),

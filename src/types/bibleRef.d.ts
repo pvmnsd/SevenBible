@@ -1,4 +1,4 @@
-import {BookNumbers} from "src-e/types/bookNumbers";
+import {BookNumbers} from "src-electron/types/bookNumbers";
 
 export interface BibleRef {
   filename?: string,

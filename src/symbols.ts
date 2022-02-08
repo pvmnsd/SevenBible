@@ -1,5 +1,5 @@
 import {InjectionKey} from 'vue'
-import {Bible} from "src/types/bible";
+import {Bible} from "src/types/store/bible";
 import {Ref} from 'vue'
 import {Popup} from "src/hooks/usePopupWindows";
 

@@ -1,4 +1,4 @@
-import {Commentaries} from "src-e/types/commentaries";
+import {Commentaries} from "src-electron/types/commentaries";
 import {BibleRef} from "src/types/bibleRef";
 
 export default (commentaries: Commentaries[], ref: BibleRef) =>

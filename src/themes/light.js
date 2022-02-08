@@ -38,5 +38,5 @@ module.exports = {
   "system-bar": "#ababab",
   "scrollbar": "var(--separator)",
   "scrollbar-hover": "#8c8c8c",
-  'selected-verse': "#26a69a"
+  'selected-verse': "rgba(70,187,172,0.55)"
 }

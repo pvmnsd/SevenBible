@@ -1,8 +1,8 @@
 import {ipcMain} from "electron";
-import getCommentaries from "src-e/api/commentaries/api/getCommentaries";
-import getFootnotes from "src-e/api/commentaries/api/getFootnotes";
-import {connectDatabase, disconnectDatabase} from "src-e/api/commentaries/api/databaseConnection";
-import getCompared from "src-e/api/commentaries/api/getCompared";
+import getCommentaries from "src-electron/api/commentaries/api/getCommentaries";
+import getFootnotes from "src-electron/api/commentaries/api/getFootnotes";
+import {connectDatabase, disconnectDatabase} from "src-electron/api/commentaries/api/databaseConnection";
+import getCompared from "src-electron/api/commentaries/api/getCompared";
 
 export default () => {
   ipcMain.handle('get-commentaries', (event, args) => getCommentaries(args))

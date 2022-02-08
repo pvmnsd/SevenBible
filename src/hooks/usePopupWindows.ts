@@ -1,13 +1,13 @@
 import {ref, h, Ref, VNode} from "vue";
-import RefSelector from "components/bible/transitions/RefSelector.vue";
-import TextSearcher from "components/bible/transitions/textSearcher.vue";
-import TranslationsComparator from 'components/bible/transitions/TranslationsComparator.vue'
-import CommentariesSettings from "components/bible/transitions/commentariesSettings.vue";
-import SubheadingsSettings from "components/bible/transitions/subheadingsSettings.vue";
-import StrongSearcher from "components/bible/transitions/strongSearcher.vue";
-import BookmarkCreator from "components/bible/transitions/BookmarkCreator.vue";
-import CrossreferencesSearcher from "components/bible/transitions/crossreferencesSearcher.vue";
-import CommentariesComparator from "components/bible/transitions/CommentariesComparator.vue";
+import RefSelector from "components/Main/popupWindows/RefSelector.vue";
+import TextSearcher from "components/Main/popupWindows/textSearcher.vue";
+import TranslationsComparator from 'components/Main/popupWindows/TranslationsComparator.vue'
+import CommentariesSettings from "components/Main/popupWindows/commentariesSettings.vue";
+import SubheadingsSettings from "components/Main/popupWindows/subheadingsSettings.vue";
+import StrongSearcher from "components/Main/popupWindows/strongSearcher.vue";
+import BookmarkCreator from "components/Main/popupWindows/BookmarkCreator.vue";
+import CrossreferencesSearcher from "components/Main/popupWindows/crossreferencesSearcher.vue";
+import CommentariesComparator from "components/Main/popupWindows/CommentariesComparator.vue";
 
 export interface Popup {
   isPopupShown: Ref<boolean>,

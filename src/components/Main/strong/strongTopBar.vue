@@ -42,7 +42,7 @@
   <q-separator/>
 </template>
 <script>
-import ModuleSelector from 'components/bible/ModuleSelector.vue'
+import ModuleSelector from 'components/Main/popupWindows/ModuleSelector.vue'
 import {computed, defineComponent} from 'vue'
 import useStore from "src/hooks/useStore";
 import UIButtonset from "components/UI/UIButtonset";
@@ -60,7 +60,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const {id, popup} = useSevenBible()
-    
+
     const openStrongSearcher = async () => {
       const ref = await popup.showStrongSearcher()
       store.state.setBibleRef(id, ref)

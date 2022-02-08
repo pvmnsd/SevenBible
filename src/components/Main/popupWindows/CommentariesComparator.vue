@@ -27,7 +27,7 @@ import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader.v
 import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody.vue";
 import useSevenBible from "src/hooks/useSevenBible";
 import {onMounted, ref, defineComponent, Ref, nextTick} from "vue";
-import {Commentaries} from "src-e/types/commentaries";
+import {Commentaries} from "src-electron/types/commentaries";
 import UIError from "components/UI/UIError.vue";
 import UILoader from "components/UI/UILoader.vue";
 

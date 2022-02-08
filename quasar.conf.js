@@ -72,6 +72,12 @@ module.exports = configure(function (ctx) {
 
       // https://quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
+      extendWebpack(cfg) {
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias,
+          "src-electron": path.resolve(__dirname,'./src-electron')
+        }
+      },
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
@@ -234,7 +240,7 @@ module.exports = configure(function (ctx) {
         )
         cfg.resolve.alias = {
           ...cfg.resolve.alias,
-          "src-e": path.resolve(__dirname,'./src-electron/')
+          "src-electron": path.resolve(__dirname,'./src-electron')
         }
       },
       extendWebpackPreload(cfg) {
@@ -243,7 +249,7 @@ module.exports = configure(function (ctx) {
         )
         cfg.resolve.alias = {
           ...cfg.resolve.alias,
-          "src-e": path.resolve(__dirname,'./src-electron/')
+          "src-electron": path.resolve(__dirname,'./src-electron')
         }
       },
 

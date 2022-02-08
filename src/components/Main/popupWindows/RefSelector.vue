@@ -86,7 +86,7 @@ import {ref} from "vue";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow"
 import useSevenBible from "src/hooks/useSevenBible";
-import {initBooksCategories} from "src/utils";
+import {initBooksCategories} from "src/helpers";
 
 export default {
   components: {

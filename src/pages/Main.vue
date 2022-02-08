@@ -21,7 +21,7 @@ import {computed, provide} from "vue"
 import useStore from "src/hooks/useStore";
 import {Splitpanes, Pane} from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
-import WorkPlace from "components/bible/WorkPlace";
+import WorkPlace from "../components/Main/WorkPlace";
 
 
 export default {

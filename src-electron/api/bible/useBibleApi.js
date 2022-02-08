@@ -1,13 +1,13 @@
 import {ipcMain} from "electron";
-import getChapter from "src-e/api/bible/api/getChapter";
-import getTopBarState from "src-e/api/bible/api/getTopBarState";
-import getBibleInfo from "src-e/api/bible/api/getBibleInfo";
-import getChaptersCount from "src-e/api/bible/api/getChaptersCount";
-import getIntroduction from "src-e/api/bible/api/getIntroduction";
-import getCompared from "src-e/api/bible/api/getCompared";
-import {connectDatabase, disconnectDatabase} from "src-e/api/bible/api/databaseConnection";
-import findBibleTexts from "src-e/api/bible/api/findTextInBible/findBibleTexts.mjs";
-import getBibleBooks from "src-e/api/bible/api/getBibleBooks";
+import getChapter from "src-electron/api/bible/api/getChapter";
+import getTopBarState from "src-electron/api/bible/api/getTopBarState";
+import getBibleInfo from "src-electron/api/bible/api/getBibleInfo";
+import getChaptersCount from "src-electron/api/bible/api/getChaptersCount";
+import getIntroduction from "src-electron/api/bible/api/getIntroduction";
+import getCompared from "src-electron/api/bible/api/getCompared";
+import {connectDatabase, disconnectDatabase} from "src-electron/api/bible/api/databaseConnection";
+import findBibleTexts from "src-electron/api/bible/api/findTextInBible/findBibleTexts.mjs";
+import getBibleBooks from "src-electron/api/bible/api/getBibleBooks";
 
 export default () => {
   ipcMain.handle('get-chapter', (event, args) => getChapter(args))

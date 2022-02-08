@@ -1,6 +1,6 @@
 import path from 'path'
 import Database from 'better-sqlite3'
-import {BibleDatabase} from "src-e/models/Database/BibleDatabase.js";
+import {BibleDatabase} from "src-electron/models/Database/BibleDatabase.js";
 
 export default (args) => {
   const fundedTexts = []

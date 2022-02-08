@@ -18,15 +18,15 @@
   </UIWorkPlaceWindow>
 </template>
 <script>
-import StrongTopBar from './strong/strongTopBar.vue'
+import StrongTopBar from './strongTopBar.vue'
 import UIWorkPlaceWindow from "components/UI/WorkPlaceWindow/UIWorkPlaceWindow";
 import UIWorkPlaceWindowHeader from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowHeader";
 import UIWorkPlaceWindowBody from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowBody";
-import StrongBody from "components/bible/splitter/StrongBody";
+import StrongBody from "components/Main/strong/StrongBody";
 import useSevenBible from "src/hooks/useSevenBible";
 import useStore from "src/hooks/useStore";
 import {useStrongDatabaseConnection} from "src/hooks/DBconnectionController";
-import {computed, watch} from "vue";
+import {computed} from "vue";
 
 export default {
   setup() {

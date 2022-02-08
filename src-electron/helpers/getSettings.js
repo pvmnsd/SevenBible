@@ -1,6 +1,6 @@
 import fs from 'fs-extra'
 import {join} from 'path'
-import {settingsScheme} from "src-e/objects/settingsScheme"
+import {settingsScheme} from "src-electron/objects/settingsScheme"
 
 export const getSettings = () => {
   try {

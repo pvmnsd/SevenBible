@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import path from "path";
-import {CrossreferencesDatabase} from "src-e/models/Database/CrossreferencesDatabase";
-import {BibleDatabase} from "src-e/models/Database/BibleDatabase";
+import {CrossreferencesDatabase} from "src-electron/models/Database/CrossreferencesDatabase";
+import {BibleDatabase} from "src-electron/models/Database/BibleDatabase";
 
 export default (args) => {
   {

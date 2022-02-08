@@ -1,6 +1,6 @@
 import {Ref, ref} from "vue";
-import {Bible} from "src/types/bible";
-import {Commentaries} from "src-e/types/commentaries";
+import {Bible} from "src/types/store/bible";
+import {Commentaries} from "src-electron/types/commentaries";
 
 
 export default (bible: Ref<Bible>) => {

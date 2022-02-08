@@ -110,8 +110,8 @@
 
 
 <script>
-import QuickSettings from 'components/bible/topBar/quickSettings.vue'
-import ModuleSelector from 'components/bible/ModuleSelector.vue'
+import QuickSettings from 'components/Main/bible/quickSettings.vue'
+import ModuleSelector from 'components/Main/popupWindows/ModuleSelector.vue'
 import {horizontalScrollOnWheel} from "src/hooks/HorizontalScrollOnWheel";
 import UIButtonset from "components/UI/UIButtonset";
 import useSevenBible from "src/hooks/useSevenBible";

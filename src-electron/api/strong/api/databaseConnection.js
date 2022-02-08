@@ -1,4 +1,4 @@
-import {StrongDatabase} from "src-e/models/Database/StrongDatabase";
+import {StrongDatabase} from "src-electron/models/Database/StrongDatabase";
 
 export const connectDatabase = (filename) => {new StrongDatabase(filename, {keepConnections: true})}
 

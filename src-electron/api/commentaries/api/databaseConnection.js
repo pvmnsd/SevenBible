@@ -1,4 +1,4 @@
-import {CommentariesDatabase} from "src-e/models/Database/CommentariesDatabase";
+import {CommentariesDatabase} from "src-electron/models/Database/CommentariesDatabase";
 
 export const connectDatabase = (filename) => new CommentariesDatabase(filename, {keepConnections: true})
 

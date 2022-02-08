@@ -1,7 +1,7 @@
-import getDirection from "src-e/helpers/getDirection";
-import {BibleDatabase} from "src-e/models/Database/BibleDatabase";
-import {SubheadingsDatabase} from "src-e/models/Database/SubheadingsDatabase";
-import {CommentariesDatabase} from "src-e/models/Database/CommentariesDatabase";
+import getDirection from "src-electron/helpers/getDirection";
+import {BibleDatabase} from "src-electron/models/Database/BibleDatabase";
+import {SubheadingsDatabase} from "src-electron/models/Database/SubheadingsDatabase";
+import {CommentariesDatabase} from "src-electron/models/Database/CommentariesDatabase";
 
 export default (args) => {
   {

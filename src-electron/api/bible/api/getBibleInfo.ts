@@ -1,5 +1,5 @@
-import {BibleDatabase} from "src-e/models/Database/BibleDatabase";
-import {BibleInfo} from "src-e/types/bible";
+import {BibleDatabase} from "src-electron/models/Database/BibleDatabase";
+import {BibleInfo} from "src-electron/types/bible";
 
 export default (args: any) => {
   {

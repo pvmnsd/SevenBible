@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import CommentariesTopBar from "components/bible/splitter/commentaries/commentariesTopBar"
+import CommentariesTopBar from "components/Main/commentaries/commentariesTopBar"
 import {onMounted, watch, computed} from "vue"
 import useStore from "src/hooks/useStore";
 import UIWorkPlaceWindow from "components/UI/WorkPlaceWindow/UIWorkPlaceWindow";

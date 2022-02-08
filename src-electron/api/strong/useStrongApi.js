@@ -1,7 +1,7 @@
 import {ipcMain} from "electron";
-import getStrongNumbersInfo from "src-e/api/strong/api/getStrongNumbersInfo";
-import getVersesByStrong from "src-e/api/strong/api/getVersesByStrong";
-import {connectDatabase, disconnectDatabase} from "src-e/api/strong/api/databaseConnection";
+import getStrongNumbersInfo from "src-electron/api/strong/api/getStrongNumbersInfo";
+import getVersesByStrong from "src-electron/api/strong/api/getVersesByStrong";
+import {connectDatabase, disconnectDatabase} from "src-electron/api/strong/api/databaseConnection";
 
 export default () => {
   ipcMain.handle('get-strong-numbers-info', (event, args) => getStrongNumbersInfo(args))

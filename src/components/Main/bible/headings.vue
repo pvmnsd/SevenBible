@@ -81,12 +81,10 @@
 
 import {watch, onMounted, ref} from "vue";
 import useSevenBible from "src/hooks/useSevenBible";
-import useStore from "src/hooks/useStore";
 
 export default {
   setup(props) {
-    const {bibleModuleInfo: info, refString, id} = useSevenBible()
-    const store = useStore()
+    const {bibleModuleInfo: info, refString} = useSevenBible()
     const moduleIntroductionWindow = ref(false)
     const bookIntroductionWindow = ref(false)
     const chapterIntroductionWindow = ref(false)
@@ -115,7 +113,7 @@ export default {
     }
 
     onMounted(() => getIntroductions())
-    watch(refString, () => {
+    watch([refString, () => props.bibleFileName], () => {
       setTimeout(() => getIntroductions())
     })
 

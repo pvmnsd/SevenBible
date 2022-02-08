@@ -1,4 +1,4 @@
-import {ModuleDatabase} from "src-e/models/Database/ModuleDatabase";
+import {ModuleDatabase} from "src-electron/models/Database/ModuleDatabase";
 
 export class SubheadingsDatabase extends ModuleDatabase {
   static _instance = {}

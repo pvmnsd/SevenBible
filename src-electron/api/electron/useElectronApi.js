@@ -1,5 +1,5 @@
 import {BrowserWindow, ipcMain} from "electron";
-import toggleMaximize from "src-e/api/electron/api/toggleMaximize";
+import toggleMaximize from "src-electron/api/electron/api/toggleMaximize";
 
 export default () => {
   ipcMain.on('close', () => BrowserWindow.getFocusedWindow().close())

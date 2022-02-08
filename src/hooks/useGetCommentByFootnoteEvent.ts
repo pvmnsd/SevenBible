@@ -1,6 +1,6 @@
 import {Ref, ref} from "vue";
-import {Commentaries} from "src-e/types/commentaries";
-import getCommentByRef from 'src/utils/getCommentByRef'
+import {Commentaries} from "src-electron/types/commentaries";
+import getCommentByRef from 'src/helpers/getCommentByRef'
 import {BibleRef} from "src/types/bibleRef";
 
 export default (footnotes: Ref<Commentaries[]>) => {

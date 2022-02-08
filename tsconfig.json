@@ -1,20 +1,17 @@
 {
   "extends": "@quasar/app/tsconfig-preset",
-  "ts-node": {
-    "files": true
-  },
   "compilerOptions": {
     "moduleResolution": "Node",
     "baseUrl": ".",
     "paths": {
+      "app/*": [
+        "*"
+      ],
       "src/*": [
         "src/*"
       ],
-      "src-e/*": [
+      "src-electron/*": [
         "src-electron/*"
-      ],
-      "app/*": [
-        "*"
       ],
       "components/*": [
         "src/components/*"
