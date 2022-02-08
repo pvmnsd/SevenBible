@@ -1,5 +1,7 @@
 import {ref} from "vue";
 import normalizeSearchInput from "src/hooks/normalizeSearchInput";
+import {highlightWords} from "src/utils";
+
 export default (bibleFileName) => {
   const showLoader = ref(false)
   const searchInput = ref('')
@@ -19,9 +21,14 @@ export default (bibleFileName) => {
       searchString: normalizedSearchInput,
       filename: bibleFileName.value
     }
-    foundedTexts.value = await window.bible.getFindedTexts(settings)
+    foundedTexts.value = await window.api.bible.getFindedTexts(settings)
     textsCount.value = foundedTexts.value.length
     showLoader.value = false
+
+    foundedTexts.value.forEach(item => {
+      item.text = highlightWords(item.text, keywordsToHighlight)
+    })
+
   }
 
   return {

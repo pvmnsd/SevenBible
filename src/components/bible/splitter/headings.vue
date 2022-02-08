@@ -102,7 +102,7 @@ export default {
         bookNumber: props.bookNumber,
         filename: props.bibleFileName
       }
-      const data = await window.bible.getIntroduction(settings)
+      const data = await window.api.bible.getIntroduction(settings)
 
       data?.forEach(item => {
         if (item.book_number === 0) {

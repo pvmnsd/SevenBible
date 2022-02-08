@@ -1,6 +1,7 @@
 import WrapperDatabaseApi from "src-e/wrappers/DatabaseApi/DatabaseApi";
 import BetterSqlite from "better-sqlite3";
 import path from 'path'
+import {BibleDatabase} from "src-e/models/Database/BibleDatabase";
 
 export class Database extends WrapperDatabaseApi {
   static _instance = {}
@@ -30,6 +31,7 @@ export class Database extends WrapperDatabaseApi {
     if (this._keepConnections) {
       if (!this.constructor._instance[filename]) {
         this._setConnection()
+
         this.constructor._instance[filename] = this
       }
 
@@ -37,7 +39,6 @@ export class Database extends WrapperDatabaseApi {
         this.constructor._connections[filename] = 0
       }
       this.constructor._connections[filename]++
-
     }
     return this.constructor._instance[filename]
 

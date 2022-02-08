@@ -131,6 +131,8 @@ export default {
 
     const closeWorkPlace = () => store.mutations.closeWorkPlace(id)
 
+    // popup.showTranslationsComparator()
+
     const activeWorkPlacesCount = computed(() => activeWorkPlaces.value.indexes.length)
 
     const notify = useNotify()

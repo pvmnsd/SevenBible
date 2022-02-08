@@ -1,16 +1,16 @@
 import {onBeforeUnmount} from "vue";
 
 export const useStrongDatabaseConnection = (filename) => {
-  window.strong.connectDatabase(filename.value)
-  onBeforeUnmount(() => window.strong.disconnectDatabase(filename.value))
+  window.api.strong.connectDatabase(filename.value)
+  onBeforeUnmount(() => window.api.strong.disconnectDatabase(filename.value))
 }
 
 export const useBibleDatabaseConnection = (filename) => {
-  window.bible.connectDatabase(filename.value)
-  onBeforeUnmount(() => window.bible.disconnectDatabase(filename.value))
+  window.api.bible.connectDatabase(filename.value)
+  onBeforeUnmount(() => window.api.bible.disconnectDatabase(filename.value))
 }
 
 export const useCommentariesDatabaseConnection = (filename) => {
-  window.commentaries.connectDatabase(filename.value)
-  onBeforeUnmount(() => window.commentaries.disconnectDatabase(filename.value))
+  window.api.commentaries.connectDatabase(filename.value)
+  onBeforeUnmount(() => window.api.commentaries.disconnectDatabase(filename.value))
 }

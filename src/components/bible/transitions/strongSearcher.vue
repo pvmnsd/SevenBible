@@ -163,7 +163,7 @@ export default defineComponent({
 
       const normalizedNumbers = strongNumbers.value.map(curr => curr.substring(1))
       const strongNumbersRegexString = normalizedNumbers.join('|')
-      const data = await window.strong.getFindedVerseByStrong(settings)
+      const data = await window.api.strong.getFindedVerseByStrong(settings)
 
       const regex = new RegExp(`<S>(${strongNumbersRegexString})</S>`, 'gi')
       data.forEach(current => {

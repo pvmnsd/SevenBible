@@ -1,9 +1,11 @@
 import {inject} from "vue";
+import {bible_, id_, popup_} from "src/symbols";
+import {injectStrict} from "src/helpers";
 
 export default () => {
   return{
     get id(){
-      return inject('id')
+      return injectStrict(id_)
     },
     get bibleTextKey(){
       return inject('bibleTextKey')
@@ -18,7 +20,7 @@ export default () => {
       return inject('bookShortName')
     },
     get bible(){
-      return inject('bible')
+      return injectStrict(bible_)
     },
     get bibleModuleInfo(){
       return inject('bibleModuleInfo')
@@ -45,7 +47,7 @@ export default () => {
       return inject('booksList')
     },
     get popup(){
-      return inject('popup')
+      return injectStrict(popup_)
     },
   }
 }

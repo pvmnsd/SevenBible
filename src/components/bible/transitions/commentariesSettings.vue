@@ -45,7 +45,7 @@ export default {
       transitions.commentariesSettings = false
     }
     onMounted(() => commentariesModules.value =
-      window.system.fsReaddirSync(['modules', 'commentaries'])
+      window.api.system.fsReaddirSync(['modules', 'commentaries'])
         .map(moduleName => moduleName
           .match(/.+?(?=\.)/g)[0])
     )

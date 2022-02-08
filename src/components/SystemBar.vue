@@ -34,9 +34,9 @@ export default {
     const store = useStore()
     const activeWorkPlaces = computed(() => store.getters.getActiveWorkPlaces().indexes)
 
-    const minimize = () => window.electron.minimize()
-    const toggleMaximize = () => window.electron.toggleMaximize()
-    const close = () => window.electron.close()
+    const minimize = () => window.api.electron.minimize()
+    const toggleMaximize = () => window.api.electron.toggleMaximize()
+    const close = () => window.api.electron.close()
     const openNewWorkPlace = () => store.native.commit('settings/openNewWorkPlace')
 
     return {

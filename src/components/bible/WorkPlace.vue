@@ -1,11 +1,11 @@
 <template>
-<!--  <Transitions-->
-<!--    :text-directions="textDirections"-->
-<!--    :transitions="transitions"-->
-<!--    :book-full-name="bookFullName"-->
-<!--    :book-short-name="bookShortName"-->
-<!--    :strong-numbers-prefix="bibleModuleInfo.strong_numbers_prefix"-->
-<!--  />-->
+  <!--  <Transitions-->
+  <!--    :text-directions="textDirections"-->
+  <!--    :transitions="transitions"-->
+  <!--    :book-full-name="bookFullName"-->
+  <!--    :book-short-name="bookShortName"-->
+  <!--    :strong-numbers-prefix="bibleModuleInfo.strong_numbers_prefix"-->
+  <!--  />-->
 
   <div class="popup-windows">
     <transition name="fade">
@@ -51,18 +51,20 @@
   </Splitpanes>
 </template>
 
-<script>
+<script lang="ts">
+import {defineComponent} from "vue";
 import Strong from 'components/bible/splitter/strong.vue'
 import Bible from 'components/bible/splitter/Bible.vue'
-import Commentaries from "components/bible/splitter/Commentaries";
+import Commentaries from "components/bible/splitter/Commentaries.vue";
 import {Splitpanes, Pane} from 'splitpanes'
 import useStore from "src/hooks/useStore";
 import {computed, provide, ref} from "vue";
 import useBibleModuleInfo from "src/hooks/useBibleModuleInfo";
 import {useBibleDatabaseConnection} from "src/hooks/DBconnectionController";
 import {initPopupWindows} from "src/hooks/usePopupWindows";
+import {bible_, id_, popup_} from 'src/symbols'
 
-export default {
+export default defineComponent({
   setup({id}) {
     const store = useStore()
     const bible = store.state.getReactive(`workPlace.${id}.bible`)
@@ -106,7 +108,6 @@ export default {
     })
     const refString = computed(() => {
       return (
-        bible.value.fileName +
         bible.value.bookNumber +
         bible.value.chapterNumber
       );
@@ -125,12 +126,12 @@ export default {
     const bookFullName = ref(null)
     const bookShortName = ref(null)
 
-    provide('id', id)
+    provide(id_, id)
     provide("bibleTextKey", bibleTextKey)
     provide('bookShortName', bookShortName)
     provide('bookFullName', bookFullName)
-    provide('popup', popup)
-    provide('bible', bible)
+    provide(popup_, popup)
+    provide(bible_, bible)
     provide('bibleModuleInfo', bibleModuleInfo)
     provide('activeWorkPlaceWindows', activeWorkPlaceWindows)
     provide('allModulesClosed', allModulesClosed)
@@ -168,5 +169,5 @@ export default {
     Splitpanes,
     Pane
   }
-}
+})
 </script>

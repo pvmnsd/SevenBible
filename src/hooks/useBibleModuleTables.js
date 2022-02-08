@@ -1,10 +1,8 @@
-
 export default async (bibleFileName) => {
   const settings = {filename: bibleFileName}
-  const tables = await window.bible.getModuleInfo(settings)
+  const info = await window.api.bible.getBibleInfo(settings)
+  const booksList = await window.api.bible.getBibleBooks(settings)
 
-  const booksList = tables.booksList
-  const info = tables.info
 
   return {
     booksList,

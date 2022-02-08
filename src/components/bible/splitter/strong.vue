@@ -26,7 +26,7 @@ import StrongBody from "components/bible/splitter/StrongBody";
 import useSevenBible from "src/hooks/useSevenBible";
 import useStore from "src/hooks/useStore";
 import {useStrongDatabaseConnection} from "src/hooks/DBconnectionController";
-import {computed} from "vue";
+import {computed, watch} from "vue";
 
 export default {
   setup() {
@@ -35,9 +35,10 @@ export default {
     const strong = store.state.getReactive(`workPlace.${id}.strong`)
     const strongFilename = computed(() => strong.value.fileName)
     useStrongDatabaseConnection(strongFilename)
+
     // if (!props.strongFileName || !props.strongFileName.length) {
     //   console.log('sd')
-    //   const firstModuleName = window.system.getFirstExistsModuleName(['modules', 'dictionaries', 'strong'])
+    //   const firstModuleName = window.api.system.getFirstExistsModuleName(['modules', 'dictionaries', 'strong'])
     //   store.state.set(`workPlace.${id}.strong.fileName`, firstModuleName)
     // }
     return {

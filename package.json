@@ -30,11 +30,14 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
     "@quasar/app": "^3.2.2",
+    "@types/splitpanes": "^2.2.1",
+    "@typescript-eslint/eslint-plugin": "^5.10.2",
+    "@typescript-eslint/parser": "^5.10.2",
     "electron": "^15.3.1",
     "electron-builder": "^22.13.1",
     "electron-packager": "^15.2.0",
     "electron-rebuild": "^3.2.5",
-    "eslint": "^7.14.0",
+    "eslint": "^8.8.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^7.0.0",
     "eslint-webpack-plugin": "^2.4.0"

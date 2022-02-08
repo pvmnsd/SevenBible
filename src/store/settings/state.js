@@ -1,4 +1,5 @@
-const settings = JSON.parse(window.system.getSettings())
+const settings = JSON.parse(window.api.system.getSettings())
+
 export default function () {
   return {
     ...settings

@@ -60,7 +60,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const {id, popup} = useSevenBible()
-
+    
     const openStrongSearcher = async () => {
       const ref = await popup.showStrongSearcher()
       store.state.setBibleRef(id, ref)

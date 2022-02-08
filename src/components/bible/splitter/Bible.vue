@@ -93,7 +93,7 @@
             v-for='(verse, i) in chapter'
             :key='i'
             class="flex verse-block"
-            @click.stop="onVerseClick"
+            @click.stop="onVerseClick($event, {chapterNumber: bible.chapterNumber, verseNumber: i + 1})"
             @contextmenu.stop="onVerseContextmenu"
           >
             <span
@@ -200,16 +200,16 @@ export default {
     const {footnotes, getFootNotes} = useFootnotes(bible)
 
 
-    let workMode = ref(WorkModes.standard)
-
     watch([
       refString,
       viewParamsRequiringRerender,
-      bibleTextKey
+      bibleTextKey,
+      () => bible.value.fileName
     ], async () => {
       await getChapter()
       await getFootNotes()
     })
+
 
     const {
       onVerseContextmenu,
@@ -238,13 +238,13 @@ export default {
     const copyVerses = (verses) => {
       const ref = `${bookShortName.value} ${bible.value.chapterNumber}:${convertVerses(verses)}`
       let text = ''
-      text+= '['
+      text += '['
       verses.forEach(verseNumber => {
         const html = chapter.value[verseNumber - 1].text
         text += clearTags(html)
       })
-      text+=']'
-      text+= `\n${ref}`
+      text += ']'
+      text += `\n${ref}`
       navigator.clipboard.writeText(text)
       notify.showInfo(`${t('textCopied')}: "${cropString(text, 20)}"`)
     }

@@ -12,7 +12,7 @@ export default (id, store, footnotes) => {
     htmlPopupTarget
   } = useGetCommentByFootnoteEvent(footnotes)
 
-  const onVerseClick = ({target}) => {
+  const onVerseClick = ({target}, ref) => {
     if (target.tagName === "S")
       store.state.set(`workPlace.${id}.strong`, {
         show: true,
@@ -23,7 +23,7 @@ export default (id, store, footnotes) => {
       onStrongSearch(target)
 
     if (target.tagName === "F")
-      onGetCommentByFootnote(target)
+      onGetCommentByFootnote(target, ref)
   }
 
   return {

@@ -36,15 +36,13 @@ export default defineComponent({
 
     const loadStrongModules = () => {
       if (props.path.length) {
-        modules.value = window.system.fsReaddirSync(props.path)
+        modules.value = window.api.system.fsReaddirSync(props.path)
           .map(module => module.split('.')[0])
       } else console.log('Отсутствуют модули ... ')
     }
     const onModuleClick = newFilename => {
       const oldFilename = store.state.get(`workPlace.${id}.${props.module}.fileName`)
       if (newFilename !== oldFilename) {
-        window[props.module].disconnectDatabase(oldFilename)
-        window[props.module].connectDatabase(newFilename)
         store.state.set(`workPlace.${id}.${props.module}.fileName`, newFilename)
       }
     }

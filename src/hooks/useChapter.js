@@ -18,8 +18,7 @@ export default (bible) => {
       activeModulesSubheadings: [...bible.value.view.subheadings.activeModules],
       activeModulesCommentaries: [...bible.value.view.commentaries.activeModules],
     }
-
-    let data =  await window.bible.getChapter(settings)
+    let data =  await window.api.bible.getChapter(settings)
     //set abreviatures
     bookFullName.value = data.bookNames.bookFullName
     bookShortName.value = data.bookNames.bookShortName

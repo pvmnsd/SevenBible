@@ -34,14 +34,17 @@ export default {
         strongNumbers: [...props.strongNumbers],
         filename: props.strongFileName
       }
-      strongNumbersInfo.value = await window.strong.getStrongNumbersInfo(settings)
+      strongNumbersInfo.value = await window.api.strong.getStrongNumbersInfo(settings)
     }
 
     onMounted(() => searchInfo())
-    watch([
-        () => props.strongNumbers,
-        () => props.strongFileName],
-      () => searchInfo())
+
+    watch(() => props.strongNumbers, () => searchInfo())
+    watch(() => props.strongFileName, (newFilename, oldFilename) => {
+      window.api.strong.disconnectDatabase(oldFilename)
+      window.api.strong.connectDatabase(newFilename)
+      searchInfo()
+    })
 
     return {
       strongNumbersInfo

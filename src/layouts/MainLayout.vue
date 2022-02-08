@@ -34,12 +34,12 @@ export default {
     setTheme(app.value.appearance.theme)
 
     const stringify = state => JSON.stringify(state, null, 2)
-    const saveProgramSettings = (state) => window.system.saveProgramSettings(stringify(state))
+    const saveProgramSettings = (state) => window.api.system.saveProgramSettings(stringify(state))
 
     const changeAppSettings = settings => store.commit('settings/changeAppSettings', settings)
 
     const saveProgramState = async () => {
-      const bounds = await window.electron.getWindowBounds()
+      const bounds = await window.api.electron.getWindowBounds()
       changeAppSettings({win: bounds})
       saveProgramSettings(store.state.settings)
     }
@@ -49,9 +49,9 @@ export default {
       console.log('saved')
     }, 60000 * 5)
 
-    window.electron.onCloseApp(async () => {
+    window.api.electron.onCloseApp(async () => {
       await saveProgramState()
-      window.electron.closeApp()
+      window.api.electron.closeApp()
     })
 
     return {

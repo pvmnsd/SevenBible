@@ -32,9 +32,7 @@
         </div>
       </template>
 
-      <q-inner-loading v-else :showing="showLoader">
-        <q-spinner-gears size="50px"/>
-      </q-inner-loading>
+      <UILoader v-else/>
     </UIWorkPlaceWindowBody>
 
   </UIWorkPlaceWindow>
@@ -50,6 +48,7 @@ import UIWorkPlaceWindowBody from "components/UI/WorkPlaceWindow/UIWorkPlaceWind
 import useSevenBible from "src/hooks/useSevenBible";
 import useCommentaries from "src/hooks/useCommentaries";
 import {useCommentariesDatabaseConnection} from "src/hooks/DBconnectionController";
+import UILoader from "components/UI/UILoader";
 
 export default {
   setup() {
@@ -62,10 +61,12 @@ export default {
 
     const {commentaries, showLoader, getCommentaries} = useCommentaries(id, store, commentariesModule)
 
-    watch([
-      refString,
-      () => commentariesModule.value.fileName
-    ], () => {
+    watch(refString, () => {
+      getCommentaries()
+    })
+    watch(() => commentariesModule.value.fileName, (newFilename, oldFilename) => {
+      window.api.commentaries.disconnectDatabase(oldFilename)
+      window.api.commentaries.connectDatabase(newFilename)
       getCommentaries()
     })
     onMounted(() => getCommentaries())
@@ -79,6 +80,7 @@ export default {
     }
   },
   components: {
+    UILoader,
     UIWorkPlaceWindowBody,
     UIWorkPlaceWindowHeader,
     UIWorkPlaceWindow,

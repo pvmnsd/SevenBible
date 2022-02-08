@@ -109,7 +109,7 @@ export default {
       foundedTexts,
       searchText,
       goToText,
-      close
+      close,
     }
 
   }

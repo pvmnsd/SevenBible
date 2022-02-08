@@ -1,6 +1,9 @@
-export const myRef = value => ({value})
+import {inject, InjectionKey} from "vue";
+import {BookNumbers} from "src-e/types/bookNumbers";
 
-export const getBookCategory = bookNumber => {
+export const myRef = (value: any) => ({value})
+
+export const getBookCategory = (bookNumber: BookNumbers) => {
   return (bookNumber <= 50) ? 'torah'
     : (bookNumber <= 160 || bookNumber === 190) ? 'poetry'
       : (bookNumber >= 220 && bookNumber <= 260) ? 'major-prophets'
@@ -12,20 +15,19 @@ export const getBookCategory = bookNumber => {
                   : 'non-canonical'
 }
 
-export const convertVerses = (verses = [1, 3, 4, 5,6,7,8,9, 11,13,14]) => {
+export const convertVerses = (verses: number[]) => {
   let res = verses[0].toString()
   for (let i = 1; i < verses.length; i++) {
     const verse = verses[i]
     if (verse - 1 !== verses[i - 1])
       res += `,${verse}`
-    else{
-      let lastIndex
-      for (let j = i; j < verses.length; j++){
+    else {
+      let lastIndex: number = 0
+      for (let j = i; j < verses.length; j++) {
         if (j === verses.length - 1) {
           lastIndex = j
           break
-        }
-        else if (verses[j + 1] !== verses[j] + 1){
+        } else if (verses[j + 1] !== verses[j] + 1) {
           lastIndex = j
           break
         }
@@ -38,6 +40,13 @@ export const convertVerses = (verses = [1, 3, 4, 5,6,7,8,9, 11,13,14]) => {
   return res
 }
 
-export const clearTags = (html) => html.replace(/(<[Smfnh]>.+?<\/[Smfnh]>|<[^>]+>)/g, "")
+export const clearTags = (html: string) => html.replace(/(<[Smfnh]>.+?<\/[Smfnh]>|<[^>]+>)/g, "")
 
-export const cropString = (string, length) => string.length > length ? string.slice(0, length) + '...' : string
+export const cropString = (string: string, length: number) => string.length > length ? string.slice(0, length) + '...' : string
+
+export const injectStrict = <T>(key: InjectionKey<T>, fallback?: T) => {
+  const resolved = inject(key, fallback)
+  if (resolved === null || resolved === undefined)
+    throw new Error(`Could not resolve ${key.description}`)
+  return resolved
+}

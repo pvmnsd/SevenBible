@@ -21,25 +21,25 @@
       icon="close"
       unelevated
       stretch
-      @click="toggleModuleState('commentaries', 'show')"
+      @click="close"
     />
   </UIButtonset>
   <q-separator/>
 </template>
 <script>
 import ModuleSelector from "components/bible/ModuleSelector"
-import {useStore} from "vuex"
-import {inject} from 'vue'
+import useStore from "src/hooks/useStore";
 import {horizontalScrollOnWheel} from "src/hooks/HorizontalScrollOnWheel";
 import UIButtonset from "components/UI/UIButtonset";
+import useSevenBible from "src/hooks/useSevenBible";
 
 export default {
   setup() {
-    const id = inject('id')
+    const {id} = useSevenBible()
     const store = useStore()
-    const toggleModuleState = (key, name) => store.commit('settings/toggleModuleState', {id, key, name})
+    const close = () => store.state.set(`workPlace.${id}.commentaries.show`, false)
 
-    return {toggleModuleState, horizontalScrollOnWheel}
+    return {close, horizontalScrollOnWheel}
   },
   props: {
     commentariesFileName: String,

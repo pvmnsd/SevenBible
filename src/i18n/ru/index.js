@@ -30,5 +30,7 @@ export default {
   verseNumberClickEventTitle: 'Событие нажатия на номер стиха',
   verseNumberClickEventDescription: 'Управляет дейстивем которое будет производиться при нажатии на номер стиха левой кнопкой миши',
   openTranslationsComparator: 'Открывать окно сравнения переводов стиха в разных модулях Библии',
-  openCrossreferencesSearcher: 'Открывать окно перекререкрестных ссылок стиха'
+  openCrossreferencesSearcher: 'Открывать окно перекререкрестных ссылок стиха',
+
+  nothingFounded: 'Ничего не найдено'
 }

@@ -1,4 +1,4 @@
-import {ref} from "vue";
+import {nextTick, ref} from "vue";
 import {debounce} from "quasar";
 
 export default (id, store, commentariesModule) => {
@@ -12,9 +12,9 @@ export default (id, store, commentariesModule) => {
       filename: commentariesModule.value.fileName
     }
     let commentariesData
-    commentariesData = await window.commentaries.getCommentaries(settings)
+    commentariesData = await window.api.commentaries.getCommentaries(settings)
     commentaries.value = commentariesData
-    showLoader.value = false
+    nextTick(() => showLoader.value = false)
   }, 500)
 
   const getCommentaries = () => {

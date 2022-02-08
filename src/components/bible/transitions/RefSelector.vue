@@ -116,7 +116,7 @@ export default {
         bookNumber,
         filename: fileName
       }
-      countOfChapters.value = await window.bible.getChaptersCount(settings)
+      countOfChapters.value = await window.api.bible.getChaptersCount(settings)
       selectedBookNumber.value = bookNumber
       selectedBookName.value = bookFullName
       step.value++

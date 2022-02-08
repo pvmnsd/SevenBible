@@ -122,7 +122,7 @@ export default {
         verse: props.selectedVerses[0],
         filename: bibleFileName
       }
-      const data = await window.crossreferences.getCrossreferences(settings)
+      const data = await window.api.crossreferences.getCrossreferences(settings)
 
       data.sort((a, b) => {
         if (a.book_to === b.book_to) {

@@ -2,7 +2,8 @@
   <UIModalWindow>
 
     <UIModalWindowHeader @click="close">
-      <template #title>{{ bookShortName }} {{ chapterNumber }}:{{ convertVerses(selectedVerses) }} в разных местах</template>
+      <template #title>{{ bookShortName }} {{ chapterNumber }}:{{ convertVerses(selectedVerses) }} в разных местах
+      </template>
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
 
@@ -39,23 +40,25 @@
   </UIModalWindow>
 </template>
 
-<script>
-import {ref, computed, onMounted} from "vue";
-import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
-import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
+<script lang="ts">
+import {ref, PropType, onMounted, defineComponent} from "vue";
+import UIModalWindow from "components/UI/ModalWindow/UIModalWindow.vue";
+import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader.vue";
 import useSevenBible from "src/hooks/useSevenBible";
-import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody";
+import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody.vue";
 import {convertVerses} from "src/helpers";
 
-export default {
+export default defineComponent({
   components: {UIModalWindowBody, UIModalWindowHeader, UIModalWindow},
   setup(props, {emit}) {
-    const {bookShortName, bible: {value: {bookNumber, chapterNumber}}} = useSevenBible()
-    const testament = computed(() => props.bookNumber >= 470 ? 'nt' : 'ot')
+    const {bookShortName, bible} = useSevenBible()
+    const {bookNumber, chapterNumber} = bible!.value!
 
-    const close = (ref) => emit('close', ref)
+    const testament = bookNumber >= 470 ? 'nt' : 'ot'
 
-    const goToModule = filename => {
+    const close = (ref: any) => emit('close', ref)
+
+    const goToModule = (filename: string) => {
       close({fileName: filename})
     }
 
@@ -66,7 +69,7 @@ export default {
         chapterNumber: chapterNumber,
         versesNumbers: [...props.selectedVerses]
       }
-      translationsTexts.value = await window.bible.getCompared(settings)
+      translationsTexts.value = await window.api.bible.getCompared(settings)
     }
     onMounted(() => getComparedTranslations())
 
@@ -82,7 +85,10 @@ export default {
     }
   },
   props: {
-    selectedVerses: Array
+    selectedVerses: {
+      type: Array as PropType<number[]>,
+      required: true
+    }
   }
-}
+})
 </script>

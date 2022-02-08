@@ -159,6 +159,7 @@ export default defineComponent({
   components: {UIButtonDropdown},
   setup() {
     const {id, bible, popup} = useSevenBible()
+
     const panels = ['show', 'open']
     const panel = ref('open')
 

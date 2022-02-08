@@ -18,7 +18,7 @@ export default (store, id) => {
       chapterNumber: store.state.get(path + 'chapterNumber'),
       filename: store.state.get(path + 'fileName')
     }
-    const data = await window.bible.getTopBarState(settings)
+    const data = await window.api.bible.getTopBarState(settings)
     arrows.value = data.arrows
   }
 

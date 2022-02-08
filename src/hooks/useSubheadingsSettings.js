@@ -16,7 +16,7 @@ export default () => {
 
   onMounted(() => {
     subheadingsModulesList.value =
-      window.system.fsReaddirSync(['modules', 'subheadings'])
+      window.api.system.fsReaddirSync(['modules', 'subheadings'])
         .map(moduleName => moduleName
           .match(/.+?(?=\.)/g)[0])
   })
