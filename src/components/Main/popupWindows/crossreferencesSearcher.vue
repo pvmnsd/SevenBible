@@ -1,5 +1,5 @@
 <template>
-  <UIModalWindow>
+  <UIModalWindow @close="close">
     <UIModalWindowHeader @close="close">
       <template #title>{{ bookShortName }} {{ chapterNumber }}:{{ selectedVerses[0] }} - ссылки</template>
       <q-btn flat round icon='payments'/>
@@ -10,12 +10,11 @@
 
       <DynamicVirtualScroller
         :items="crossreferences"
-        class="overlay"
+        class="overlay separated"
       >
         <template v-slot="{item}">
           <q-item
             clickable
-            v-ripple
             @click="goToText(item.book_to, item.chapter_to)"
             :dir="item.book_to >= 470 ? textDirections.nt : textDirections.ot"
           >
@@ -92,7 +91,7 @@
 
 <script>
 import useStore from "src/hooks/useStore";
-import {defineComponent, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
 import useSevenBible from "src/hooks/useSevenBible";
@@ -112,7 +111,6 @@ export default {
       fileName: bibleFileName
     } = store.native.state.settings.workPlace[id].bible
 
-    const crossreferencesCount = ref(0)
     const crossreferences = ref([])
 
     const getCrosrefferences = async () => {
@@ -122,7 +120,7 @@ export default {
         verse: props.selectedVerses[0],
         filename: bibleFileName
       }
-      const data = await window.api.crossreferences.getCrossreferences(settings)
+      let data = await window.api.crossreferences.getCrossreferences(settings)
 
       data.sort((a, b) => {
         if (a.book_to === b.book_to) {
@@ -134,7 +132,6 @@ export default {
       })
 
       crossreferences.value = data
-      crossreferencesCount.value = data.length
     }
 
     onMounted(() => getCrosrefferences())
@@ -164,7 +161,6 @@ export default {
       goToText,
       openPanel,
       close,
-      crossreferencesCount,
       crossreferences,
       bibleFileName,
       chapterNumber,

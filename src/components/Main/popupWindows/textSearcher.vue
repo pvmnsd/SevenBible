@@ -5,55 +5,55 @@
       <template #title>Поиск по библии - {{ bibleFileName }}</template>
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
+    <UIModalWindowBody>
+      <UIModalWindowSettings>
+        <q-form>
+          <q-input
+            placeholder='Поиск'
+            filled
+            v-model='searchInput'
+            counter
+            ref="input"
+            for="btn"
+          >
+            <template v-slot:after>
+              <q-btn
+                ref="btn"
+                name="btn"
+                type="submit"
+                round flat
+                icon='search'
+                @click='searchText()'
+              />
+            </template>
+          </q-input>
+        </q-form>
+      </UIModalWindowSettings>
 
-    <UIModalWindowSettings>
-      <q-form>
-        <q-input
-          placeholder='Поиск'
-          filled
-          v-model='searchInput'
-          counter
-          ref="input"
-          for="btn"
-        >
-          <template v-slot:after>
-            <q-btn
-              ref="btn"
-              name="btn"
-              type="submit"
-              round flat
-              icon='search'
-              @click='searchText()'
-            />
-          </template>
-        </q-input>
-      </q-form>
-    </UIModalWindowSettings>
+      <q-linear-progress v-if='showLoader' query/>
 
-    <q-linear-progress v-if='showLoader' query/>
+      <DynamicVirtualScroller
+        :items="foundedTexts"
+        class="overlay separated"
+      >
+        <template v-slot="{item}">
+          <q-item
+            clickable
+            class='q-px-md'
+            @click='goToText(item.book_number, item.chapter)'
+          >
+            <q-item-section>
+              <q-item-label caption>
+                {{ item.long_name }}
+                {{ item.chapter }}:{{ item.verse }}
+              </q-item-label>
+              <q-item-label v-html='item.text'></q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </DynamicVirtualScroller>
 
-    <DynamicVirtualScroller
-      :items="foundedTexts"
-      class="overlay"
-    >
-      <template v-slot="{item}">
-        <q-separator/>
-        <q-item
-          clickable
-          class='q-px-md'
-          @click='goToText(item.book_number, item.chapter)'
-        >
-          <q-item-section>
-            <q-item-label caption>
-              {{ item.long_name }}
-              {{ item.chapter }}:{{ item.verse }}
-            </q-item-label>
-            <q-item-label v-html='item.text'></q-item-label>
-          </q-item-section>
-        </q-item>
-      </template>
-    </DynamicVirtualScroller>
-
+    </UIModalWindowBody>
 
   </UIModalWindow>
 </template>
@@ -67,9 +67,11 @@ import UIModalWindowSettings from "components/UI/ModalWindow/UIModalWindowSettin
 import useSevenBible from "src/hooks/useSevenBible";
 import useTextSearcher from "src/hooks/useTextSearcher";
 import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
+import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody";
 
 export default {
   components: {
+    UIModalWindowBody,
     DynamicVirtualScroller,
     UIModalWindowSettings,
     UIModalWindowHeader,

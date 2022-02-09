@@ -2,7 +2,14 @@
 @import "splitter";
 @import "notifications";
 @import "markers";
-
+.q-list--separator > .q-item-type + .q-item-type {
+  border-top: 1px solid var(--separator);
+}
+.vue-recycle-scroller.separated {
+  .vue-recycle-scroller__item-view + .vue-recycle-scroller__item-view {
+    border-top: 1px solid var(--separator);
+  }
+}
 .q-separator {
   background-color: var(--separator)
 }

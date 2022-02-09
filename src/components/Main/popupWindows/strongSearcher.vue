@@ -18,74 +18,74 @@
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
 
-    <UIModalWindowSettings>
-      <q-form>
-        <q-input
-          clearable
-          placeholder='Введите номер'
-          filled
-          for='aaa'
-          v-model='searchInput'
-          class='q-mt-none col'
-          hint='Введите номера стронга через пробел'
-        >
-          <template v-slot:after>
-            <q-btn
-              name='aaa'
-              type='submit'
-              flat
-              round
-              icon='search'
-              @click='searchByStrong'
-            />
-            <q-btn
-              name='aaa'
-              type='submit'
-              flat
-              round
-              icon='settings'
-              @click='$refs.dialog.show()'
-            />
-          </template>
+    <UIModalWindowBody>
+      <UIModalWindowSettings>
+        <q-form>
+          <q-input
+            clearable
+            placeholder='Введите номер'
+            filled
+            for='aaa'
+            v-model='searchInput'
+            class='q-mt-none col'
+            hint='Введите номера стронга через пробел'
+          >
+            <template v-slot:after>
+              <q-btn
+                name='aaa'
+                type='submit'
+                flat
+                round
+                icon='search'
+                @click='searchByStrong'
+              />
+              <q-btn
+                name='aaa'
+                type='submit'
+                flat
+                round
+                icon='settings'
+                @click='$refs.dialog.show()'
+              />
+            </template>
 
-        </q-input>
-      </q-form>
+          </q-input>
+        </q-form>
 
-      <div class='q-pa-sm text-right'>Найдено текстов: {{ textsCount }}</div>
+        <div class='q-pa-sm text-right'>Найдено текстов: {{ textsCount }}</div>
 
-      <StrongBody
-        :strong-numbers="strongNumbers"
-        :strong-file-name="strongFileName"
-        class="overlay strong-searcher-strong-body shadow-4 rounded-borders container"
-        style="max-height: 150px"
-      />
+        <StrongBody
+          :strong-numbers="strongNumbers"
+          :strong-file-name="strongFileName"
+          class="overlay strong-searcher-strong-body shadow-4 rounded-borders container"
+          style="max-height: 150px"
+        />
 
 
-    </UIModalWindowSettings>
+      </UIModalWindowSettings>
 
-    <DynamicVirtualScroller
-      :items="foundedTexts"
-      class="overlay"
-    >
-      <template v-slot="{item}">
-        <q-separator/>
-        <q-item
-          clickable
-          class='q-px-md'
-          @click='goToText(item.book_number,item.chapter)'
-        >
-          <q-item-section>
-            <q-item-label caption
-            >{{ item.bookShortName }}
-              {{ item.chapter }}:{{ item.verse }}
-            </q-item-label
-            >
-            <q-item-label v-html='item.text'></q-item-label>
-          </q-item-section>
-        </q-item>
-      </template>
-    </DynamicVirtualScroller>
-
+      <DynamicVirtualScroller
+        :items="foundedTexts"
+        class="overlay separated"
+      >
+        <template v-slot="{item}">
+          <q-item
+            clickable
+            class='q-px-md'
+            @click='goToText(item.book_number,item.chapter)'
+          >
+            <q-item-section>
+              <q-item-label caption
+              >{{ item.bookShortName }}
+                {{ item.chapter }}:{{ item.verse }}
+              </q-item-label
+              >
+              <q-item-label v-html='item.text'></q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </DynamicVirtualScroller>
+    </UIModalWindowBody>
 
   </UIModalWindow>
 </template>
@@ -101,9 +101,11 @@ import useSevenBible from "src/hooks/useSevenBible";
 import StrongBody from "components/Main/strong/StrongBody";
 import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
 import useNotify from "src/wrappers/useNotify";
+import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody";
 
 export default defineComponent({
   components: {
+    UIModalWindowBody,
     DynamicVirtualScroller,
     UIModalWindowSettings,
     UIModalWindowHeader,
