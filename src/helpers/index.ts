@@ -18,30 +18,6 @@ export const getBookCategory = (bookNumber: BookNumbers): BookCategories => {
                     : BookCategories.NonCanonical
 }
 
-export const convertVerses = (verses: number[]) => {
-  let res = verses[0].toString()
-  for (let i = 1; i < verses.length; i++) {
-    const verse = verses[i]
-    if (verse - 1 !== verses[i - 1])
-      res += `,${verse}`
-    else {
-      let lastIndex: number = 0
-      for (let j = i; j < verses.length; j++) {
-        if (j === verses.length - 1) {
-          lastIndex = j
-          break
-        } else if (verses[j + 1] !== verses[j] + 1) {
-          lastIndex = j
-          break
-        }
-      }
-      res += `-${verses[lastIndex]}`
-      i = lastIndex
-    }
-
-  }
-  return res
-}
 
 export const clearTags = (html: string) => html.replace(/(<[Smfnh]>.+?<\/[Smfnh]>|<[^>]+>)/g, "")
 

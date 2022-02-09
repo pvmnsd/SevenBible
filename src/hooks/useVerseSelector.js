@@ -1,4 +1,5 @@
 import {ref} from "vue"
+import {insertVerse, insertVerses} from "src/helpers/verseSelector";
 
 export default () => {
   const selectedVerses = ref([])
@@ -7,10 +8,10 @@ export default () => {
     if (selectedVerses.value.includes(verseNumber))
       selectedVerses.value.remove(verseNumber)
     else
-      selectedVerses.value.insert(verseNumber)
+      insertVerse(selectedVerses.value, verseNumber)
   }
   const onSelectorHold = (verseNumber) => {
-    console.log('hold', verseNumber)
+    insertVerses(selectedVerses.value, verseNumber)
   }
   const clearSelectedVerses = () => {
     selectedVerses.value = []

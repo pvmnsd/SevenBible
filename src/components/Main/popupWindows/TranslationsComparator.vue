@@ -8,7 +8,7 @@
     </UIModalWindowHeader>
 
     <UIModalWindowBody>
-      <q-list separator>
+      <q-list separator class="overlay">
         <q-item
           clickable
           v-ripple
@@ -46,7 +46,7 @@ import UIModalWindow from "components/UI/ModalWindow/UIModalWindow.vue";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader.vue";
 import useSevenBible from "src/hooks/useSevenBible";
 import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody.vue";
-import {convertVerses} from "src/helpers";
+import {convertVerses} from 'src/helpers/verseSelector'
 
 export default defineComponent({
   components: {UIModalWindowBody, UIModalWindowHeader, UIModalWindow},

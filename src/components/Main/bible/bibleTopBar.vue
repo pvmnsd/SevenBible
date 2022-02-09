@@ -118,10 +118,11 @@ import useSevenBible from "src/hooks/useSevenBible";
 import useStore from "src/hooks/useStore";
 import useNavigations from "src/hooks/useNavigations";
 import {computed} from "vue";
-import {convertVerses, cropString} from "src/helpers";
+import {convertVerses} from 'src/helpers/verseSelector'
 import UIButton from "components/UI/UIButton";
 import useNotify from "src/wrappers/useNotify";
 import {useI18n} from "vue-i18n";
+import {cropString} from "src/helpers";
 
 export default {
   setup(props) {

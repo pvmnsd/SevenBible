@@ -3,6 +3,7 @@
     :items="items"
     :min-item-size="54"
     keyField="rowid"
+    style="min-height: 100px"
   >
     <template v-slot="{ item, index, active }">
       <DynamicScrollerItem
