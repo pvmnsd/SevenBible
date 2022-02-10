@@ -8,6 +8,7 @@ import getCompared from "src-electron/api/bible/api/getCompared";
 import {connectDatabase, disconnectDatabase} from "src-electron/api/bible/api/databaseConnection";
 import findBibleTexts from "src-electron/api/bible/api/findTextInBible/findBibleTexts.mjs";
 import getBibleBooks from "src-electron/api/bible/api/getBibleBooks";
+import getVerses from "src-electron/api/bible/api/getVerses";
 
 export default () => {
   ipcMain.handle('get-chapter', (event, args) => getChapter(args))
@@ -20,4 +21,5 @@ export default () => {
   ipcMain.handle('get-compared-translations', (event, args) => getCompared(args))
   ipcMain.on('connect-bible-database', (event, filename) => connectDatabase(filename))
   ipcMain.on('disconnect-bible-database', (event, filename) => disconnectDatabase(filename))
+  ipcMain.handle('get-bible-verses', (event, args) => getVerses(args))
 }

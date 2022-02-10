@@ -79,6 +79,14 @@
     <q-separator vertical/>
 
     <UIButton
+      :tooltip="$t('makeBookmark')"
+      icon="bookmark_add"
+      @click="openBookmarkCreator"
+    />
+
+    <q-separator vertical/>
+
+    <UIButton
       @click="openCrossreferencesSearcher"
       :tooltip="$t('searchCrossreferences')"
       icon="shuffle"
@@ -162,6 +170,15 @@ export default {
       navigator.clipboard.writeText(text)
       notify.showInfo(`${t('textCopied')}: "${cropString(text, 30)}"`)
     }
+
+    const openBookmarkCreator = () => {
+      const verses = props.selectedVerses
+      popup.showBookmarkCreator({
+        selectedVerseFrom: verses[0],
+        selectedVerseTo: verses[verses.length - 1]
+      })
+    }
+
     return {
       arrows,
       horizontalScrollOnWheel,
@@ -176,7 +193,8 @@ export default {
       copySelectionRef,
       compareSelectedVerses,
       openCrossreferencesSearcher,
-      openCommentariesComparator
+      openCommentariesComparator,
+      openBookmarkCreator
     }
   },
   components: {UIButton, UIButtonset, QuickSettings, ModuleSelector},

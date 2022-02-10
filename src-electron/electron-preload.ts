@@ -17,7 +17,8 @@ const bible = {
   getChaptersCount: (args: any) => ipcRenderer.invoke('get-count-of-chapters', args),
   getFindedTexts: (args: any) => ipcRenderer.invoke('find-texts-in-bible', args),
   getIntroduction: (args: any) => ipcRenderer.invoke('get-introductions', args),
-  getCompared: (args: any) => ipcRenderer.invoke('get-compared-translations', args)
+  getCompared: (args: any) => ipcRenderer.invoke('get-compared-translations', args),
+  getVerses: (args: any) => ipcRenderer.invoke('get-bible-verses', args),
 }
 
 const strong = {

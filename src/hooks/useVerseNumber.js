@@ -35,30 +35,34 @@ export default ({copyVerses}) => {
   }
   const openCommentariesComparator = () => popup.showCommentariesComparator({verseNumber: selectedVerse})
   const openBookmarkCreator = () => {
-    // transitions.bookmarkCreator = true
+    popup.showBookmarkCreator({selectedVerseFrom: selectedVerse})
   }
 
   const verseMenuItems = [
     {
       title: 'compareTranslations',
-      callback: () => openTranslationsComparator()
+      callback: openTranslationsComparator
     },
     {
       title: 'addBookmark',
-      callback: () => openBookmarkCreator()
+      callback: openBookmarkCreator
     },
     {
       title: 'searchCrossreferences',
-      callback: () => openCrossreferencesSearcher()
+      callback: openCrossreferencesSearcher
     },
     {
       title: 'searchCommentaries',
-      callback: () => openCommentariesComparator()
+      callback: openCommentariesComparator
     },
     {
       title: 'copy',
       callback: () => copyVerses([selectedVerse])
     },
+    {
+      title: 'makeBookmark',
+      callback: openBookmarkCreator
+    }
   ]
 
 

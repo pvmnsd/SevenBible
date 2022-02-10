@@ -5,6 +5,7 @@ export default {
   feedbackPage: 'Обратная связь',
   helpPage: 'Информация',
 
+  //actions
   compareTranslations: 'Сравнить переводы',
   addBookmark: 'Добавить закладку',
   searchCrossreferences: 'Искать ссылки',
@@ -12,6 +13,7 @@ export default {
   copy: 'Копировать',
   cancelSelection: 'Отменить выделение',
   copyRef: 'Копировать ссылку',
+  makeBookmark: 'Создать закладку',
 
   textCopied: 'Текст скопирован',
 
