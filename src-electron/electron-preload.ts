@@ -3,6 +3,8 @@ import path from 'path'
 import fs from 'fs'
 import {BibleBooks, BibleInfo} from "src-electron/types/bible";
 import {Commentaries} from "src-electron/types/commentaries";
+import {BookmarkCategory} from "app/types/bookmark";
+import {MakeBookmarkArgs} from "app/types/api-args/makeBookmarkArgs";
 
 
 window.dir = process.env.dir!
@@ -57,6 +59,7 @@ const system = {
   readUserTheme: (themeName: string) => ipcRenderer.invoke('read-user-theme', themeName),
   getFontList: () => ipcRenderer.invoke('get-font-list'),
   saveProgramSettings: (state: string) => ipcRenderer.invoke('save-program-settings', state),
+  makeBookmark: (args: MakeBookmarkArgs) => ipcRenderer.send('make-bookmark', args)
 }
 
 export const API = {

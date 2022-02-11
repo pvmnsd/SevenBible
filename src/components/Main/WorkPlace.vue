@@ -62,7 +62,7 @@ import {computed, provide, ref} from "vue";
 import useBibleModuleInfo from "src/hooks/useBibleModuleInfo";
 import {useBibleDatabaseConnection} from "src/hooks/DBconnectionController";
 import {initPopupWindows} from "src/hooks/usePopupWindows";
-import {bible_, id_, popup_} from 'src/symbols'
+import {bible_, bibleModuleInfo_, bookFullName_, bookShortName_, id_, popup_} from 'src/symbols'
 
 export default defineComponent({
   setup({id}) {
@@ -86,17 +86,17 @@ export default defineComponent({
       return view.showSubheadings + view.showCommentaries + view.showDreamy
     })
     const textDirections = computed(() => {
-      return bibleModuleInfo.value.right_to_left === "true"
+      return bibleModuleInfo.value?.right_to_left === "true"
         ? {
           nt: "rtl",
           ot: "rtl",
         }
-        : bibleModuleInfo.value.right_to_left_nt === "true"
+        : bibleModuleInfo.value?.right_to_left_nt === "true"
           ? {
             nt: "rtl",
             ot: "ltr",
           }
-          : bibleModuleInfo.value.right_to_left_ot === "true"
+          : bibleModuleInfo.value?.right_to_left_ot === "true"
             ? {
               nt: "ltr",
               ot: "rtl",
@@ -113,8 +113,8 @@ export default defineComponent({
       );
     });
     const strongNumbersPrefix = computed(() => {
-      if (bibleModuleInfo.value.strong_numbers_prefix) {
-        return bibleModuleInfo.value.strong_numbers_prefix;
+      if (bibleModuleInfo.value?.strong_numbers_prefix) {
+        return bibleModuleInfo.value?.strong_numbers_prefix;
       } else {
         return bible.value.bookNumber >= 470
           ? "G"
@@ -123,16 +123,16 @@ export default defineComponent({
     });
 
     const bibleTextKey = ref(0)
-    const bookFullName = ref(null)
-    const bookShortName = ref(null)
+    const bookFullName = ref<string>()
+    const bookShortName = ref<string>()
 
     provide(id_, id)
     provide("bibleTextKey", bibleTextKey)
-    provide('bookShortName', bookShortName)
-    provide('bookFullName', bookFullName)
+    provide(bookShortName_, bookShortName)
+    provide(bookFullName_, bookFullName)
     provide(popup_, popup)
     provide(bible_, bible)
-    provide('bibleModuleInfo', bibleModuleInfo)
+    provide(bibleModuleInfo_, bibleModuleInfo)
     provide('activeWorkPlaceWindows', activeWorkPlaceWindows)
     provide('allModulesClosed', allModulesClosed)
     provide('viewParamsRequiringRerender', viewParamsRequiringRerender)

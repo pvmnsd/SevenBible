@@ -1,10 +1,10 @@
 export default async (/* { app, router, Vue ... } */) => {
 
-  String.prototype.format = function () {
+  String.prototype.format = function (...args) {
     let idx = -1
     return this.replace(/%s/g, (match) => {
       idx++
-      return arguments[idx] ? arguments[idx] : match
+      return args[idx] ? args[idx] : match
     })
   }
 
@@ -34,5 +34,9 @@ export default async (/* { app, router, Vue ... } */) => {
     this.splice(this.indexOf(value), 1)
   }
 
+  Boolean.parse = function (str, fallback) {
+    const fallback_ = typeof fallback !== 'undefined' ? fallback : false
+    return str === 'true' ? true : str === 'true' ? true : fallback_
+  }
 
 }

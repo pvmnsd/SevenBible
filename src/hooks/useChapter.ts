@@ -1,11 +1,13 @@
-import {ref} from 'vue'
+import {Ref, ref} from 'vue'
 import useSevenBible from "src/hooks/useSevenBible";
 import {useI18n} from "vue-i18n";
 import {splitWords} from "src/helpers/regex";
+import {Bible} from "src/types/store/bible";
+import {BibleVerses} from "src-electron/types/bible";
 
-export default ({bible, bibleError}) => {
+export default ({bible, bibleError}:{bible: Ref<Bible>, bibleError: any}) => {
   const {t} = useI18n()
-  const chapter = ref(null)
+  const chapter = ref<BibleVerses[]>()
   const {bookFullName, bookShortName} = useSevenBible()
 
   const getChapter = async () => {
@@ -33,13 +35,13 @@ export default ({bible, bibleError}) => {
     bookShortName.value = data.bookNames.bookShortName
 
     //parse text
-    data.texts.forEach(element => element.text = splitWords(element.text))
+    data.texts.forEach((element: any) => element.text = splitWords(element.text))
     //stories
-    data.stories?.forEach(story => {
+    data.stories?.forEach((story: any) => {
       data.texts[story.verse - 1].story = story.title
     })
     //subheadings
-    data.subheadings?.forEach(subheading => {
+    data.subheadings?.forEach((subheading: any) => {
       const verseNumber = subheading.verse - 1
       if (!data.texts[verseNumber].subheadings) data.texts[verseNumber].subheadings = []
       data.texts[verseNumber].subheadings.push(subheading)
@@ -61,8 +63,6 @@ export default ({bible, bibleError}) => {
 
   return {
     chapter,
-    getChapter,
-    bookFullName,
-    bookShortName
+    getChapter
   }
 }

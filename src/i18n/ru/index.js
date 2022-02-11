@@ -14,6 +14,8 @@ export default {
   cancelSelection: 'Отменить выделение',
   copyRef: 'Копировать ссылку',
   makeBookmark: 'Создать закладку',
+  accept: 'Принять',
+  cancel: 'Отменить',
 
   textCopied: 'Текст скопирован',
 
@@ -27,6 +29,7 @@ export default {
 
   themeLabel: 'Тема',
   themeDescription: 'Управляет темой',
+  chapterString: 'Глава',
 
   control: 'Управление',
   verseNumberClickEventTitle: 'Событие нажатия на номер стиха',

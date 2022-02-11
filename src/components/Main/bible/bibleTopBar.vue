@@ -55,7 +55,7 @@
     <UIButton
       :tooltip="$t('cancelSelection')"
       icon="cancel"
-      @click="$emit('clear-selected-verses')"
+      @click="$emit('clearSelectedVerses')"
     />
 
     <q-separator vertical/>

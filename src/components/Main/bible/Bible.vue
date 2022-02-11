@@ -67,18 +67,18 @@
     <UIWorkPlaceWindowBody>
       <UIError v-if="bibleError.show" v-text="bibleError.message"/>
       <div v-else
-        class='bible-text scroll-container container'
-        :style="{fontSize: bible.view.fontSize + 'px'}"
-        :showBookName="bible.view.showBookName.toString()"
-        :showChapterNumber="bible.view.showChapterNumber.toString()"
-        :showSubheadings="bible.view.showSubheadings"
-        :showCommentaries="bible.view.showCommentaries"
-        :showVerseNumber="bible.view.showVerseNumber.toString()"
-        :showJesusWords="bible.view.showJesusWords.toString()"
-        :showStrongNumbers="bible.view.showStrongNumbers.toString()"
-        :showParagraphs="bible.view.showParagraphs.toString()"
-        :showContinuousText="bible.view.showContinuousText.toString()"
-        :showDreamy='bible.view.showDreamy.toString()'
+           class='bible-text scroll-container container'
+           :style="{fontSize: bible.view.fontSize + 'px'}"
+           :showBookName="bible.view.showBookName.toString()"
+           :showChapterNumber="bible.view.showChapterNumber.toString()"
+           :showSubheadings="bible.view.showSubheadings"
+           :showCommentaries="bible.view.showCommentaries"
+           :showVerseNumber="bible.view.showVerseNumber.toString()"
+           :showJesusWords="bible.view.showJesusWords.toString()"
+           :showStrongNumbers="bible.view.showStrongNumbers.toString()"
+           :showParagraphs="bible.view.showParagraphs.toString()"
+           :showContinuousText="bible.view.showContinuousText.toString()"
+           :showDreamy='bible.view.showDreamy.toString()'
       >
 
         <headings
@@ -165,15 +165,15 @@
   </UIWorkPlaceWindow>
 </template>
 
-<script>
+<script lang="ts">
 import Headings from 'components/Main/bible/headings.vue'
-import ContextMenu from "components/Main/bible/ContextMenu";
+import ContextMenu from "components/Main/bible/ContextMenu.vue";
 import useBibleEvents from "src/hooks/useBibleEvents";
 import useVerseNumber from "src/hooks/useVerseNumber";
-import UIWorkPlaceWindow from "components/UI/WorkPlaceWindow/UIWorkPlaceWindow";
-import UIWorkPlaceWindowHeader from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowHeader";
-import UIWorkPlaceWindowBody from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowBody";
-import BibleTopBar from "components/Main/bible/bibleTopBar";
+import UIWorkPlaceWindow from "components/UI/WorkPlaceWindow/UIWorkPlaceWindow.vue";
+import UIWorkPlaceWindowHeader from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowHeader.vue";
+import UIWorkPlaceWindowBody from "components/UI/WorkPlaceWindow/UIWorkPlaceWindowBody.vue";
+import BibleTopBar from "components/Main/bible/bibleTopBar.vue";
 import useSevenBible from "src/hooks/useSevenBible";
 import useStore from "src/hooks/useStore";
 import {onMounted, watch, computed, ref} from "vue";
@@ -185,7 +185,8 @@ import {clearTags, cropString} from "src/helpers";
 import {convertVerses} from "src/helpers/verseSelector";
 import useNotify from "src/wrappers/useNotify";
 import {useI18n} from "vue-i18n";
-import UIError from "components/UI/UIError";
+import UIError from "components/UI/UIError.vue";
+import {BookNumbers} from "src-electron/types/bookNumbers";
 
 export default {
   setup() {
@@ -193,16 +194,19 @@ export default {
       id,
       refString,
       viewParamsRequiringRerender,
+      bibleTextKey,
       bible,
-      bibleModuleInfo: info
+      bibleModuleInfo: info,
+      bookShortName,
+      bookFullName
     } = useSevenBible()
     const store = useStore()
-    const {bibleTextKey} = useSevenBible()
+
     const bibleError = ref({
       show: false,
       message: ''
     })
-    const {chapter, getChapter, bookFullName, bookShortName} = useChapter({bible, bibleError})
+    const {chapter, getChapter} = useChapter({bible, bibleError})
     const {footnotes, getFootNotes} = useFootnotes(bible)
 
 
@@ -241,12 +245,12 @@ export default {
     const notify = useNotify()
     const {t} = useI18n()
 
-    const copyVerses = (verses) => {
-      const ref = `${bookShortName.value} ${bible.value.chapterNumber}:${convertVerses(verses)}`
+    const copyVerses = (verses: number[]) => {
+      const ref = `${bookShortName?.value} ${bible.value.chapterNumber}:${convertVerses(verses)}`
       let text = ''
       text += '['
       verses.forEach(verseNumber => {
-        const html = chapter.value[verseNumber - 1].text
+        const html = chapter?.value![verseNumber - 1].text;
         text += clearTags(html)
       })
       text += ']'
@@ -272,19 +276,17 @@ export default {
       getFootNotes()
     });
 
+    const localizedChapterName = t('chapterString')
     const chapterString = computed(() => {
-      return info.value.chapter_string_ps &&
-      bible.value.bookNumber === 230
-        ? info.value.chapter_string_ps
-        : info.value.chapter_string_nt &&
-        bible.value.bookNumber >= 470
-          ? info.value.chapter_string_nt
-          : info.value.chapter_string_ot &&
-          bible.value.bookNumber < 470
-            ? info.value.chapter_string_ot
-            : info.value.chapter_string
-              ? info.value.chapter_string
-              : "Глава";
+      return info.value?.chapter_string_ps && bible.value.bookNumber === BookNumbers.Ps
+        ? info.value?.chapter_string_ps
+        : info.value?.chapter_string_nt && bible.value.bookNumber >= BookNumbers.Mat
+          ? info.value?.chapter_string_nt
+          : info.value?.chapter_string_ot && bible.value.bookNumber < BookNumbers.Mat
+            ? info.value?.chapter_string_ot
+            : info.value?.chapter_string
+              ? info.value?.chapter_string
+              : localizedChapterName
     })
 
 

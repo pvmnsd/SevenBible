@@ -1,18 +1,15 @@
 <template>
   <UIModalWindow>
     <UIModalWindowHeader @close="close">
-      <template #title>Закладка</template>
+      <template #title>Закладка {{ bookShortName }} {{ bible.chapterNumber }}:{{ convertedVerses }}</template>
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
     <UIModalWindowBody>
-      <q-editor
-        :model-value="editorHtml"
-        square
-        flat
-        toolbar-bg="grey"
-        content-class="fit"
-        class="flex d-column grow-1 overflow-hidden"
-        :toolbar="[['bold', 'italic', 'strike', 'underline']]"
+      <textarea
+        maxlength="1000"
+        placeholder="rsdafdsa fsdfdsf"
+        ref="textarea"
+        class="grow-1 overlay reset"
       />
       <q-separator/>
       <div class="container q-gutter-y-sm">
@@ -22,8 +19,8 @@
           class="shadow-4 rounded-borders overlay"
         />
         <div class="flex justify-around">
-          <UIButton :icon="'cancel'"/>
-          <UIButton :icon="'done'"/>
+          <UIButton :tooltip="$t('cancel')" :icon="'cancel'" @click="close"/>
+          <UIButton :tooltip="$t('accept')" :icon="'done'" @click="makeBookmark"/>
         </div>
       </div>
 
@@ -31,21 +28,21 @@
   </UIModalWindow>
 </template>
 
-<script>
-import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
-import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
-import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody";
+<script lang="ts">
+import UIModalWindow from "components/UI/ModalWindow/UIModalWindow.vue";
+import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader.vue";
+import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody.vue";
 import useSevenBible from "src/hooks/useSevenBible";
-import {onMounted, ref} from "vue";
-import BibleVerses from "components/Main/BibleVerses";
-import UIButton from "components/UI/UIButton";
+import {computed, onMounted, ref, defineComponent, Ref} from "vue";
+import BibleVerses from "components/Main/BibleVerses.vue";
+import UIButton from "components/UI/UIButton.vue";
+import {MakeBookmarkArgs} from "app/types/api-args/makeBookmarkArgs";
 
-export default {
+export default defineComponent({
   setup(props, {emit}) {
     const close = () => emit('close')
-    const {bible: {value: bible}} = useSevenBible()
-    const verses = ref(null)
-    const editorHtml = ref('')
+    const {bible: {value: bible}, bookShortName, bibleModuleInfo: {value: info}} = useSevenBible()
+    const verses = ref<[]>()
 
     const getVersesText = async () => {
       const settings = {
@@ -57,16 +54,55 @@ export default {
       }
       verses.value = await window.api.bible.getVerses(settings)
     }
-    onMounted(() => getVersesText())
+    const textarea = ref<HTMLTextAreaElement>()
+
+    onMounted(() => {
+      getVersesText()
+      setTimeout(() => {
+        textarea.value!.focus()
+      })
+    })
+
+    const convertedVerses = computed(() => {
+      return !props.selectedVerseTo || props.selectedVerseTo === props.selectedVerseFrom
+      ? props.selectedVerseFrom : `${props.selectedVerseFrom}-${props.selectedVerseTo}`
+    })
+
+    const makeBookmark = () => {
+      if (!props.selectedVerseFrom) return
+      const description = textarea.value?.value ?? ''
+      const date = new Date().toString()
+
+      const settings: MakeBookmarkArgs = {
+        categoryName: '[Без категории]',
+        bookmark: {
+          bookNumber: bible.bookNumber,
+          dateCreated: date,
+          dateModified: date,
+          description,
+          endChapterNumber: bible.chapterNumber,
+          endVerseNumber: props.selectedVerseTo ?? props.selectedVerseFrom,
+          isForRussianNumbering: Boolean.parse(info.russian_numbering),
+          startChapterNumber: bible.chapterNumber,
+          startVerseNumber: props.selectedVerseFrom,
+        }
+      }
+      console.log(settings)
+      window.api.system.makeBookmark(settings)
+    }
     return {
       close,
       verses,
-      editorHtml
+      bible,
+      bookShortName,
+      convertedVerses,
+      makeBookmark,
+      textarea
     }
   },
   props: {
     selectedVerseFrom: Number,
-    selectedVerseTo: [Number, undefined]
+    selectedVerseTo: Number
   },
   components: {
     UIButton,
@@ -75,5 +111,5 @@ export default {
     UIModalWindowHeader,
     UIModalWindow
   }
-}
+})
 </script>

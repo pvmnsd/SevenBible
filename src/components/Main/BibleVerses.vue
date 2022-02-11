@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div v-for="(verse, i) in verses" :key="i">
       <span v-text="i + 1 + ' '"/>
       <span v-html="verse.text"/>
@@ -15,7 +15,8 @@ export default defineComponent({
   props: {
     verses: {
       type: Array as PropType<BibleVerses[]>,
-      required: true
+      required: true,
+      default: () => []
     }
   }
 })

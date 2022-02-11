@@ -1,52 +1,52 @@
-import {inject} from "vue";
-import {bible_, id_, popup_} from "src/symbols";
+import {inject, Ref} from "vue";
+import {bible_, bibleModuleInfo_, bookFullName_, bookShortName_, id_, popup_} from "src/symbols";
 import {injectStrict} from "src/helpers";
 
 export default () => {
-  return{
-    get id(){
+  return {
+    get id() {
       return injectStrict(id_)
     },
-    get bibleTextKey(){
+    get bibleTextKey() {
       return inject('bibleTextKey')
     },
-    get activeWorkPlaces(){
+    get activeWorkPlaces() {
       return inject('activeWorkPlaces')
     },
-    get bookFullName(){
-      return inject('bookFullName')
+    get bookFullName() {
+      return injectStrict(bookFullName_)
     },
-    get bookShortName(){
-      return inject('bookShortName')
+    get bookShortName() {
+      return injectStrict(bookShortName_)
     },
-    get bible(){
+    get bible() {
       return injectStrict(bible_)
     },
-    get bibleModuleInfo(){
-      return inject('bibleModuleInfo')
+    get bibleModuleInfo() {
+      return injectStrict(bibleModuleInfo_)
     },
-    get activeWorkPlaceWindows(){
+    get activeWorkPlaceWindows() {
       return inject('activeWorkPlaceWindows')
     },
-    get allModulesClosed(){
+    get allModulesClosed() {
       return inject('allModulesClosed')
     },
-    get viewParamsRequiringRerender(){
+    get viewParamsRequiringRerender() {
       return inject('viewParamsRequiringRerender')
     },
-    get textDirections(){
+    get textDirections() {
       return inject('textDirections')
     },
-    get refString(){
+    get refString() {
       return inject('refString')
     },
-    get strongNumbersPrefix(){
+    get strongNumbersPrefix() {
       return inject('strongNumbersPrefix')
     },
-    get booksList(){
+    get booksList() {
       return inject('booksList')
     },
-    get popup(){
+    get popup() {
       return injectStrict(popup_)
     },
   }

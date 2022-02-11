@@ -5,7 +5,7 @@ declare global {
     api: typeof API
   }
   interface String{
-    format: () => void
+    format: (...args: any[]) => void
   }
   interface StringConstructor{
     hasReplacer: (string: string) => boolean
@@ -16,6 +16,9 @@ declare global {
   }
   interface Array<T> {
     remove: (value: any) => void
+  }
+  interface BooleanConstructor {
+    parse: (str: string | undefined, fallback?: boolean) => boolean
   }
 }
 
