@@ -1,7 +1,14 @@
 {
   "extends": "@quasar/app/tsconfig-preset",
   "compilerOptions": {
-    "moduleResolution": "Node",
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "strict": true,
     "baseUrl": ".",
     "paths": {
       "app/*": [

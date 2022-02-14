@@ -1,8 +1,10 @@
 import {API} from "src-electron/electron-preload";
 
 declare global {
+  var dir: string
   interface Window {
-    api: typeof API
+    api: typeof API,
+    dir: string
   }
   interface String{
     format: (...args: any[]) => void
@@ -21,4 +23,3 @@ declare global {
     parse: (str: string | undefined, fallback?: boolean) => boolean
   }
 }
-

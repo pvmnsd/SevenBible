@@ -22,11 +22,13 @@ import useStore from "src/hooks/useStore";
 import {Splitpanes, Pane} from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
 import WorkPlace from "../components/Main/WorkPlace";
+import useBookmarks from "../hooks/useBookmarks";
 
 
 export default {
   setup() {
     const store = useStore()
+    useBookmarks()
     const activeWorkPlaces = computed(() => store.getters.getActiveWorkPlaces())
     const indexes = computed(() => activeWorkPlaces.value.indexes)
     provide('activeWorkPlaces', activeWorkPlaces)

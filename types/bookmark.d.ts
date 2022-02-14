@@ -2,7 +2,7 @@ import {BookNumbers} from "src-electron/types/bookNumbers";
 
 export interface BookmarkCategory {
   backgroundHighlighting: boolean,
-  bookmarks: Bookmark,
+  bookmarks: Bookmark[],
   colorIndex: number,
   isDefault: boolean,
   name: string,
@@ -11,8 +11,8 @@ export interface BookmarkCategory {
 
 export interface Bookmark {
   bookNumber: BookNumbers,
-  dateCreated: string,
-  dateModified: string,
+  dateCreated?: string,
+  dateModified?: string,
   description: string,
   endChapterNumber: number,
   endVerseNumber: number,

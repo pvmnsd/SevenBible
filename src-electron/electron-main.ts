@@ -6,6 +6,7 @@ import {getSettings} from "./helpers/getSettings"
 import useApi from "src-electron/api/useApi";
 
 const dir = process.env.DEBUGGING ? '' : path.resolve(app.getPath('userData'))
+// @ts-ignore
 global.dir = dir
 process.env.dir = dir.toString()
 const {app: {win}} = getSettings()
@@ -24,7 +25,7 @@ try {
 
 useApi()
 
-let mainWindow
+let mainWindow: BrowserWindow | null
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -37,13 +38,13 @@ function createWindow() {
     ...win,
     webPreferences: {
       contextIsolation: true,
-      preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD)
+      preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD!)
     }
   })
 
   // enable(mainWindow.webContents)
 
-  mainWindow.loadURL(process.env.APP_URL)
+  mainWindow.loadURL(process.env.APP_URL!)
 
   if (process.env.DEBUGGING) {
     // if on DEV or Production with debug enabled
@@ -51,16 +52,16 @@ function createWindow() {
   } else {
     // we're on production; no access to devtools pls
     mainWindow.webContents.on('devtools-opened', () => {
-      mainWindow.webContents.closeDevTools()
+      mainWindow?.webContents.closeDevTools()
     })
   }
 
   mainWindow.on('close', (e) => {
     e.preventDefault()
     ipcMain.once('close-app', () => {
-      mainWindow.destroy()
+      mainWindow?.destroy()
     })
-    mainWindow.webContents.send('close-app')
+    mainWindow?.webContents.send('close-app')
   })
 
   mainWindow.on('closed', () => {

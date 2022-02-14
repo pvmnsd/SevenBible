@@ -5,12 +5,14 @@
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
     <UIModalWindowBody>
+      <div class="container fit">
       <textarea
         maxlength="1000"
-        placeholder="rsdafdsa fsdfdsf"
+        :placeholder="$t('noteToBookmark')"
         ref="textarea"
-        class="grow-1 overlay reset"
+        class="fit overlay reset shadow-4 rounded-borders container"
       />
+      </div>
       <q-separator/>
       <div class="container q-gutter-y-sm">
         <BibleVerses
@@ -37,13 +39,19 @@ import {computed, onMounted, ref, defineComponent, Ref} from "vue";
 import BibleVerses from "components/Main/BibleVerses.vue";
 import UIButton from "components/UI/UIButton.vue";
 import {MakeBookmarkArgs} from "app/types/api-args/makeBookmarkArgs";
+import {createDateString} from "src/helpers";
 
 export default defineComponent({
   setup(props, {emit}) {
     const close = () => emit('close')
-    const {bible: {value: bible}, bookShortName, bibleModuleInfo: {value: info}} = useSevenBible()
-    const verses = ref<[]>()
+    const {
+      bible: {value: bible},
+      bookShortName,
+      bibleModuleInfo: {value: info},
+      bookmarks
+    } = useSevenBible()
 
+    const verses = ref<[]>()
     const getVersesText = async () => {
       const settings = {
         filename: bible.fileName,
@@ -53,6 +61,7 @@ export default defineComponent({
         selectedVerseTo: props.selectedVerseTo
       }
       verses.value = await window.api.bible.getVerses(settings)
+      bookmarks.fetchBookmarks()
     }
     const textarea = ref<HTMLTextAreaElement>()
 
@@ -65,20 +74,17 @@ export default defineComponent({
 
     const convertedVerses = computed(() => {
       return !props.selectedVerseTo || props.selectedVerseTo === props.selectedVerseFrom
-      ? props.selectedVerseFrom : `${props.selectedVerseFrom}-${props.selectedVerseTo}`
+        ? props.selectedVerseFrom : `${props.selectedVerseFrom}-${props.selectedVerseTo}`
     })
 
-    const makeBookmark = () => {
+    const makeBookmark = async () => {
       if (!props.selectedVerseFrom) return
       const description = textarea.value?.value ?? ''
-      const date = new Date().toString()
 
       const settings: MakeBookmarkArgs = {
         categoryName: '[Без категории]',
         bookmark: {
           bookNumber: bible.bookNumber,
-          dateCreated: date,
-          dateModified: date,
           description,
           endChapterNumber: bible.chapterNumber,
           endVerseNumber: props.selectedVerseTo ?? props.selectedVerseFrom,
@@ -87,8 +93,14 @@ export default defineComponent({
           startVerseNumber: props.selectedVerseFrom,
         }
       }
-      console.log(settings)
-      window.api.system.makeBookmark(settings)
+      const date = createDateString()
+      if (props.isEditMode)
+        settings.bookmark.dateModified = date
+      else {
+        settings.bookmark.dateCreated = date
+        settings.bookmark.dateModified = date
+      }
+      await window.api.system.makeBookmark(settings)
     }
     return {
       close,
@@ -102,7 +114,11 @@ export default defineComponent({
   },
   props: {
     selectedVerseFrom: Number,
-    selectedVerseTo: Number
+    selectedVerseTo: Number,
+    isEditMode: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {
     UIButton,

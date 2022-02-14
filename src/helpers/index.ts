@@ -37,3 +37,18 @@ export const initBooksCategories = (booksList: BibleBooksFront[]) => {
     book.bookCategory = getBookCategory(book.book_number)
   })
 }
+
+export const createDateString = () => {
+  return new Date().toLocaleString('en', {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+
+    hour: "2-digit",
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h24',
+  })
+    .replace(/\//g, '-')
+    .replace(/,/, '')
+}

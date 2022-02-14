@@ -1,5 +1,5 @@
 import {inject, Ref} from "vue";
-import {bible_, bibleModuleInfo_, bookFullName_, bookShortName_, id_, popup_} from "src/symbols";
+import {bible_, bibleModuleInfo_, bookFullName_, bookmarks_, bookShortName_, id_, popup_} from "src/symbols";
 import {injectStrict} from "src/helpers";
 
 export default () => {
@@ -49,5 +49,8 @@ export default () => {
     get popup() {
       return injectStrict(popup_)
     },
+    get bookmarks() {
+      return injectStrict(bookmarks_)
+    }
   }
 }
