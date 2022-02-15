@@ -1,9 +1,8 @@
 import {computed} from "vue";
 import useSevenBible from "src/hooks/useSevenBible";
-import useNotify from "src/wrappers/useNotify";
+import {notify} from "src/wrappers/notify";
 
 export default (id, store, strongNumbersPrefix) => {
-  const notify = useNotify()
   const {bibleModuleInfo: info} = useSevenBible()
 
   const isStrong = computed(() =>

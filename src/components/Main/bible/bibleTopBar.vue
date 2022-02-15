@@ -128,7 +128,7 @@ import useNavigations from "src/hooks/useNavigations";
 import {computed} from "vue";
 import {convertVerses} from 'src/helpers/verseSelector'
 import UIButton from "components/UI/UIButton";
-import useNotify from "src/wrappers/useNotify";
+import {notify} from "src/wrappers/notify";
 import {useI18n} from "vue-i18n";
 import {cropString} from "src/helpers";
 
@@ -144,7 +144,6 @@ export default {
 
     const activeWorkPlacesCount = computed(() => activeWorkPlaces.value.indexes.length)
 
-    const notify = useNotify()
     const {t} = useI18n()
 
     const openPopupAndSetRef = async (callback, props = {}) => {

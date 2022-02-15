@@ -35,11 +35,13 @@ import UIModalWindow from "components/UI/ModalWindow/UIModalWindow.vue";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader.vue";
 import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody.vue";
 import useSevenBible from "src/hooks/useSevenBible";
-import {computed, onMounted, ref, defineComponent, Ref} from "vue";
+import {computed, onMounted, ref, defineComponent} from "vue";
 import BibleVerses from "components/Main/BibleVerses.vue";
 import UIButton from "components/UI/UIButton.vue";
 import {MakeBookmarkArgs} from "app/types/api-args/makeBookmarkArgs";
 import {createDateString} from "src/helpers";
+import {notify} from "src/wrappers/notify";
+import {useI18n} from "vue-i18n";
 
 export default defineComponent({
   setup(props, {emit}) {
@@ -50,8 +52,8 @@ export default defineComponent({
       bibleModuleInfo: {value: info},
       bookmarks
     } = useSevenBible()
-
     const verses = ref<[]>()
+
     const getVersesText = async () => {
       const settings = {
         filename: bible.fileName,
@@ -61,10 +63,8 @@ export default defineComponent({
         selectedVerseTo: props.selectedVerseTo
       }
       verses.value = await window.api.bible.getVerses(settings)
-      bookmarks.fetchBookmarks()
     }
     const textarea = ref<HTMLTextAreaElement>()
-
     onMounted(() => {
       getVersesText()
       setTimeout(() => {
@@ -76,6 +76,8 @@ export default defineComponent({
       return !props.selectedVerseTo || props.selectedVerseTo === props.selectedVerseFrom
         ? props.selectedVerseFrom : `${props.selectedVerseFrom}-${props.selectedVerseTo}`
     })
+
+    const {t} = useI18n()
 
     const makeBookmark = async () => {
       if (!props.selectedVerseFrom) return
@@ -101,6 +103,9 @@ export default defineComponent({
         settings.bookmark.dateModified = date
       }
       await window.api.system.makeBookmark(settings)
+      bookmarks.fetchBookmarks()
+      close()
+      notify.showInfo(t('bookmarkWasCreated'))
     }
     return {
       close,

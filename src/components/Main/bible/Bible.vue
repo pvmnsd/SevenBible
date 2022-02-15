@@ -183,7 +183,7 @@ import useVerseSelector from "src/hooks/useVerseSelector";
 import useVerse from "src/hooks/useVerse";
 import {clearTags, cropString} from "src/helpers";
 import {convertVerses} from "src/helpers/verseSelector";
-import useNotify from "src/wrappers/useNotify";
+import {notify} from "src/wrappers/notify";
 import {useI18n} from "vue-i18n";
 import UIError from "components/UI/UIError.vue";
 import {BookNumbers} from "src-electron/types/bookNumbers";
@@ -242,7 +242,6 @@ export default {
       clearSelectedVerses
     } = useVerseSelector()
 
-    const notify = useNotify()
     const {t} = useI18n()
 
     const copyVerses = (verses: number[]) => {

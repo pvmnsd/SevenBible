@@ -100,7 +100,7 @@ import UIModalWindowSettings from "components/UI/ModalWindow/UIModalWindowSettin
 import useSevenBible from "src/hooks/useSevenBible";
 import StrongBody from "components/Main/strong/StrongBody";
 import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
-import useNotify from "src/wrappers/useNotify";
+import {notify} from "src/wrappers/notify";
 import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody";
 
 export default defineComponent({
@@ -144,7 +144,6 @@ export default defineComponent({
     const showLoader = ref(false)
     const strongNumbers = ref([])
 
-    const notify = useNotify()
     const foundedTexts = ref([])
     const searchByStrong = async () => {
       showLoader.value = true
