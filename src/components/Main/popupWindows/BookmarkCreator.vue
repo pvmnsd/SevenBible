@@ -5,7 +5,11 @@
       <q-btn disable flat round icon='more_vert'/>
     </UIModalWindowHeader>
     <UIModalWindowBody>
-      <div class="container fit">
+      <div class="container fit flex d-column">
+        <q-select
+          v-model="selectedCategory"
+          :options="categoriesList"
+        />
       <textarea
         maxlength="1000"
         :placeholder="$t('noteToBookmark')"
@@ -38,7 +42,7 @@ import useSevenBible from "src/hooks/useSevenBible";
 import {computed, onMounted, ref, defineComponent} from "vue";
 import BibleVerses from "components/Main/BibleVerses.vue";
 import UIButton from "components/UI/UIButton.vue";
-import {MakeBookmarkArgs} from "app/types/api-args/makeBookmarkArgs";
+import {MakeBookmarkArgs} from "app/types/api-args/systemArgs";
 import {createDateString} from "src/helpers";
 import {notify} from "src/wrappers/notify";
 import {useI18n} from "vue-i18n";
@@ -50,7 +54,8 @@ export default defineComponent({
       bible: {value: bible},
       bookShortName,
       bibleModuleInfo: {value: info},
-      bookmarks
+      bookmarks,
+      updateBibleWindows
     } = useSevenBible()
     const verses = ref<[]>()
 
@@ -72,19 +77,22 @@ export default defineComponent({
       })
     })
 
+    const {t} = useI18n()
+
     const convertedVerses = computed(() => {
       return !props.selectedVerseTo || props.selectedVerseTo === props.selectedVerseFrom
         ? props.selectedVerseFrom : `${props.selectedVerseFrom}-${props.selectedVerseTo}`
     })
 
-    const {t} = useI18n()
+    const categoriesList = bookmarks.bookmarkCategories.value.map(category => category.name)
+    const selectedCategory = ref(categoriesList[0])
 
     const makeBookmark = async () => {
       if (!props.selectedVerseFrom) return
       const description = textarea.value?.value ?? ''
 
       const settings: MakeBookmarkArgs = {
-        categoryName: '[Без категории]',
+        categoryName: selectedCategory.value,
         bookmark: {
           bookNumber: bible.bookNumber,
           description,
@@ -102,11 +110,12 @@ export default defineComponent({
         settings.bookmark.dateCreated = date
         settings.bookmark.dateModified = date
       }
-      await window.api.system.makeBookmark(settings)
-      bookmarks.fetchBookmarks()
       close()
+      await bookmarks.addBookmark(settings)
       notify.showInfo(t('bookmarkWasCreated'))
+      updateBibleWindows()
     }
+
     return {
       close,
       verses,
@@ -114,7 +123,9 @@ export default defineComponent({
       bookShortName,
       convertedVerses,
       makeBookmark,
-      textarea
+      textarea,
+      categoriesList,
+      selectedCategory
     }
   },
   props: {

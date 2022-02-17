@@ -4,11 +4,12 @@ import {useI18n} from "vue-i18n";
 import {splitWords} from "src/helpers/regex";
 import {Bible} from "src/types/store/bible";
 import {BibleVerses} from "src-electron/types/bible";
+import {Bookmark} from "app/types/bookmark";
 
-export default ({bible, bibleError}:{bible: Ref<Bible>, bibleError: any}) => {
+export default ({bible, bibleError}: { bible: Ref<Bible>, bibleError: any }) => {
   const {t} = useI18n()
   const chapter = ref<BibleVerses[]>()
-  const {bookFullName, bookShortName} = useSevenBible()
+  const {bookFullName, bookShortName, bookmarks} = useSevenBible()
 
   const getChapter = async () => {
     let settings = {
@@ -58,6 +59,24 @@ export default ({bible, bibleError}:{bible: Ref<Bible>, bibleError: any}) => {
         }
       })
     }
+    //bookmarks
+    bookmarks.bookmarkCategories.value.forEach(category => {
+      category.bookmarks.forEach(bookmark => {
+        const isCognateBookNumber = bookmark.bookNumber === settings.bookNumber
+        const isCognateChapterNumber = [bookmark.startChapterNumber, bookmark.endChapterNumber].includes(settings.chapterNumber)
+        if (isCognateBookNumber && isCognateChapterNumber)
+          for (let i = bookmark.startVerseNumber; i <= bookmark.endVerseNumber; i++) {
+            const verseNumber = i - 1
+            const currentVerse = data.texts[verseNumber]
+
+            if (!currentVerse.bookmarkCategories)
+              currentVerse.bookmarkCategories = {}
+            if (!currentVerse.bookmarkCategories[category.name])
+              currentVerse.bookmarkCategories[category.name] = {...category, bookmarks: []}
+            currentVerse.bookmarkCategories[category.name].bookmarks.push(bookmark)
+          }
+      })
+    })
     chapter.value = data.texts
   }
 

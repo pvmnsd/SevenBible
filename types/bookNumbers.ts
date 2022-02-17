@@ -105,3 +105,4 @@ export const nonCanonicalBooks = [
   BookNumbers.Esd2,
   BookNumbers.Lao
 ]
+

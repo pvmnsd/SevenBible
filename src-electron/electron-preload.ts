@@ -4,7 +4,8 @@ import fs from 'fs'
 import {BibleBooks, BibleInfo} from "src-electron/types/bible";
 import {Commentaries} from "src-electron/types/commentaries";
 import {BookmarkCategory} from "app/types/bookmark";
-import {MakeBookmarkArgs} from "app/types/api-args/makeBookmarkArgs";
+import {MakeBookmarkArgs} from "app/types/api-args/systemArgs";
+import {RemoveBookmarkArgs} from "app/types/api-args/systemArgs";
 
 
 window.dir = process.env.dir!
@@ -61,7 +62,8 @@ const system = {
   getFontList: () => ipcRenderer.invoke('get-font-list'),
   saveProgramSettings: (state: string) => ipcRenderer.invoke('save-program-settings', state),
   makeBookmark: (args: MakeBookmarkArgs): Promise<any> => ipcRenderer.invoke('make-bookmark', args),
-  getBookmarkCategories: (): Promise<BookmarkCategory[]> => ipcRenderer.invoke('get-bookmark-categories')
+  getBookmarkCategories: (): Promise<BookmarkCategory[]> => ipcRenderer.invoke('get-bookmark-categories'),
+  removeBookmark: (args: RemoveBookmarkArgs): Promise<void> => ipcRenderer.invoke('remove-bookmark', args)
 }
 
 export const API = {

@@ -11,6 +11,26 @@
   </q-menu>
 
   <q-menu
+    ref="bookmarkBlockMenuRef"
+    transition-show="jump-down"
+    transition-hide="jump-up"
+    no-parent-event
+    auto-close
+    :target="bookmarkBlockMenuTarget"
+  >
+    <q-list>
+      <q-item
+        v-for="(item, i) in bookmarkBlockContextMenu"
+        :key="i"
+        clickable
+        @click="item.callback"
+      >
+        <q-item-section v-t="item.title"/>
+      </q-item>
+    </q-list>
+  </q-menu>
+
+  <q-menu
     ref="verseNumberPopup"
     transition-show="jump-down"
     transition-hide="jump-up"
@@ -148,6 +168,25 @@
           </span>
 
             </span>
+
+            <div
+              class="bookmarks"
+              v-if="verse.bookmarkCategories"
+            >
+              <template
+                v-for="(category, categoryName, i) of verse.bookmarkCategories"
+                :key="i"
+                class="bookmark-category"
+              >
+                <div
+                  v-for="(bookmark, i) in category.bookmarks"
+                  :key="i"
+                  class="bookmark"
+                  @contextmenu.stop="onBookmarkBlockContextMenu($event, categoryName, bookmark)"
+                />
+              </template>
+            </div>
+
             <span class="checkbox" :class="{visible: selectedVerses.includes(i + 1)}">
               <q-checkbox
                 @click="onSelectorClick(i + 1)"
@@ -156,6 +195,7 @@
                 size="1.7em"
               />
             </span>
+
           </div>
 
         </div>
@@ -186,7 +226,8 @@ import {convertVerses} from "src/helpers/verseSelector";
 import {notify} from "src/wrappers/notify";
 import {useI18n} from "vue-i18n";
 import UIError from "components/UI/UIError.vue";
-import {BookNumbers} from "src-electron/types/bookNumbers";
+import {BookNumbers} from "app/types/bookNumbers";
+import useBookmarkBlock from "src/hooks/useBookmarkBlock";
 
 export default {
   setup() {
@@ -198,7 +239,8 @@ export default {
       bible,
       bibleModuleInfo: info,
       bookShortName,
-      bookFullName
+      bookFullName,
+      bibleWindowsUpdates
     } = useSevenBible()
     const store = useStore()
 
@@ -214,6 +256,7 @@ export default {
       refString,
       viewParamsRequiringRerender,
       bibleTextKey,
+      bibleWindowsUpdates,
       () => bible.value.fileName
     ], async () => {
       await getChapter()
@@ -234,6 +277,13 @@ export default {
       htmlPopupText,
       htmlPopupTarget
     } = useBibleEvents(id, store, footnotes)
+
+    const {
+      bookmarkBlockContextMenu,
+      bookmarkBlockMenuRef,
+      bookmarkBlockMenuTarget,
+      onBookmarkBlockContextMenu
+    } = useBookmarkBlock()
 
     const {
       selectedVerses,
@@ -325,7 +375,12 @@ export default {
       openCrossreferencesSearcher,
       openTranslationsComparator,
       openBookmarkCreator,
-      copyVerses
+      copyVerses,
+
+      bookmarkBlockContextMenu,
+      bookmarkBlockMenuRef,
+      bookmarkBlockMenuTarget,
+      onBookmarkBlockContextMenu
     }
   },
   components: {

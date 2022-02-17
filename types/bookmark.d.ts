@@ -1,4 +1,4 @@
-import {BookNumbers} from "src-electron/types/bookNumbers";
+import {BookNumbers} from "app/types/bookNumbers";
 
 export interface BookmarkCategory {
   backgroundHighlighting: boolean,

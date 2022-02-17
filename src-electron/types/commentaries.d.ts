@@ -1,4 +1,4 @@
-import {BookNumbers} from "src-electron/types/bookNumbers";
+import {BookNumbers} from "app/types/bookNumbers";
 import {InfoTable} from "src-electron/types/infoTable";
 
 type nullable = 0 | null

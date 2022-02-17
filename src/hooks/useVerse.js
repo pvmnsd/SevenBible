@@ -10,8 +10,8 @@ export default () => {
   ]
 
   const onVerseContextmenu = ({target}) => {
-    versePopupTarget.value = target
-    versePopup.value.toggle()
+    // versePopupTarget.value = target
+    // versePopup.value.toggle()
   }
   return {
     onVerseContextmenu,

@@ -43,7 +43,6 @@
       >
       {{ bookFullName }}
       </span>
-
       <q-dialog v-model="bookIntroductionWindow">
         <q-card>
 
@@ -63,12 +62,9 @@
 
         </q-card>
       </q-dialog>
-
     </div>
 
-    <div
-      class='chapter-number text-h4'
-    >
+    <div class='chapter-number text-h4'>
       {{
         String.hasReplacer(chapterString) ? chapterString.format(chapterNumber) : `${chapterString} ${chapterNumber}`
       }}

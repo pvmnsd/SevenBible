@@ -16,6 +16,9 @@ export default {
   makeBookmark: 'Создать закладку',
   accept: 'Принять',
   cancel: 'Отменить',
+  // deleteBookmark: 'Удалить закладку',
+  delete: 'Удалить',
+  show: 'Показать',
 
   textCopied: 'Текст скопирован',
 

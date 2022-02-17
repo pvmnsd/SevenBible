@@ -1,7 +1,7 @@
 import {inject, InjectionKey} from "vue";
 import {BibleBooksFront} from "src/types/bibleModule";
-import {BookNumbers, nonCanonicalBooks} from "src-electron/types/bookNumbers";
-import {BookCategories} from "src-electron/types/bookCategory";
+import {BookNumbers, nonCanonicalBooks} from "app/types/bookNumbers";
+import {BookCategories} from "app/types/bookCategory";
 
 export const myRef = (value: any) => ({value})
 

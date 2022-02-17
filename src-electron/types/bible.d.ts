@@ -1,5 +1,5 @@
-import {BookNumbers} from "src-electron/types/bookNumbers";
-import {BookCategories} from "src-electron/types/bookCategory";
+import {BookNumbers} from "app/types/bookNumbers";
+import {BookCategories} from "app/types/bookCategory";
 import {InfoTable} from "src-electron/types/infoTable";
 
 type boolstr = 'true' | 'false'

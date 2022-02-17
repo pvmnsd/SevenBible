@@ -16,19 +16,27 @@
   </div>
 </template>
 
-<script>
-import {computed, provide} from "vue"
+<script lang="ts">
+import {computed, provide, ref} from "vue"
 import useStore from "src/hooks/useStore";
 import {Splitpanes, Pane} from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
-import WorkPlace from "../components/Main/WorkPlace";
-import useBookmarks from "../hooks/useBookmarks";
+import WorkPlace from "../components/Main/WorkPlace.vue";
+import {useBookmarks} from "../hooks/useBookmarks";
+import {bibleWindowsUpdates_, updateBibleWindows_} from "src/symbols";
 
 
 export default {
   setup() {
     const store = useStore()
+
+    const bibleWindowsUpdates = ref<number>(0)
+    const updateBibleWindows = () => bibleWindowsUpdates.value++
+    provide(bibleWindowsUpdates_, bibleWindowsUpdates)
+    provide(updateBibleWindows_, updateBibleWindows)
+
     useBookmarks()
+
     const activeWorkPlaces = computed(() => store.getters.getActiveWorkPlaces())
     const indexes = computed(() => activeWorkPlaces.value.indexes)
     provide('activeWorkPlaces', activeWorkPlaces)

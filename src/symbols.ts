@@ -12,3 +12,6 @@ export const bibleModuleInfo_: InjectionKey<Ref<BibleInfo>> = Symbol('bibleModul
 export const bookFullName_: InjectionKey<Ref<string>> = Symbol('bookFullName')
 export const bookShortName_: InjectionKey<Ref<string>> = Symbol('bookShortName')
 export const bookmarks_: InjectionKey<typeof bookmarks> = Symbol('bookmarks')
+//main
+export const bibleWindowsUpdates_: InjectionKey<Ref<number>> = Symbol('bibleWindowsUpdates')
+export const updateBibleWindows_: InjectionKey<() => void> = Symbol('updateBibleWindows')
