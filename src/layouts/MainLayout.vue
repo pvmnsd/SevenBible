@@ -1,5 +1,5 @@
 <template>
-  <div :style="font" class="flex d-column fit">
+  <q-layout :style="font" class="flex d-column fit">
 
     <SystemBar @toggleDrawer="visibleRight = !visibleRight"/>
     <div class="flex col">
@@ -11,7 +11,7 @@
       <SideMenu :visibleRight="visibleRight"/>
     </div>
 
-  </div>
+  </q-layout>
 </template>
 
 <script>

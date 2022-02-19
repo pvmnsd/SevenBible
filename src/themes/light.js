@@ -26,6 +26,7 @@ module.exports = {
   "primary": "#006fb6",
   "secondary": "#26a69a",
   "background": "#ffffff",
+  "background-transparent": "rgba(0,0,0,0.4)",
   "background-active": "rgb(255, 227, 150)",
   "text": "#000000",
   "primary-text": "#ffffff",

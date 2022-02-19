@@ -1,4 +1,5 @@
 export default {
+  //pages
   mainPage: 'Главная',
   modulesPage: 'Модули',
   settingsPage: 'Настройки',
@@ -20,15 +21,13 @@ export default {
   delete: 'Удалить',
   show: 'Показать',
 
-  textCopied: 'Текст скопирован',
-
+  //tabs
   generalTab: 'Общие',
   themeEditorTab: 'Редактор тем',
 
   appearance: 'Внешний вид',
-
   appFontTitle: 'Шрифт',
-  appFontDescription: 'Управляет шрифом главного окна',
+  appFontDescription: 'Управляет шрифтом главного окна',
 
   themeLabel: 'Тема',
   themeDescription: 'Управляет темой',
@@ -46,5 +45,8 @@ export default {
   nothingFounded: 'Ничего не найдено',
   bookNotFounded: 'Текущий модуль Библии %s не содержит стихов для выбранной книги. Выберите пожалуйста другую книгу с помощью широкой центральной кнопки в заголовке.',
   //info
-  bookmarkWasCreated: 'Заметка успешно создна'
+  bookmarkWasCreated: 'Заметка успешно создна',
+  textCopied: 'Текст скопирован',
+
+  bookmarks: 'Закладки',
 }

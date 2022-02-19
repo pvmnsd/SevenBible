@@ -9,7 +9,9 @@
 .text-text {
   color: var(--text-color) !important
 }
-
+.cursor-move {
+  cursor: move;
+}
 .no-border {
   border: 0 !important;
 }

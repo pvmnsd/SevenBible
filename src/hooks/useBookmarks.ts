@@ -15,7 +15,7 @@ const addBookmark = async (args: MakeBookmarkArgs) => {
   fetchBookmarks()
 }
 const getBookmarkIndex = (bookmarkCategory: string, bookmark: Bookmark): RemoveBookmarkArgs => {
-  const categoryIndex = bookmarkCategories.value.findIndex(category => category.name = bookmarkCategory)
+  const categoryIndex = bookmarkCategories.value.findIndex(category => category.name === bookmarkCategory)
 
   const bookmarkIndex = bookmarkCategories.value[categoryIndex].bookmarks.findIndex(curr => {
     return curr.description === bookmark.description
@@ -36,6 +36,8 @@ const getBookmarkIndex = (bookmarkCategory: string, bookmark: Bookmark): RemoveB
 const deleteBookmark = (bookmarkCategory: string, bookmark: Bookmark) => {
   const indexes = getBookmarkIndex(bookmarkCategory, bookmark)
   const {categoryIndex, bookmarkIndex} = indexes
+  if (categoryIndex < 0 || bookmarkIndex < 0)
+    return
   bookmarkCategories.value[categoryIndex].bookmarks.splice(bookmarkIndex, 1)
   bookmarkCategories.value[categoryIndex].bookmarks
   window.api.system.removeBookmark(indexes)

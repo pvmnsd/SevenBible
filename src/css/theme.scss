@@ -153,3 +153,10 @@ body {
     }
   }
 }
+.bookmark-block {
+  min-width: 5px;
+  background-color: rgba(110, 0, 0, 0.42);
+}
+.background-transparent {
+  background-color: var(--background-transparent) !important;
+}

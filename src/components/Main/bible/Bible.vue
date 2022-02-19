@@ -172,6 +172,7 @@
             <div
               class="bookmarks"
               v-if="verse.bookmarkCategories"
+              @click="onBookmarkBlockClick(verse.bookmarkCategories)"
             >
               <template
                 v-for="(category, categoryName, i) of verse.bookmarkCategories"
@@ -228,6 +229,7 @@ import {useI18n} from "vue-i18n";
 import UIError from "components/UI/UIError.vue";
 import {BookNumbers} from "app/types/bookNumbers";
 import useBookmarkBlock from "src/hooks/useBookmarkBlock";
+import UIDraggableDialog from "components/UIDraggableDialog.vue";
 
 export default {
   setup() {
@@ -282,7 +284,8 @@ export default {
       bookmarkBlockContextMenu,
       bookmarkBlockMenuRef,
       bookmarkBlockMenuTarget,
-      onBookmarkBlockContextMenu
+      onBookmarkBlockContextMenu,
+      onBookmarkBlockClick
     } = useBookmarkBlock()
 
     const {
@@ -380,10 +383,12 @@ export default {
       bookmarkBlockContextMenu,
       bookmarkBlockMenuRef,
       bookmarkBlockMenuTarget,
-      onBookmarkBlockContextMenu
+      onBookmarkBlockContextMenu,
+      onBookmarkBlockClick
     }
   },
   components: {
+    UIDraggableDialog,
     UIError,
     UIWorkPlaceWindowBody,
     UIWorkPlaceWindowHeader,
