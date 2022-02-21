@@ -3,13 +3,13 @@
     <ModuleSelector
       module="commentaries"
       :path="['modules', 'commentaries']"
-      :file-name="commentariesFileName"
+      :file-name="props.commentariesFileName"
     />
     <q-separator vertical/>
 
     <q-btn
       class="grow-1"
-      :label="bookShortName + ' ' + chapterNumber"
+      :label="props.bookShortName + ' ' + props.chapterNumber"
       no-caps
       unelevated
       no-wrap
@@ -17,35 +17,32 @@
     />
     <q-separator vertical/>
 
-    <q-btn
-      icon="close"
-      unelevated
-      stretch
+    <UIButton
+      :icon="Icons.Close"
       @click="close"
     />
   </UIButtonset>
   <q-separator/>
 </template>
-<script>
-import ModuleSelector from "components/Main/popupWindows/ModuleSelector"
+
+<script setup lang="ts">
+import ModuleSelector from "components/Main/popupWindows/ModuleSelector.vue"
 import useStore from "src/hooks/useStore";
-import {horizontalScrollOnWheel} from "src/hooks/HorizontalScrollOnWheel";
-import UIButtonset from "components/UI/UIButtonset";
+import UIButtonset from "components/UI/UIButtonset.vue";
 import useSevenBible from "src/hooks/useSevenBible";
+import UIButton from "components/UI/UIButton.vue";
+import {Icons} from "src/types/icons";
 
-export default {
-  setup() {
-    const {id} = useSevenBible()
-    const store = useStore()
-    const close = () => store.state.set(`workPlace.${id}.commentaries.show`, false)
-
-    return {close, horizontalScrollOnWheel}
-  },
-  props: {
-    commentariesFileName: String,
-    bookShortName: String,
-    chapterNumber: Number
-  },
-  components: {UIButtonset, ModuleSelector}
+interface Props {
+  commentariesFileName: string,
+  bookShortName: string,
+  chapterNumber: number
 }
+
+const props = defineProps<Props>()
+
+const {id} = useSevenBible()
+const store = useStore()
+const close = () => store.state.set(`workPlace.${id}.commentaries.show`, false)
+
 </script>

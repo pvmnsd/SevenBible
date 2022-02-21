@@ -19,7 +19,7 @@ export default () => {
     get bibleTextKey() {
       return inject('bibleTextKey')
     },
-    get activeWorkPlaces() {
+    get activeWorkPlaces(): any {
       return inject('activeWorkPlaces')
     },
     get bookFullName() {

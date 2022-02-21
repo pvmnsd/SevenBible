@@ -2,8 +2,7 @@
   <UIModalWindow @close="close">
     <UIModalWindowHeader @close="close">
       <template #title>{{ bookShortName }} {{ chapterNumber }}:{{ selectedVerses[0] }} - ссылки</template>
-      <q-btn flat round icon='payments'/>
-      <q-btn flat round icon='more_vert'/>
+      <q-btn flat round :icon='Icons.Dots'/>
     </UIModalWindowHeader>
 
     <UIModalWindowBody>
@@ -89,88 +88,76 @@
   </UIModalWindow>
 </template>
 
-<script>
+<script setup lang="ts">
 import useStore from "src/hooks/useStore";
 import {onMounted, ref} from "vue";
-import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
-import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
+import UIModalWindow from "components/UI/ModalWindow/UIModalWindow.vue";
+import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader.vue";
 import useSevenBible from "src/hooks/useSevenBible";
-import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody";
-import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
+import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody.vue";
+import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller.vue";
+import {Icons} from "src/types/icons";
 
-export default {
-  components: {DynamicVirtualScroller, UIModalWindowBody, UIModalWindowHeader, UIModalWindow},
-  setup(props, {emit}) {
-    const {id, textDirections, bookShortName} = useSevenBible()
-    const close = (ref) => emit('close', ref)
-    const store = useStore()
+interface Props {
+  selectedVerses: number[]
+}
+const props = defineProps<Props>()
+const emit = defineEmits(['close'])
 
-    const {
-      bookNumber,
-      chapterNumber,
-      fileName: bibleFileName
-    } = store.native.state.settings.workPlace[id].bible
+const {id, textDirections, bookShortName} = useSevenBible()
+const close = (ref: any) => emit('close', ref)
+const store = useStore()
 
-    const crossreferences = ref([])
+const {
+  bookNumber,
+  chapterNumber,
+  fileName: bibleFileName
+} = store.native.state.settings.workPlace[id].bible
 
-    const getCrosrefferences = async () => {
-      const settings = {
-        bookNumber: bookNumber,
-        chapterNumber: chapterNumber,
-        verse: props.selectedVerses[0],
-        filename: bibleFileName
+const crossreferences = ref([])
+
+const getCrosrefferences = async () => {
+  const settings = {
+    bookNumber: bookNumber,
+    chapterNumber: chapterNumber,
+    verse: props.selectedVerses[0],
+    filename: bibleFileName
+  }
+  let data = await window.api.crossreferences.getCrossreferences(settings)
+
+  data.sort((a: any, b: any) => {
+    if (a.book_to === b.book_to) {
+      if (a.chapter_to === b.chapter_to) {
+        return a.verse_to_start - b.verse_to_start
       }
-      let data = await window.api.crossreferences.getCrossreferences(settings)
+      return a.chapter_to - b.chapter_to
+    } else return a.book_to - b.book_to
+  })
 
-      data.sort((a, b) => {
-        if (a.book_to === b.book_to) {
-          if (a.chapter_to === b.chapter_to) {
-            return a.verse_to_start - b.verse_to_start
-          }
-          return a.chapter_to - b.chapter_to
-        } else return a.book_to - b.book_to
-      })
+  crossreferences.value = data
+}
 
-      crossreferences.value = data
-    }
+onMounted(() => getCrosrefferences())
 
-    onMounted(() => getCrosrefferences())
+const openPanel = ({target}: any, expanded: boolean, ref: any) => {
+  while (target.className !== 'q-item__label') {
+    target = target.parentNode
+  }
+  const eToExpand = target.querySelector('#el')
 
-    const openPanel = ({target}, expanded, ref) => {
-      while (target.className !== 'q-item__label') {
-        target = target.parentNode
-      }
-      const eToExpand = target.querySelector('#el')
-
-      if (expanded) {
-        eToExpand.style.maxHeight = 0
-        setTimeout(() => {
-          ref.expanded = !ref.expanded
-        }, 100)
-      } else {
-        eToExpand.style.maxHeight = eToExpand.scrollHeight + 8 + 'px'
-        ref.expanded = !ref.expanded
-      }
-    }
-
-    const goToText = (bookNumber, chapterNumber) => {
-      close({bookNumber, chapterNumber})
-    }
-
-    return {
-      goToText,
-      openPanel,
-      close,
-      crossreferences,
-      bibleFileName,
-      chapterNumber,
-      bookNumber,
-      textDirections,
-      bookShortName
-    }
-  },
-  props: {
-    selectedVerses: Array
+  if (expanded) {
+    eToExpand.style.maxHeight = 0
+    setTimeout(() => {
+      ref.expanded = !ref.expanded
+    }, 100)
+  } else {
+    eToExpand.style.maxHeight = eToExpand.scrollHeight + 8 + 'px'
+    ref.expanded = !ref.expanded
   }
 }
+
+const goToText = (bookNumber: number, chapterNumber: number) => {
+  close({bookNumber, chapterNumber})
+}
+
 </script>

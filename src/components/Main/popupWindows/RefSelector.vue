@@ -5,7 +5,7 @@
         <q-btn
           flat
           round
-          icon="arrow_back"
+          :icon="Icons.PrevChapter"
           @click.stop="step === 1 ? close() : step--"
         />
       </template>
@@ -18,7 +18,7 @@
         disable
         flat
         round
-        icon="more_vert"
+        :icon="Icons.Dots"
       />
     </UIModalWindowHeader>
 
@@ -80,72 +80,51 @@
 
 </template>
 
-<script>
+<script setup>
 import useStore from "src/hooks/useStore";
 import {ref} from "vue";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow"
 import useSevenBible from "src/hooks/useSevenBible";
 import {initBooksCategories} from "src/helpers";
+import {Icons} from "src/types/icons";
 
-export default {
-  components: {
-    UIModalWindowHeader,
-    UIModalWindow
-  },
+const emit = defineEmits(['close'])
 
-  setup({}, {emit}) {
-    const {id, textDirections, bookFullName, booksList} = useSevenBible()
-    const store = useStore()
-    const {fileName, chapterNumber, bookNumber} = store.native.state.settings.workPlace[id].bible
+const {id, textDirections, bookFullName, booksList} = useSevenBible()
+const store = useStore()
+const {fileName, chapterNumber, bookNumber} = store.native.state.settings.workPlace[id].bible
 
-    const step = ref(1)
-    const countOfChapters = ref(0)
-    const selectedBookNumber = ref(0)
-    const selectedBookName = ref('')
+const step = ref(1)
+const countOfChapters = ref(0)
+const selectedBookNumber = ref(0)
+const selectedBookName = ref('')
 
-    initBooksCategories(booksList.value)
+initBooksCategories(booksList.value)
 
-    const newTestamentBooks = booksList.value.filter(book => book.book_number >= 470)
-    const oldTestamentBooks = booksList.value.filter(book => book.book_number <= 460)
+const newTestamentBooks = booksList.value.filter(book => book.book_number >= 470)
+const oldTestamentBooks = booksList.value.filter(book => book.book_number <= 460)
 
-    const close = (ref) => emit('close', ref)
+const close = (ref) => emit('close', ref)
 
-    const firstStep = async (bookNumber, bookFullName) => {
-      const settings = {
-        bookNumber,
-        filename: fileName
-      }
-      countOfChapters.value = await window.api.bible.getChaptersCount(settings)
-      selectedBookNumber.value = bookNumber
-      selectedBookName.value = bookFullName
-      step.value++
-    }
-
-    const secondStep = newChapterNumber => {
-      close({
-        bookNumber: selectedBookNumber.value,
-        chapterNumber: newChapterNumber
-      })
-    }
-
-    return {
-      newTestamentBooks,
-      oldTestamentBooks,
-      firstStep,
-      secondStep,
-      close,
-      selectedBookName,
-      countOfChapters,
-      step,
-      fileName,
-      chapterNumber,
-      bookNumber,
-      textDirections,
-      bookFullName
-    }
+const firstStep = async (bookNumber, bookFullName) => {
+  const settings = {
+    bookNumber,
+    filename: fileName
   }
+  countOfChapters.value = await window.api.bible.getChaptersCount(settings)
+  selectedBookNumber.value = bookNumber
+  selectedBookName.value = bookFullName
+  step.value++
 }
+
+const secondStep = newChapterNumber => {
+  close({
+    bookNumber: selectedBookNumber.value,
+    chapterNumber: newChapterNumber
+  })
+}
+
 </script>
 
 <style lang="scss">

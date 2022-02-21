@@ -14,7 +14,7 @@
         <q-bar class="cursor-move" v-touch-pan.prevent.mouse="onPane">
           <div>{{ title }}</div>
           <q-space/>
-          <q-btn dense flat icon="close" v-close-popup/>
+          <q-btn dense flat :icon="Icons.Close" v-close-popup/>
         </q-bar>
         <slot/>
       </q-card>
@@ -23,7 +23,8 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {ref} from "vue"
+import {Icons} from "src/types/icons"
 
 const props = defineProps({
   title: String

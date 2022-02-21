@@ -15,7 +15,7 @@
     </q-dialog>
     <UIModalWindowHeader @close="close">
       <template #title>Поиск по номеру стронга</template>
-      <q-btn disable flat round icon='more_vert'/>
+      <q-btn disable flat round :icon='Icons.Dots'/>
     </UIModalWindowHeader>
 
     <UIModalWindowBody>
@@ -36,7 +36,7 @@
                 type='submit'
                 flat
                 round
-                icon='search'
+                :icon='Icons.Search'
                 @click='searchByStrong'
               />
               <q-btn
@@ -44,7 +44,7 @@
                 type='submit'
                 flat
                 round
-                icon='settings'
+                :icon='Icons.Settings'
                 @click='$refs.dialog.show()'
               />
             </template>
@@ -90,9 +90,9 @@
   </UIModalWindow>
 </template>
 
-<script>
+<script setup>
 import useStore from "src/hooks/useStore";
-import {defineComponent, onMounted, ref} from "vue"
+import {onMounted, ref} from "vue"
 import normalizeSearchInput from "src/hooks/normalizeSearchInput"
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
@@ -102,102 +102,81 @@ import StrongBody from "components/Main/strong/StrongBody";
 import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
 import {notify} from "src/wrappers/notify";
 import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody";
+import {Icons} from "src/types/icons";
 
-export default defineComponent({
-  components: {
-    UIModalWindowBody,
-    DynamicVirtualScroller,
-    UIModalWindowSettings,
-    UIModalWindowHeader,
-    UIModalWindow,
-    StrongBody
+const emit = defineEmits(['close'])
+
+const {id, bibleModuleInfo} = useSevenBible()
+const store = useStore()
+const {
+  bible: {
+    fileName: bibleFileName
   },
-  setup(props, {emit}) {
-    const {id, bibleModuleInfo} = useSevenBible()
-    const store = useStore()
-    const {
-      bible: {
-        fileName: bibleFileName
-      },
-      strong: {
-        strongNumbers: fixedStrongNumbers,
-        fileName: strongFileName
-      }
-    } = store.native.state.settings.workPlace[id]
-
-
-    const close = (ref) => emit('close', ref)
-
-    const options = [
-      {
-        value: 'AND',
-        label: 'Искать стихи содержащие все введенные номера стронга'
-      },
-      {
-        value: 'OR',
-        label: 'Искать любой из введенных номеров стронга'
-      }
-    ]
-    const searchMode = ref(options[1])
-    const textsCount = ref(0)
-    const searchInput = ref('')
-    const showLoader = ref(false)
-    const strongNumbers = ref([])
-
-    const foundedTexts = ref([])
-    const searchByStrong = async () => {
-      showLoader.value = true
-      strongNumbers.value = normalizeSearchInput(searchInput.value).split(' ')
-
-      if (searchInput.value.toUpperCase().includes('H') && searchInput.value.toUpperCase().includes('G') && searchMode.value.value === 'AND') {
-        notify.showInfo('Строка поиска не может сожержать одновременно два префикса (H и G) в текущем режиме поиска.')
-        return
-      }
-
-
-      const settings = {
-        strongNumbers: [...strongNumbers.value],
-        separator: searchMode.value.value,
-        fixedStrongNumbersPrefix: bibleModuleInfo.value.strong_numbers_prefix,
-        filename: bibleFileName
-      }
-
-      const normalizedNumbers = strongNumbers.value.map(curr => curr.substring(1))
-      const strongNumbersRegexString = normalizedNumbers.join('|')
-      const data = await window.api.strong.getFindedVerseByStrong(settings)
-
-      const regex = new RegExp(`<S>(${strongNumbersRegexString})</S>`, 'gi')
-      data.forEach(current => {
-        current.text = current.text.replace(regex, `<mark>${current.strongNumbersPrefix}$1</mark>`)
-      })
-
-      foundedTexts.value = data
-      textsCount.value = data.length
-      showLoader.value = false
-    }
-    const goToText = (bookNumber, chapterNumber) => close({bookNumber, chapterNumber})
-
-
-    onMounted(() => {
-      searchInput.value = fixedStrongNumbers.join(' ')
-      searchByStrong()
-    })
-
-
-    return {
-      searchInput,
-      searchMode,
-      options,
-      textsCount,
-      goToText,
-      searchByStrong,
-      close,
-      strongNumbers,
-      strongFileName,
-      foundedTexts
-    }
+  strong: {
+    strongNumbers: fixedStrongNumbers,
+    fileName: strongFileName
   }
+} = store.native.state.settings.workPlace[id]
+
+
+const close = (ref) => emit('close', ref)
+
+const options = [
+  {
+    value: 'AND',
+    label: 'Искать стихи содержащие все введенные номера стронга'
+  },
+  {
+    value: 'OR',
+    label: 'Искать любой из введенных номеров стронга'
+  }
+]
+const searchMode = ref(options[1])
+const textsCount = ref(0)
+const searchInput = ref('')
+const showLoader = ref(false)
+const strongNumbers = ref([])
+
+const foundedTexts = ref([])
+const searchByStrong = async () => {
+  showLoader.value = true
+  strongNumbers.value = normalizeSearchInput(searchInput.value).split(' ')
+
+  if (searchInput.value.toUpperCase().includes('H') && searchInput.value.toUpperCase().includes('G') && searchMode.value.value === 'AND') {
+    notify.showInfo('Строка поиска не может сожержать одновременно два префикса (H и G) в текущем режиме поиска.')
+    return
+  }
+
+
+  const settings = {
+    strongNumbers: [...strongNumbers.value],
+    separator: searchMode.value.value,
+    fixedStrongNumbersPrefix: bibleModuleInfo.value.strong_numbers_prefix,
+    filename: bibleFileName
+  }
+
+  const normalizedNumbers = strongNumbers.value.map(curr => curr.substring(1))
+  const strongNumbersRegexString = normalizedNumbers.join('|')
+  const data = await window.api.strong.getFindedVerseByStrong(settings)
+
+  const regex = new RegExp(`<S>(${strongNumbersRegexString})</S>`, 'gi')
+  data.forEach(current => {
+    current.text = current.text.replace(regex, `<mark>${current.strongNumbersPrefix}$1</mark>`)
+  })
+
+  foundedTexts.value = data
+  textsCount.value = data.length
+  showLoader.value = false
+}
+const goToText = (bookNumber, chapterNumber) => close({bookNumber, chapterNumber})
+
+
+onMounted(() => {
+  searchInput.value = fixedStrongNumbers.join(' ')
+  searchByStrong()
 })
+
+
 </script>
 
 <style lang='scss'>

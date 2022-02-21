@@ -9,7 +9,7 @@ import BookmarkCreator from "components/Main/popupWindows/BookmarkCreator.vue";
 import CrossreferencesSearcher from "components/Main/popupWindows/crossreferencesSearcher.vue";
 import CommentariesComparator from "components/Main/popupWindows/CommentariesComparator.vue";
 import BookmarksViewList from "components/Main/popupWindows/BookmarksViewList.vue";
-
+import BookmarksManager from 'components/Main/popupWindows/BookmarksManager.vue'
 
 export interface Popup {
   isPopupShown: Ref<boolean>,
@@ -25,6 +25,7 @@ export interface Popup {
   showCrossreferencesSearcher: (props: any) => Promise<any>,
   showCommentariesComparator: (props: any) => Promise<any>,
   showBookmarksViewList: (props: any) => Promise<any>,
+  showBookmarksManager: (props: any) => Promise<any>,
 }
 
 export const initPopupWindows = () => {
@@ -61,7 +62,8 @@ export const initPopupWindows = () => {
     showBookmarkCreator: (props) => showPopup(BookmarkCreator, props),
     showCrossreferencesSearcher: (props) => showPopup(CrossreferencesSearcher, props),
     showCommentariesComparator: (props) => showPopup(CommentariesComparator, props),
-    showBookmarksViewList: (props) => showPopup(BookmarksViewList, props)
+    showBookmarksViewList: (props) => showPopup(BookmarksViewList, props),
+    showBookmarksManager: (props) => showPopup(BookmarksManager, props)
   }
 
   return {

@@ -6,7 +6,7 @@
         v-if="!$slots.close"
         flat
         round
-        icon='arrow_back'
+        :icon='Icons.PrevChapter'
         @click="$emit('close')"
       />
       <span class='flex items-center text-bold ellipsis'>
@@ -16,18 +16,16 @@
 
       <slot/>
     </div>
-    <q-separator v-if="bordered"/>
+    <q-separator v-if="props.bordered"/>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    bordered: {
-      type: Boolean,
-      default: true
-    }
-  },
-  emits: ['close']
+<script setup lang="ts">
+import {Icons} from "src/types/icons";
+
+interface Props {
+  bordered?: boolean
 }
+const props = withDefaults(defineProps<Props>(), {bordered: true})
+const emit = defineEmits(['close'])
 </script>

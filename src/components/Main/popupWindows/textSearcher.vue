@@ -3,7 +3,7 @@
 
     <UIModalWindowHeader @close="close">
       <template #title>Поиск по библии - {{ bibleFileName }}</template>
-      <q-btn disable flat round icon='more_vert'/>
+      <q-btn disable flat round :icon='Icons.Dots'/>
     </UIModalWindowHeader>
     <UIModalWindowBody>
       <UIModalWindowSettings>
@@ -22,7 +22,7 @@
                 name="btn"
                 type="submit"
                 round flat
-                icon='search'
+                :icon='Icons.Search'
                 @click='searchText()'
               />
             </template>
@@ -58,7 +58,7 @@
   </UIModalWindow>
 </template>
 
-<script>
+<script setup>
 import useStore from "src/hooks/useStore";
 import {ref, onMounted} from "vue"
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
@@ -68,52 +68,31 @@ import useSevenBible from "src/hooks/useSevenBible";
 import useTextSearcher from "src/hooks/useTextSearcher";
 import DynamicVirtualScroller from "components/wrappers/DynamicVirtualScroller";
 import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody";
+import {Icons} from "src/types/icons";
 
-export default {
-  components: {
-    UIModalWindowBody,
-    DynamicVirtualScroller,
-    UIModalWindowSettings,
-    UIModalWindowHeader,
-    UIModalWindow
-  },
-  setup(props, {emit}) {
-    const {id} = useSevenBible()
-    const close = (ref) => emit('close', ref)
+const emit = defineEmits(['close'])
 
-    const store = useStore()
-    const bibleFileName = ref(store.native.state.settings.workPlace[id].bible.fileName)
-    const {
-      showLoader,
-      searchInput,
-      textsCount,
-      foundedTexts,
-      searchText
-    } = useTextSearcher(bibleFileName)
+const {id} = useSevenBible()
+const close = (ref) => emit('close', ref)
 
-    const goToText = (bookNumber, chapterNumber) => {
-      const ref = {bookNumber, chapterNumber}
-      close(ref)
-    }
+const store = useStore()
+const bibleFileName = ref(store.native.state.settings.workPlace[id].bible.fileName)
+const {
+  showLoader,
+  searchInput,
+  textsCount,
+  foundedTexts,
+  searchText
+} = useTextSearcher(bibleFileName)
 
-
-    const input = ref(null)
-    onMounted(() =>
-      setTimeout(() => input.value.focus(), 300)
-    )
-
-    return {
-      bibleFileName,
-      searchInput,
-      showLoader,
-      textsCount,
-      input,
-      foundedTexts,
-      searchText,
-      goToText,
-      close,
-    }
-
-  }
+const goToText = (bookNumber, chapterNumber) => {
+  const ref = {bookNumber, chapterNumber}
+  close(ref)
 }
+
+const input = ref(null)
+onMounted(() =>
+  setTimeout(() => input.value.focus(), 300)
+)
+
 </script>

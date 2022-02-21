@@ -2,7 +2,7 @@
   <UIModalWindow>
     <UIModalWindowHeader @close="close">
       <template #title>Закладка {{ bookShortName }} {{ bible.chapterNumber }}:{{ convertedVerses }}</template>
-      <q-btn disable flat round icon='more_vert'/>
+      <q-btn disable flat round :icon='Icons.Dots'/>
     </UIModalWindowHeader>
     <UIModalWindowBody>
       <div class="container fit flex d-column">
@@ -48,6 +48,7 @@ import {createDateString} from "src/helpers";
 import {notify} from "src/wrappers/notify";
 import {useI18n} from "vue-i18n";
 import {Bookmark} from "app/types/bookmark";
+import {Icons} from "src/types/icons";
 
 interface Props {
   _bookmark: Bookmark,

@@ -6,6 +6,9 @@ export default {
   feedbackPage: 'Обратная связь',
   helpPage: 'Информация',
 
+  //titles
+  bookmarksManager: 'Управление закладками',
+
   //actions
   compareTranslations: 'Сравнить переводы',
   addBookmark: 'Добавить закладку',
@@ -20,6 +23,11 @@ export default {
   // deleteBookmark: 'Удалить закладку',
   delete: 'Удалить',
   show: 'Показать',
+  openCommentaries: 'Открыть окно комментариев',
+  openStrong: 'Открыть словарь стронга',
+  chooseRef: 'Выбрать ссылку',
+  openBookmarksManager: 'Открыть менеджер закладок',
+
 
   //tabs
   generalTab: 'Общие',

@@ -4,7 +4,7 @@
     <UIModalWindowHeader @click="close">
       <template #title>{{ bookShortName }} {{ chapterNumber }}:{{ convertVerses(selectedVerses) }} в разных местах
       </template>
-      <q-btn disable flat round icon='more_vert'/>
+      <q-btn disable flat round :icon='Icons.Dots'/>
     </UIModalWindowHeader>
 
     <UIModalWindowBody>
@@ -40,55 +40,43 @@
   </UIModalWindow>
 </template>
 
-<script lang="ts">
-import {ref, PropType, onMounted, defineComponent} from "vue";
+<script setup lang="ts">
+import {ref, PropType, onMounted} from "vue";
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow.vue";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader.vue";
 import useSevenBible from "src/hooks/useSevenBible";
 import UIModalWindowBody from "components/UI/ModalWindow/UIModalWindowBody.vue";
 import {convertVerses} from 'src/helpers/verseSelector'
+import {Icons} from "src/types/icons";
 
-export default defineComponent({
-  components: {UIModalWindowBody, UIModalWindowHeader, UIModalWindow},
-  setup(props, {emit}) {
-    const {bookShortName, bible} = useSevenBible()
-    const {bookNumber, chapterNumber} = bible!.value!
-
-    const testament = bookNumber >= 470 ? 'nt' : 'ot'
-
-    const close = (ref: any) => emit('close', ref)
-
-    const goToModule = (filename: string) => {
-      close({fileName: filename})
-    }
-
-    const translationsTexts = ref([])
-    const getComparedTranslations = async () => {
-      const settings = {
-        bookNumber: bookNumber,
-        chapterNumber: chapterNumber,
-        versesNumbers: [...props.selectedVerses]
-      }
-      translationsTexts.value = await window.api.bible.getCompared(settings)
-    }
-    onMounted(() => getComparedTranslations())
-
-    return {
-      bookShortName,
-      testament,
-      translationsTexts,
-      chapterNumber,
-      bookNumber,
-      goToModule,
-      close,
-      convertVerses
-    }
-  },
-  props: {
-    selectedVerses: {
-      type: Array as PropType<number[]>,
-      required: true
-    }
+const props = defineProps({
+  selectedVerses: {
+    type: Array as PropType<number[]>,
+    required: true
   }
 })
+const emit = defineEmits(['close'])
+
+const {bookShortName, bible} = useSevenBible()
+const {bookNumber, chapterNumber} = bible!.value!
+
+const testament = bookNumber >= 470 ? 'nt' : 'ot'
+
+const close = (ref: any) => emit('close', ref)
+
+const goToModule = (filename: string) => {
+  close({fileName: filename})
+}
+
+const translationsTexts = ref([])
+const getComparedTranslations = async () => {
+  const settings = {
+    bookNumber: bookNumber,
+    chapterNumber: chapterNumber,
+    versesNumbers: [...props.selectedVerses]
+  }
+  translationsTexts.value = await window.api.bible.getCompared(settings)
+}
+onMounted(() => getComparedTranslations())
+
 </script>

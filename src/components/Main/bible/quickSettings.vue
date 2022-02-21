@@ -1,18 +1,18 @@
 <template>
-  <UIButtonDropdown icon='more_vert'>
+  <UIButtonDropdown :icon='Icons.Dots'>
     <div>
-      <div  v-if="panel === 'show'">
+      <div v-if="panel === 'show'">
         <div class="q-py-sm q-px-md no-selectable column">
           <div class="row content-between no-wrap q-gutter-x-sm">
             <q-btn
-              icon="arrow_left"
+              :icon="Icons.PrevChapter"
               round
               unelevated
               @click="showPrevPanel('show')"
             />
             <span class="text-center text-h6 col">Показывать</span>
             <q-btn
-              icon="arrow_right"
+              :icon="Icons.NextChapter"
               round
               unelevated
               @click="showNextPanel('show')"
@@ -39,7 +39,7 @@
               round
               flat
               size="xs"
-              icon="settings"
+              :icon="Icons.Settings"
               @click="popup.showSubheadingsSettings"
             />
           </div>
@@ -54,7 +54,7 @@
               round
               flat
               size="xs"
-              icon="settings"
+              :icon="Icons.Settings"
               @click="popup.showCommentariesSettings"
             />
           </div>
@@ -96,100 +96,90 @@
           <div class="flex justify-center">
             <div>
               <q-btn
-                icon="add"
+                disable
+                :icon="Icons.Plus"
                 @click="changeFontSize('+')"
               />
               <q-btn
+                disable
                 @click="changeFontSize('-')"
-                icon="remove"
+                :icon="Icons.Minus"
               />
             </div>
           </div>
         </div>
       </div>
-      <div  v-if="panel === 'open'">
+      <div v-if="panel === 'open'">
         <div class="q-py-sm q-px-md q-gutter-y-sm no-selectable column">
           <div class="row content-between">
             <q-btn
-              icon="arrow_left"
+              :icon="Icons.PrevChapter"
               round
               unelevated
               @click="showPrevPanel('open')"
             />
             <span class="text-center text-h6 col">Открыть</span>
             <q-btn
-              icon="arrow_right"
+              :icon="Icons.NextChapter"
               round
               unelevated
               @click="showNextPanel('open')"
             />
           </div>
 
-            <q-btn
-              label="Словарь стронга"
-              icon-right="menu_book"
-              align="between"
-              @click="changeState('strong.show')"
-            />
-            <q-btn
-              label="Словарь"
-              icon-right="auto_stories"
-              align="between"
-              @click="changeState('dictionary.show')"
-            />
-            <q-btn
-              label="Комментарии"
-              icon-right="forum"
-              align="between"
-              @click="changeState('commentaries.show')"
-            />
+          <q-btn
+            label="Словарь стронга"
+            :icon-right="Icons.Strong"
+            align="between"
+            @click="changeState('strong.show')"
+          />
+          <q-btn
+            label="Словарь"
+            :icon-right="Icons.Dictionary"
+            align="between"
+            @click="changeState('dictionary.show')"
+          />
+          <q-btn
+            label="Комментарии"
+            :icon-right="Icons.Commentaries"
+            align="between"
+            @click="changeState('commentaries.show')"
+          />
         </div>
       </div>
     </div>
   </UIButtonDropdown>
 </template>
 
-<script>
+<script setup lang="ts">
 import useStore from "src/hooks/useStore";
-import {defineComponent, ref} from "vue"
+import {ref} from "vue"
 import useSevenBible from "src/hooks/useSevenBible";
-import UIButtonDropdown from "components/UI/UIButtonDropdown";
+import UIButtonDropdown from "components/UI/UIButtonDropdown.vue";
+import {Icons} from "src/types/icons";
 
-export default defineComponent({
-  components: {UIButtonDropdown},
-  setup() {
-    const {id, bible, popup} = useSevenBible()
+const {id, bible, popup} = useSevenBible()
 
-    const panels = ['show', 'open']
-    const panel = ref('open')
+const panels = ['show', 'open']
+const panel = ref('open')
 
-    const showNextPanel = current => {
-      const index = panels.indexOf(current)
-      panel.value =  panels.length > index + 1 ? panels[index + 1] : panels[0]
-    }
-    const showPrevPanel = current => {
-      const index = panels.indexOf(current)
-      panel.value = index - 1 !== -1 ? panels[index - 1] : panels[panels.length - 1]
-    }
+const showNextPanel = (current: string) => {
+  const index = panels.indexOf(current)
+  panel.value = panels.length > index + 1 ? panels[index + 1] : panels[0]
+}
+const showPrevPanel = (current: string) => {
+  const index = panels.indexOf(current)
+  panel.value = index - 1 !== -1 ? panels[index - 1] : panels[panels.length - 1]
+}
 
-    const store = useStore()
+const store = useStore()
 
-    const changeViewState = (key, value) => {
-      store.state.set(`workPlace.${id}.bible.view.${key}`, value)
-    }
-    const changeState = (key, value) => {
-      store.state.set(`workPlace.${id}.${key}`, value)
-    }
+const changeViewState = (key: string, value: any) => {
+  store.state.set(`workPlace.${id}.bible.view.${key}`, value)
+}
+const changeState = (key: string, value?: any) => {
+  store.state.set(`workPlace.${id}.${key}`, value)
+}
+const bibleView = bible.value.view
 
-    return {
-      changeViewState,
-      changeState,
-      showNextPanel,
-      showPrevPanel,
-      panel,
-      popup,
-      bibleView: bible.value.view
-    }
-  }
-})
 </script>

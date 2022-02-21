@@ -24,8 +24,8 @@
                 <q-space/>
 
                 <div class="flex d-column justify-around q-gutter-y-sm">
-                  <q-btn icon="delete" round dense @click="onDeleteClick(categoryName, bookmark)"/>
-                  <q-btn icon="edit" round dense @click="onEditClick(categoryName,bookmark)"/>
+                  <q-btn :icon="Icons.Delete" round dense @click="onDeleteClick(categoryName, bookmark)"/>
+                  <q-btn :icon="Icons.Edit" round dense @click="onEditClick(categoryName,bookmark)"/>
                 </div>
 
               </q-card-section>
@@ -56,7 +56,7 @@ import useSevenBible from "src/hooks/useSevenBible";
 import {ChapterBookmarkCategories} from "src/types/chapter";
 import {Bookmark, BookmarkCategory} from "app/types/bookmark";
 import {isEqual} from "src/helpers";
-import {computed} from "vue";
+import {Icons} from "src/types/icons";
 
 
 const props = defineProps<{

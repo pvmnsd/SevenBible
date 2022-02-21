@@ -16,7 +16,7 @@
           <q-card-section class='row q-pb-none'>
             <span class='text-h6'>{{ info.description }}</span>
             <q-space/>
-            <q-btn icon='close' flat round dense v-close-popup/>
+            <q-btn :icon='Icons.Close' flat round dense v-close-popup/>
           </q-card-section>
 
           <q-separator/>
@@ -49,7 +49,7 @@
           <q-card-section class='row q-pb-none'>
             <div class='text-h6'>{{ bookFullName }}</div>
             <q-space/>
-            <q-btn icon='close' flat round dense v-close-popup/>
+            <q-btn :icon='Icons.Close' flat round dense v-close-popup/>
           </q-card-section>
 
           <q-separator/>
@@ -77,6 +77,7 @@
 
 import {watch, onMounted, ref} from "vue";
 import useSevenBible from "src/hooks/useSevenBible";
+import {Icons} from "src/types/icons";
 
 export default {
   setup(props) {
@@ -120,7 +121,8 @@ export default {
       chapterIntroduction,
       moduleIntroduction,
       bookIntroduction,
-      info
+      info,
+      Icons
     }
   },
 

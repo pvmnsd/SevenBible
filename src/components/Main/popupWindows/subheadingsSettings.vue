@@ -2,7 +2,7 @@
   <UIModalWindow>
     <UIModalWindowHeader @close="close">
       <template #title>Настройки отображения подзаголовков</template>
-      <q-btn disable flat round icon='more_vert'/>
+      <q-btn disable flat round :icon='Icons.Dots'/>
     </UIModalWindowHeader>
 
     <div class="overlay container">
@@ -31,51 +31,39 @@
   </UIModalWindow>
 </template>
 
-<script>
+<script setup>
 import {onMounted, ref} from "vue";
 import UIModalWindow from "components/UI/ModalWindow/UIModalWindow";
 import UIModalWindowHeader from "components/UI/ModalWindow/UIModalWindowHeader";
 import useSevenBible from "src/hooks/useSevenBible";
 import useStore from "src/hooks/useStore";
+import {Icons} from "src/types/icons";
 
-export default {
-  components: {UIModalWindowHeader, UIModalWindow},
-  setup({}, {emit}) {
-
-    const {id, bibleTextKey} = useSevenBible()
-    const store = useStore()
+const emit = defineEmits(['close'])
+const {id, bibleTextKey} = useSevenBible()
+const store = useStore()
 
 
-    const close = () => {
-      bibleTextKey.value++
-      emit('close')
-    }
-
-    const subheadingsModulesList = ref([])
-
-    onMounted(() => {
-      subheadingsModulesList.value =
-        window.api.system.fsReaddirSync(['modules', 'subheadings'])
-          .map(moduleName => moduleName
-            .match(/.+?(?=\.)/g)[0])
-    })
-    const changeSubheadingsSetting = (name, value) =>
-      store.state.set(`workPlace.${id}.bible.view.subheadings.${name}`, value)
-
-    const addNewActiveSubheadingModule = (moduleName, value) => {
-      store.mutations.toggleSubheadingsModule(id, moduleName, value)
-    }
-
-    const subheadings = store.state.get(`workPlace.${id}.bible.view.subheadings`)
-
-
-    return {
-      subheadingsModulesList,
-      subheadings,
-      changeSubheadingsSetting,
-      addNewActiveSubheadingModule,
-      close
-    }
-  }
+const close = () => {
+  bibleTextKey.value++
+  emit('close')
 }
+
+const subheadingsModulesList = ref([])
+
+onMounted(() => {
+  subheadingsModulesList.value =
+    window.api.system.fsReaddirSync(['modules', 'subheadings'])
+      .map(moduleName => moduleName
+        .match(/.+?(?=\.)/g)[0])
+})
+const changeSubheadingsSetting = (name, value) =>
+  store.state.set(`workPlace.${id}.bible.view.subheadings.${name}`, value)
+
+const addNewActiveSubheadingModule = (moduleName, value) => {
+  store.mutations.toggleSubheadingsModule(id, moduleName, value)
+}
+
+const subheadings = store.state.get(`workPlace.${id}.bible.view.subheadings`)
+
 </script>
