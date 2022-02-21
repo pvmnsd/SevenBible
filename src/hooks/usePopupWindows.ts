@@ -10,6 +10,7 @@ import CrossreferencesSearcher from "components/Main/popupWindows/crossreference
 import CommentariesComparator from "components/Main/popupWindows/CommentariesComparator.vue";
 import BookmarksViewList from "components/Main/popupWindows/BookmarksViewList.vue";
 
+
 export interface Popup {
   isPopupShown: Ref<boolean>,
   component: any,

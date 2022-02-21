@@ -35,7 +35,7 @@ export default ({copyVerses}) => {
   }
   const openCommentariesComparator = () => popup.showCommentariesComparator({verseNumber: selectedVerse})
   const openBookmarkCreator = () => {
-    popup.showBookmarkCreator({selectedVerseFrom: selectedVerse})
+    popup.showBookmarkCreator({_bookmark: {startVerseNumber: selectedVerse}})
   }
 
   const verseMenuItems = [

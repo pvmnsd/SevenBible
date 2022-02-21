@@ -39,5 +39,7 @@ module.exports = {
   "system-bar": "#ababab",
   "scrollbar": "var(--separator)",
   "scrollbar-hover": "#8c8c8c",
-  'selected-verse': "rgba(70,187,172,0.55)"
+  "selected-verse": "rgba(70,187,172,0.55)",
+  "bookmark-default": "rgb(110,0,0)",
+  "bookmark-hover": "var(--primary)",
 }

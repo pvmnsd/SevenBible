@@ -11,26 +11,6 @@
   </q-menu>
 
   <q-menu
-    ref="bookmarkBlockMenuRef"
-    transition-show="jump-down"
-    transition-hide="jump-up"
-    no-parent-event
-    auto-close
-    :target="bookmarkBlockMenuTarget"
-  >
-    <q-list>
-      <q-item
-        v-for="(item, i) in bookmarkBlockContextMenu"
-        :key="i"
-        clickable
-        @click="item.callback"
-      >
-        <q-item-section v-t="item.title"/>
-      </q-item>
-    </q-list>
-  </q-menu>
-
-  <q-menu
     ref="verseNumberPopup"
     transition-show="jump-down"
     transition-hide="jump-up"
@@ -172,7 +152,7 @@
             <div
               class="bookmarks"
               v-if="verse.bookmarkCategories"
-              @click="onBookmarkBlockClick(verse.bookmarkCategories)"
+              @click="onBookmarkBlockClick(verse.bookmarkCategories, i + 1)"
             >
               <template
                 v-for="(category, categoryName, i) of verse.bookmarkCategories"
@@ -180,10 +160,10 @@
                 class="bookmark-category"
               >
                 <div
-                  v-for="(bookmark, i) in category.bookmarks"
+                  v-for="({}, i) in category.bookmarks"
                   :key="i"
-                  class="bookmark"
-                  @contextmenu.stop="onBookmarkBlockContextMenu($event, categoryName, bookmark)"
+                  class="bookmark bookmark-block"
+                  :style="{backgroundColor: category.backgroundColor}"
                 />
               </template>
             </div>
@@ -281,10 +261,6 @@ export default {
     } = useBibleEvents(id, store, footnotes)
 
     const {
-      bookmarkBlockContextMenu,
-      bookmarkBlockMenuRef,
-      bookmarkBlockMenuTarget,
-      onBookmarkBlockContextMenu,
       onBookmarkBlockClick
     } = useBookmarkBlock()
 
@@ -380,10 +356,6 @@ export default {
       openBookmarkCreator,
       copyVerses,
 
-      bookmarkBlockContextMenu,
-      bookmarkBlockMenuRef,
-      bookmarkBlockMenuTarget,
-      onBookmarkBlockContextMenu,
       onBookmarkBlockClick
     }
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div v-for="(verse, i) in verses" :key="i">
-      <span v-text="i + 1 + ' '"/>
+      <span v-text="verse.verse + ' '"/>
       <span v-html="verse.text"/>
     </div>
   </div>

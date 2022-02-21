@@ -1,7 +1,7 @@
 <template>
   <div style="transition: 0.2s" class="q-gutter-y-sm">
 
-    <div v-if="chapterNumber === 1 && (info.detailed_info?.length || moduleIntroduction.length)">
+    <div v-if="chapterNumber === 1 && (info?.detailed_info?.length || moduleIntroduction.length)">
 
               <span
                 class='introduction text-h6'

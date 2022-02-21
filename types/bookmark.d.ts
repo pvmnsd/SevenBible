@@ -6,17 +6,18 @@ export interface BookmarkCategory {
   colorIndex: number,
   isDefault: boolean,
   name: string,
-  quickBookmarkAdding: boolean
+  quickBookmarkAdding: boolean,
+  backgroundColor?: string
 }
 
 export interface Bookmark {
-  bookNumber: BookNumbers,
+  bookNumber?: BookNumbers,
   dateCreated?: string,
   dateModified?: string,
-  description: string,
-  endChapterNumber: number,
-  endVerseNumber: number,
-  isForRussianNumbering: boolean,
-  startChapterNumber: number,
-  startVerseNumber: number
+  description?: string,
+  endChapterNumber?: number,
+  endVerseNumber?: number,
+  isForRussianNumbering?: boolean,
+  startChapterNumber?: number,
+  startVerseNumber?: number,
 }

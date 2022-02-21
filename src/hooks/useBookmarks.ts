@@ -12,7 +12,11 @@ const fetchBookmarks = async () => {
 }
 const addBookmark = async (args: MakeBookmarkArgs) => {
   await window.api.system.makeBookmark(args)
-  fetchBookmarks()
+  await fetchBookmarks()
+}
+const editBookmark = async (args: MakeBookmarkArgs, argsToDelete: MakeBookmarkArgs) => {
+  await deleteBookmark(argsToDelete.categoryName, argsToDelete.bookmark)
+  await addBookmark(args)
 }
 const getBookmarkIndex = (bookmarkCategory: string, bookmark: Bookmark): RemoveBookmarkArgs => {
   const categoryIndex = bookmarkCategories.value.findIndex(category => category.name === bookmarkCategory)
@@ -33,19 +37,22 @@ const getBookmarkIndex = (bookmarkCategory: string, bookmark: Bookmark): RemoveB
   }
 }
 
-const deleteBookmark = (bookmarkCategory: string, bookmark: Bookmark) => {
+const deleteBookmark = async (bookmarkCategory: string, bookmark: Bookmark) => {
   const indexes = getBookmarkIndex(bookmarkCategory, bookmark)
   const {categoryIndex, bookmarkIndex} = indexes
   if (categoryIndex < 0 || bookmarkIndex < 0)
     return
   bookmarkCategories.value[categoryIndex].bookmarks.splice(bookmarkIndex, 1)
   bookmarkCategories.value[categoryIndex].bookmarks
-  window.api.system.removeBookmark(indexes)
+  await window.api.system.removeBookmark(indexes)
+  return
 }
+
 export const bookmarks = {
   fetchBookmarks,
   addBookmark,
   deleteBookmark,
+  editBookmark,
   bookmarkCategories
 }
 

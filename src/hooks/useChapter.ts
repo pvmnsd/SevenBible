@@ -62,10 +62,11 @@ export default ({bible, bibleError}: { bible: Ref<Bible>, bibleError: any }) => 
     //bookmarks
     bookmarks.bookmarkCategories.value.forEach(category => {
       category.bookmarks.forEach(bookmark => {
+
         const isCognateBookNumber = bookmark.bookNumber === settings.bookNumber
         const isCognateChapterNumber = [bookmark.startChapterNumber, bookmark.endChapterNumber].includes(settings.chapterNumber)
         if (isCognateBookNumber && isCognateChapterNumber)
-          for (let i = bookmark.startVerseNumber; i <= bookmark.endVerseNumber; i++) {
+          for (let i = bookmark.startVerseNumber!; i <= bookmark.endVerseNumber!; i++) {
             const verseNumber = i - 1
             const currentVerse = data.texts[verseNumber]
 

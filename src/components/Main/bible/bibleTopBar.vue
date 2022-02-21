@@ -173,8 +173,10 @@ export default {
     const openBookmarkCreator = () => {
       const verses = props.selectedVerses
       popup.showBookmarkCreator({
-        selectedVerseFrom: verses[0],
-        selectedVerseTo: verses[verses.length - 1]
+        _bookmark: {
+          startVerseNumber: verses[0],
+          endVerseNumber: verses[verses.length - 1]
+        }
       })
     }
 
