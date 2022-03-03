@@ -78,6 +78,19 @@ module.exports = configure(function (ctx) {
           "src-electron": path.resolve(__dirname,'./src-electron')
         }
       },
+
+      //reactivity transform
+      // chainWebpack: (config) => {a
+      //   config.module
+      //     .rule('vue')
+      //     .use('vue-loader')
+      //     .tap((options) => {
+      //       return {
+      //         ...options,
+      //         reactivityTransform: true
+      //       }
+      //     })
+      // }
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer

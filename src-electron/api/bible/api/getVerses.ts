@@ -1,6 +1,9 @@
 import {BibleDatabase} from "src-electron/models/Database/BibleDatabase";
+import {BibleVerses} from "src-electron/types/bible";
+import {PreparedVerse} from "app/types/api-modified/bible";
+import {GetVersesArgs} from "app/types/api-args/bible";
 
-export default (args: any) => {
+export default (args: GetVersesArgs): PreparedVerse[] => {
   const {
     filename,
     bookNumber,
@@ -10,13 +13,15 @@ export default (args: any) => {
   } = args
 
   const bibleDatabase = new BibleDatabase(filename)
-  const sql = `SELECT *
-               FROM verses
-               WHERE book_number = ${bookNumber}
-                 AND chapter = ${chapterNumber}
-                 AND verse BETWEEN ${selectedVerseFrom} and ${selectedVerseTo ?? selectedVerseFrom}`
+  const sql = `SELECT v.*, b.short_name
+               FROM verses v,
+                    books b
+               WHERE v.book_number = ${bookNumber}
+                 AND v.chapter = ${chapterNumber}
+                 AND v.verse BETWEEN ${selectedVerseFrom} and ${selectedVerseTo ?? selectedVerseFrom}
+                 AND b.book_number = v.book_number`
 
-  const verses = bibleDatabase.prepare(sql).all()
+  const verses: PreparedVerse[] = bibleDatabase.prepare(sql).all()
 
   return verses
 }

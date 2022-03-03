@@ -73,3 +73,12 @@ export const isEqual = (object1: any, object2: any) => {
 
   return true;
 }
+
+export const refToString = (bookName: string, chapterNumber: number, startVerseNumber?: number, endVerseNumber?: number) => {
+  if (!startVerseNumber)
+    return `${bookName} ${chapterNumber}`
+  else if (startVerseNumber === endVerseNumber)
+    return `${bookName} ${chapterNumber}:${startVerseNumber}`
+  else
+    return `${bookName} ${chapterNumber}:${startVerseNumber}-${endVerseNumber}`
+}

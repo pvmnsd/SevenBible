@@ -72,7 +72,6 @@ const close = () => emit('close')
 const {bible: {value: {chapterNumber}}, bookShortName, popup, bookmarks, updateBibleWindows} = useSevenBible()
 
 const onEditClick = (categoryName: string, bookmark: Bookmark) => {
-  console.log(categoryName)
   popup.showBookmarkCreator({
     _bookmark: {...bookmark},
     categoryNameToDeleteIn: categoryName,

@@ -22,5 +22,6 @@ export enum Icons {
   Minus = 'remove',
   Delete = 'delete',
   Edit = 'edit',
-  Bookmark = 'bookmark'
+  Bookmark = 'bookmark',
+  Colorize = 'colorize'
 }

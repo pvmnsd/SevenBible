@@ -23,3 +23,12 @@ declare global {
     parse: (str: string | undefined, fallback?: boolean) => boolean
   }
 }
+import Vue from 'vue'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    directives: {
+      vFocus: object
+    }
+  }
+}

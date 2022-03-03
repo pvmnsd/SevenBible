@@ -8,11 +8,17 @@ export interface App {
   control: {
     verseNumberClickEvent: VerseNumberClickEvent
   },
-  win: WindowBounds
+  win: WindowBounds,
+  bookmarks: Bookmarks
 }
+
 export interface WindowBounds {
   x: number,
   y: number,
   width: number,
   height: number
+}
+
+export interface Bookmarks {
+  filename: string
 }

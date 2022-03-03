@@ -13,8 +13,8 @@ import getVerses from "src-electron/api/bible/api/getVerses";
 export default () => {
   ipcMain.handle('get-chapter', (event, args) => getChapter(args))
   ipcMain.handle('get-top-bar-state', (event, args) => getTopBarState(args))
-  ipcMain.handle('get-bible-info', (event, args) => getBibleInfo(args))
-  ipcMain.handle('get-bible-books', (event, args) => getBibleBooks(args))
+  ipcMain.handle('get-bible-info', (event, filename) => getBibleInfo(filename))
+  ipcMain.handle('get-bible-books', (event, filename) => getBibleBooks(filename))
   ipcMain.handle('get-count-of-chapters', (event, args) => getChaptersCount(args))
   ipcMain.handle('find-texts-in-bible', (event, args) => findBibleTexts(args))
   ipcMain.handle('get-introductions', (event, args) => getIntroduction(args))

@@ -5,11 +5,11 @@ import TranslationsComparator from 'components/Main/popupWindows/TranslationsCom
 import CommentariesSettings from "components/Main/popupWindows/commentariesSettings.vue";
 import SubheadingsSettings from "components/Main/popupWindows/subheadingsSettings.vue";
 import StrongSearcher from "components/Main/popupWindows/strongSearcher.vue";
-import BookmarkCreator from "components/Main/popupWindows/BookmarkCreator.vue";
+import BookmarkCreator from "components/Main/popupWindows/BookmarksManager/BookmarkCreator.vue";
 import CrossreferencesSearcher from "components/Main/popupWindows/crossreferencesSearcher.vue";
 import CommentariesComparator from "components/Main/popupWindows/CommentariesComparator.vue";
 import BookmarksViewList from "components/Main/popupWindows/BookmarksViewList.vue";
-import BookmarksManager from 'components/Main/popupWindows/BookmarksManager.vue'
+import BookmarksManager from 'components/Main/popupWindows/BookmarksManager/BookmarksManager.vue'
 
 export interface Popup {
   isPopupShown: Ref<boolean>,

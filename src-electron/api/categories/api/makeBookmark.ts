@@ -1,4 +1,4 @@
-import {MakeBookmarkArgs} from "app/types/api-args/systemArgs";
+import {MakeBookmarkArgs} from "app/types/api-args/system";
 import fs from "fs-extra";
 import path from "path";
 import {BookmarkCategory} from "app/types/bookmark";

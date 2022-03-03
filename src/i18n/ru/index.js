@@ -8,6 +8,7 @@ export default {
 
   //titles
   bookmarksManager: 'Управление закладками',
+  newCategory: 'Новая категория',
 
   //actions
   compareTranslations: 'Сравнить переводы',
@@ -20,6 +21,7 @@ export default {
   makeBookmark: 'Создать закладку',
   accept: 'Принять',
   cancel: 'Отменить',
+  proceed: 'Продолжить',
   // deleteBookmark: 'Удалить закладку',
   delete: 'Удалить',
   show: 'Показать',
@@ -27,6 +29,8 @@ export default {
   openStrong: 'Открыть словарь стронга',
   chooseRef: 'Выбрать ссылку',
   openBookmarksManager: 'Открыть менеджер закладок',
+  addCategory: 'Добавить категорию',
+  create: 'Создать',
 
 
   //tabs
@@ -47,15 +51,26 @@ export default {
   openTranslationsComparator: 'Открывать окно сравнения переводов стиха в разных модулях Библии',
   openCrossreferencesSearcher: 'Открывать окно перекререкрестных ссылок стиха',
 
+  //labels
+  color: 'Цвет',
+  name: 'Название',
+
   //placeholders
   noteToBookmark: 'Примечание к заметке',
   //errors
   nothingFounded: 'Ничего не найдено',
   bookNotFounded: 'Текущий модуль Библии %s не содержит стихов для выбранной книги. Выберите пожалуйста другую книгу с помощью широкой центральной кнопки в заголовке.',
+  emptyField: 'Это поле не может быть пустым',
+  categoryExists: 'Категория с тким именем уже сущевствует',
   //info
   bookmarkWasCreated: 'Заметка успешно создна',
   bookmarkWasEdited: 'Заметка успешно отредактирована',
+  bookmarkWasDeleted: 'Заметка успешно удалена',
   textCopied: 'Текст скопирован',
+  deleteCategoryConfirm: 'Вместе с категорией, в ней также будут удалены все закладки. Вы хотите продолжить?',
 
   bookmarks: 'Закладки',
+
+  //others
+  all: 'Все'
 }

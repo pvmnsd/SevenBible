@@ -43,12 +43,13 @@ import useSevenBible from "src/hooks/useSevenBible";
 import {computed, onMounted, ref} from "vue";
 import BibleVerses from "components/Main/BibleVerses.vue";
 import UIButton from "components/UI/UIButton.vue";
-import {MakeBookmarkArgs} from "app/types/api-args/systemArgs";
 import {createDateString} from "src/helpers";
 import {notify} from "src/wrappers/notify";
 import {useI18n} from "vue-i18n";
 import {Bookmark} from "app/types/bookmark";
 import {Icons} from "src/types/icons";
+import {PreparedVerse} from "app/types/api-modified/bible";
+import { BookmarkArgs} from "src/hooks/useBookmarks";
 
 interface Props {
   _bookmark: Bookmark,
@@ -76,15 +77,16 @@ const bookmark = ref<Bookmark>({
   bookNumber: bible.bookNumber,
   startChapterNumber: bible.chapterNumber,
   endChapterNumber: bible.chapterNumber,
+  startVerseNumber: _bookmark.startVerseNumber,
   endVerseNumber: _bookmark.endVerseNumber ?? _bookmark.startVerseNumber,
   description: '',
-  isForRussianNumbering: Boolean.parse(info.russian_numbering),
-  ..._bookmark
+  isForRussianNumbering: Boolean.parse(info.russian_numbering)
 })
+bookmark.value = {...bookmark.value, ..._bookmark}
 
 
 const close = () => emit('close')
-const verses = ref<[]>()
+const verses = ref<PreparedVerse[]>()
 
 const getVersesText = async () => {
   const settings = {
@@ -109,11 +111,11 @@ const convertedVerses = computed(() => {
 })
 
 const categoriesList = bookmarks.bookmarkCategories.value.map(category => category.name)
-const selectedCategory = ref(categoriesList[0])
+const selectedCategory = ref(categoryNameToDeleteIn ?? categoriesList[0])
 
 const makeBookmark = async () => {
   if (!bookmark.value.startVerseNumber) return
-  const settings: MakeBookmarkArgs = {
+  const settings: BookmarkArgs = {
     categoryName: selectedCategory.value,
     bookmark: {...bookmark.value}
   }
@@ -124,7 +126,6 @@ const makeBookmark = async () => {
     settings.bookmark.dateCreated = date
     settings.bookmark.dateModified = date
   }
-  close()
   if (isEditMode) {
     await bookmarks.editBookmark(settings, {
       categoryName: categoryNameToDeleteIn!,
@@ -135,6 +136,7 @@ const makeBookmark = async () => {
     await bookmarks.addBookmark(settings)
     notify.showInfo(t('bookmarkWasCreated'))
   }
+  close()
   updateBibleWindows()
 }
 

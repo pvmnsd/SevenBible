@@ -11,7 +11,6 @@
       <q-list separator class="overlay">
         <q-item
           clickable
-          v-ripple
           v-for="(item, i) in translationsTexts"
           :key="i"
           @click="goToModule(item.moduleName)"
