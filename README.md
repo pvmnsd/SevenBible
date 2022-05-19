@@ -11,6 +11,9 @@
 Возможности взаимодействия со стихами:
 ![image](https://user-images.githubusercontent.com/93146235/153063784-fc6a0b8a-bd40-4dfc-941b-c6816b0b14d7.png)
 ***
+Магазин модулей:
+![изображение](https://user-images.githubusercontent.com/93146235/169272707-4a22420d-7d62-4007-ad6e-5fcbf8fd36c0.png)
+***
 Поиск по номерам стронга:
 ![image](https://user-images.githubusercontent.com/93146235/153063949-580a8a27-125a-4f84-be5d-1d2075aa2809.png)
 ***
